@@ -3,6 +3,7 @@
     "id": "tali",
     "name": "Helsingin Golfklubi (Tali)",
     "city": "Helsinki",
+    "country": "Finland",
     "lat": 60.2287,
     "lon": 24.8267
   },
@@ -10,6 +11,7 @@
     "id": "vuosaari",
     "name": "Vuosaaren Golf",
     "city": "Helsinki",
+    "country": "Finland",
     "lat": 60.2078,
     "lon": 25.1479
   },
@@ -17,6 +19,7 @@
     "id": "espoon-golfseura",
     "name": "Espoon Golfseura",
     "city": "Espoo",
+    "country": "Finland",
     "lat": 60.17,
     "lon": 24.6885
   },
@@ -24,6 +27,7 @@
     "id": "master-golf",
     "name": "Master Golf Club",
     "city": "Espoo",
+    "country": "Finland",
     "lat": 60.1972,
     "lon": 24.609
   },
@@ -31,6 +35,7 @@
     "id": "sarfvik",
     "name": "Sarfvik Golf & Country Club",
     "city": "Kirkkonummi",
+    "country": "Finland",
     "lat": 60.1339,
     "lon": 24.4453
   },
@@ -38,6 +43,7 @@
     "id": "peuramaa-golf",
     "name": "Peuramaa Golf",
     "city": "Kirkkonummi",
+    "country": "Finland",
     "lat": 60.1011,
     "lon": 24.4596
   },
@@ -45,6 +51,7 @@
     "id": "vantaankoski",
     "name": "Vantaankosken Golf",
     "city": "Vantaa",
+    "country": "Finland",
     "lat": 60.3345,
     "lon": 24.839
   },
@@ -52,6 +59,7 @@
     "id": "golf-talma",
     "name": "Golf Talma",
     "city": "Sipoo",
+    "country": "Finland",
     "lat": 60.3546,
     "lon": 25.241
   },
@@ -59,6 +67,7 @@
     "id": "pickala",
     "name": "Pickala Golf",
     "city": "Siuntio",
+    "country": "Finland",
     "lat": 60.0967,
     "lon": 24.2233
   },
@@ -66,6 +75,7 @@
     "id": "nevas-golf",
     "name": "Nevas Golf",
     "city": "Inkoo",
+    "country": "Finland",
     "lat": 60.0333,
     "lon": 24.0333
   },
@@ -73,6 +83,7 @@
     "id": "hanko-golf",
     "name": "Hanko Golf",
     "city": "Hanko",
+    "country": "Finland",
     "lat": 59.8231,
     "lon": 22.9575
   },
@@ -80,6 +91,7 @@
     "id": "nordcenter",
     "name": "Nordcenter Golf & Country Club",
     "city": "Nurmijärvi",
+    "country": "Finland",
     "lat": 60.4629,
     "lon": 24.79
   },
@@ -87,6 +99,7 @@
     "id": "kytaja",
     "name": "Kytäjä Golf",
     "city": "Hyvinkää",
+    "country": "Finland",
     "lat": 60.6892,
     "lon": 24.6172
   },
@@ -94,6 +107,7 @@
     "id": "porvoon-golfkerho",
     "name": "Porvoon Golfkerho",
     "city": "Porvoo",
+    "country": "Finland",
     "lat": 60.4064,
     "lon": 25.6656
   },
@@ -101,6 +115,7 @@
     "id": "sea-golf-ronnas",
     "name": "Sea Golf Rönnäs",
     "city": "Loviisa",
+    "country": "Finland",
     "lat": 60.4487,
     "lon": 26.1721
   },
@@ -108,6 +123,7 @@
     "id": "aura-golf",
     "name": "Aura Golf",
     "city": "Turku",
+    "country": "Finland",
     "lat": 60.4518,
     "lon": 22.2666
   },
@@ -115,6 +131,7 @@
     "id": "ruissalo-golf",
     "name": "Ruissalo Golf",
     "city": "Turku",
+    "country": "Finland",
     "lat": 60.4372,
     "lon": 22.1494
   },
@@ -122,6 +139,7 @@
     "id": "salo-golf",
     "name": "Salo Golf",
     "city": "Salo",
+    "country": "Finland",
     "lat": 60.3833,
     "lon": 23.1333
   },
@@ -129,6 +147,7 @@
     "id": "aurinko-golf",
     "name": "Aurinko Golf",
     "city": "Naantali",
+    "country": "Finland",
     "lat": 60.4994,
     "lon": 22.0678
   },
@@ -136,6 +155,7 @@
     "id": "tammer-golf",
     "name": "Tammer Golf",
     "city": "Tampere",
+    "country": "Finland",
     "lat": 61.459,
     "lon": 23.83
   },
@@ -143,6 +163,7 @@
     "id": "tampereen-golfseura",
     "name": "Tampereen Golfseura (Kalkku)",
     "city": "Tampere",
+    "country": "Finland",
     "lat": 61.4978,
     "lon": 23.651
   },
@@ -150,6 +171,7 @@
     "id": "katinala-golf",
     "name": "Katinala Golf",
     "city": "Kangasala",
+    "country": "Finland",
     "lat": 61.4569,
     "lon": 24.0759
   },
@@ -157,6 +179,7 @@
     "id": "linna-golf",
     "name": "Linna Golf",
     "city": "Hämeenlinna",
+    "country": "Finland",
     "lat": 60.9796,
     "lon": 24.5596
   },
@@ -164,6 +187,7 @@
     "id": "aulanko-golf-eversti",
     "name": "Aulanko Golf (Eversti)",
     "city": "Hämeenlinna",
+    "country": "Finland",
     "lat": 61.035,
     "lon": 24.4605
   },
@@ -171,6 +195,7 @@
     "id": "aulanko-golf-hugo",
     "name": "Aulanko Golf (Hugo)",
     "city": "Hämeenlinna",
+    "country": "Finland",
     "lat": 61.0261,
     "lon": 24.4386
   },
@@ -178,6 +203,7 @@
     "id": "tawast-golf",
     "name": "Tawast Golf",
     "city": "Hämeenlinna",
+    "country": "Finland",
     "lat": 60.9987,
     "lon": 24.5257
   },
@@ -185,6 +211,7 @@
     "id": "lahden-golf",
     "name": "Lahden Golf",
     "city": "Lahti",
+    "country": "Finland",
     "lat": 60.9827,
     "lon": 25.6612
   },
@@ -192,6 +219,7 @@
     "id": "messila-golf",
     "name": "Messilä Golf",
     "city": "Hollola",
+    "country": "Finland",
     "lat": 61.0968,
     "lon": 25.468
   },
@@ -199,6 +227,7 @@
     "id": "vierumaki-golf",
     "name": "Vierumäki Golf",
     "city": "Heinola",
+    "country": "Finland",
     "lat": 61.0587,
     "lon": 25.5809
   },
@@ -206,6 +235,7 @@
     "id": "vuoksen-golf",
     "name": "Imatran Golf",
     "city": "Imatra",
+    "country": "Finland",
     "lat": 61.2269,
     "lon": 28.8563
   },
@@ -213,6 +243,7 @@
     "id": "etela-saimaa-golf",
     "name": "Etelä-Saimaa Golf (Viipurin Golf)",
     "city": "Lappeenranta",
+    "country": "Finland",
     "lat": 61.1049,
     "lon": 28.2575
   },
@@ -220,6 +251,7 @@
     "id": "kahilanniemi-golf",
     "name": "Kahilanniemi (Viipurin Golf)",
     "city": "Lappeenranta",
+    "country": "Finland",
     "lat": 61.0641,
     "lon": 28.2132
   },
@@ -227,6 +259,7 @@
     "id": "tarinagolf",
     "name": "Tarinagolf",
     "city": "Siilinjärvi",
+    "country": "Finland",
     "lat": 63.0606,
     "lon": 27.6535
   },
@@ -234,6 +267,7 @@
     "id": "tahko-golf",
     "name": "Tahko Golf (Old Course)",
     "city": "Tahkovuori",
+    "country": "Finland",
     "lat": 63.2985,
     "lon": 28.0464
   },
@@ -241,6 +275,7 @@
     "id": "tahko-golf-lake-forest",
     "name": "Tahko Golf (Lake & Forest)",
     "city": "Tahkovuori",
+    "country": "Finland",
     "lat": 63.2454,
     "lon": 28.0487
   },
@@ -248,6 +283,7 @@
     "id": "eerikkala-golf",
     "name": "Eerikkala Golf",
     "city": "Tervo",
+    "country": "Finland",
     "lat": 62.9454,
     "lon": 26.76
   },
@@ -255,6 +291,7 @@
     "id": "konnus-golf",
     "name": "Konnus-Golf",
     "city": "Leppävirta",
+    "country": "Finland",
     "lat": 62.53,
     "lon": 27.79
   },
@@ -262,6 +299,7 @@
     "id": "kartanogolf",
     "name": "Kartanogolf",
     "city": "Joroinen",
+    "country": "Finland",
     "lat": 62.1772,
     "lon": 27.8825
   },
@@ -269,6 +307,7 @@
     "id": "yla-savon-golf",
     "name": "Ylä-Savon Golfseura",
     "city": "Iisalmi",
+    "country": "Finland",
     "lat": 63.5341,
     "lon": 27.2759
   },
@@ -276,6 +315,7 @@
     "id": "karelia-golf",
     "name": "Karelia Golf ",
     "city": "Kontiolahti",
+    "country": "Finland",
     "lat": 62.7478,
     "lon": 29.8214
   },
@@ -283,6 +323,7 @@
     "id": "outokummun-golf",
     "name": "Outokummun Golf",
     "city": "Outokumpu",
+    "country": "Finland",
     "lat": 62.7146,
     "lon": 28.9863
   },
@@ -290,6 +331,7 @@
     "id": "pielis-golf",
     "name": "Pielis-Golf",
     "city": "Nurmes",
+    "country": "Finland",
     "lat": 63.533,
     "lon": 29.1979
   },
@@ -297,6 +339,7 @@
     "id": "katinkulta-golf",
     "name": "Katinkulta Golf",
     "city": "Sotkamo",
+    "country": "Finland",
     "lat": 64.1482,
     "lon": 28.2351
   },
@@ -304,6 +347,7 @@
     "id": "kajaanin-golf",
     "name": "Kajaanin Golf",
     "city": "Kajaani",
+    "country": "Finland",
     "lat": 64.2089,
     "lon": 27.6656
   },
@@ -311,6 +355,7 @@
     "id": "kerigolf",
     "name": "Kerigolf",
     "city": "Kerimäki",
+    "country": "Finland",
     "lat": 61.8845,
     "lon": 29.1613
   },
@@ -318,6 +363,7 @@
     "id": "mikkelin-golf",
     "name": "Mikkelin Golf",
     "city": "Mikkeli",
+    "country": "Finland",
     "lat": 61.6887,
     "lon": 27.2198
   },
@@ -325,6 +371,7 @@
     "id": "golf-porrassalmi",
     "name": "Annilan Golfkeskus",
     "city": "Mikkeli",
+    "country": "Finland",
     "lat": 61.6496,
     "lon": 27.2813
   },
@@ -332,6 +379,7 @@
     "id": "puula-golf",
     "name": "PuulaGolf",
     "city": "Kangasniemi",
+    "country": "Finland",
     "lat": 62.0033,
     "lon": 26.6862
   },
@@ -339,6 +387,7 @@
     "id": "jyvas-golf",
     "name": "Jyväs-Golf (Sippulanniemi)",
     "city": "Jyväskylä",
+    "country": "Finland",
     "lat": 62.2125,
     "lon": 25.729
   },
@@ -346,6 +395,7 @@
     "id": "muurame-golf",
     "name": "Muurame Golf",
     "city": "Muurame",
+    "country": "Finland",
     "lat": 62.1315,
     "lon": 25.6808
   },
@@ -353,6 +403,7 @@
     "id": "laukaan-peurunkagolf",
     "name": "Laukaan Peurunkagolf",
     "city": "Laukaa",
+    "country": "Finland",
     "lat": 62.4339,
     "lon": 25.869
   },
@@ -360,6 +411,7 @@
     "id": "revontuli-golf",
     "name": "Revontuli Golf",
     "city": "Hankasalmi",
+    "country": "Finland",
     "lat": 62.329,
     "lon": 26.5199
   },
@@ -367,6 +419,7 @@
     "id": "himos-golf",
     "name": "Himos Golf",
     "city": "Jämsä",
+    "country": "Finland",
     "lat": 61.8831,
     "lon": 25.2903
   },
@@ -374,6 +427,7 @@
     "id": "botnia-golf",
     "name": "Botnia Golf",
     "city": "Seinäjoki",
+    "country": "Finland",
     "lat": 62.7873,
     "lon": 22.8412
   },
@@ -381,6 +435,7 @@
     "id": "vaasan-golfseura",
     "name": "Vaasan Golfseura",
     "city": "Vaasa",
+    "country": "Finland",
     "lat": 63.0951,
     "lon": 21.6165
   },
@@ -388,6 +443,7 @@
     "id": "kokkolan-golfkerho",
     "name": "Kokkolan Golfkerho",
     "city": "Kokkola",
+    "country": "Finland",
     "lat": 63.8384,
     "lon": 23.1307
   },
@@ -395,6 +451,7 @@
     "id": "kalajoki-golf",
     "name": "Kalajoki Golf",
     "city": "Kalajoki",
+    "country": "Finland",
     "lat": 64.2282,
     "lon": 23.7889
   },
@@ -402,6 +459,7 @@
     "id": "oulun-golfkerho",
     "name": "Oulun Golfkerho",
     "city": "Oulu",
+    "country": "Finland",
     "lat": 65.0121,
     "lon": 25.4651
   },
@@ -409,6 +467,7 @@
     "id": "rovaniemen-golfkerho",
     "name": "Rovaniemen Golfkerho",
     "city": "Rovaniemi",
+    "country": "Finland",
     "lat": 66.5039,
     "lon": 25.7294
   },
@@ -416,6 +475,7 @@
     "id": "hartola-golf",
     "name": "Hartola Golf",
     "city": "Hartola",
+    "country": "Finland",
     "lat": 61.5764,
     "lon": 26.04
   },
@@ -423,6 +483,7 @@
     "id": "paloheina-golf",
     "name": "Paloheinä Golf",
     "city": "Helsinki",
+    "country": "Finland",
     "lat": 60.2589,
     "lon": 24.9372
   },
@@ -430,6 +491,7 @@
     "id": "tapiola-golf",
     "name": "Tapiola Golf",
     "city": "Espoo",
+    "country": "Finland",
     "lat": 60.1972,
     "lon": 24.7823
   },
@@ -437,6 +499,7 @@
     "id": "gumbole-golf",
     "name": "Gumböle Golf",
     "city": "Espoo",
+    "country": "Finland",
     "lat": 60.224,
     "lon": 24.6113
   },
@@ -444,6 +507,7 @@
     "id": "espoo-ringside-golf",
     "name": "Espoo Ringside Golf",
     "city": "Espoo",
+    "country": "Finland",
     "lat": 60.2768,
     "lon": 24.7442
   },
@@ -451,6 +515,7 @@
     "id": "suur-helsingin-golf-luukki",
     "name": "Suur-Helsingin Golf (Luukki)",
     "city": "Espoo",
+    "country": "Finland",
     "lat": 60.3171,
     "lon": 24.6702
   },
@@ -458,6 +523,7 @@
     "id": "hirsala-golf",
     "name": "Hirsala Golf",
     "city": "Kirkkonummi",
+    "country": "Finland",
     "lat": 60.1184,
     "lon": 24.5234
   },
@@ -465,6 +531,7 @@
     "id": "kurk-golf",
     "name": "Kurk Golf",
     "city": "Kirkkonummi",
+    "country": "Finland",
     "lat": 60.181,
     "lon": 24.3889
   },
@@ -472,6 +539,7 @@
     "id": "keimola-golf",
     "name": "Keimola Golf",
     "city": "Vantaa",
+    "country": "Finland",
     "lat": 60.3208,
     "lon": 24.8056
   },
@@ -479,6 +547,7 @@
     "id": "hiekkaharju-golf",
     "name": "Hiekkaharju Golf",
     "city": "Vantaa",
+    "country": "Finland",
     "lat": 60.3058,
     "lon": 25.0536
   },
@@ -486,6 +555,7 @@
     "id": "st-laurence-golf",
     "name": "St. Laurence Golf",
     "city": "Lohja",
+    "country": "Finland",
     "lat": 60.2297,
     "lon": 24.0607
   },
@@ -493,6 +563,7 @@
     "id": "hill-side-golf",
     "name": "Hill Side Golf & Country Club",
     "city": "Vihti",
+    "country": "Finland",
     "lat": 60.3395,
     "lon": 24.2831
   },
@@ -500,6 +571,7 @@
     "id": "vihti-golf",
     "name": "Vihti Golf",
     "city": "Vihti",
+    "country": "Finland",
     "lat": 60.3663,
     "lon": 24.3727
   },
@@ -507,6 +579,7 @@
     "id": "nurmijarvi-golf",
     "name": "Nurmijärvi Golf",
     "city": "Nurmijärvi",
+    "country": "Finland",
     "lat": 60.4357,
     "lon": 24.6468
   },
@@ -514,6 +587,7 @@
     "id": "tuusulan-golfklubi",
     "name": "Tuusulan Golfklubi",
     "city": "Tuusula",
+    "country": "Finland",
     "lat": 60.415,
     "lon": 25.0492
   },
@@ -521,6 +595,7 @@
     "id": "kotojarvi-golf",
     "name": "Kotojärvi Golf",
     "city": "Pornainen",
+    "country": "Finland",
     "lat": 60.4499,
     "lon": 25.3848
   },
@@ -528,6 +603,7 @@
     "id": "kullo-golf",
     "name": "Kullo Golf Club",
     "city": "Porvoo",
+    "country": "Finland",
     "lat": 60.3324,
     "lon": 25.4997
   },
@@ -535,6 +611,7 @@
     "id": "virvik-golf",
     "name": "Virvik Golf",
     "city": "Porvoo",
+    "country": "Finland",
     "lat": 60.3505,
     "lon": 25.9023
   },
@@ -542,6 +619,7 @@
     "id": "eke-golf",
     "name": "Eke Golf",
     "city": "Raasepori",
+    "country": "Finland",
     "lat": 59.9961,
     "lon": 23.4681
   },
@@ -549,6 +627,7 @@
     "id": "ruukkigolf",
     "name": "Ruukkigolf",
     "city": "Raasepori",
+    "country": "Finland",
     "lat": 60.1108,
     "lon": 23.4725
   },
@@ -556,6 +635,7 @@
     "id": "golf-pirkkala",
     "name": "Golf Pirkkala",
     "city": "Pirkkala",
+    "country": "Finland",
     "lat": 61.4428,
     "lon": 23.6335
   },
@@ -563,6 +643,7 @@
     "id": "nokia-river-golf",
     "name": "Nokia River Golf",
     "city": "Nokia",
+    "country": "Finland",
     "lat": 61.4475,
     "lon": 23.4116
   },
@@ -570,6 +651,7 @@
     "id": "hiisi-golf",
     "name": "Hiisi-Golf",
     "city": "Lempäälä",
+    "country": "Finland",
     "lat": 61.3033,
     "lon": 23.7736
   },
@@ -577,6 +659,7 @@
     "id": "pirkanmaan-golf",
     "name": "Pirkanmaan Golf",
     "city": "Tampere",
+    "country": "Finland",
     "lat": 61.4722,
     "lon": 23.8294
   },
@@ -584,6 +667,7 @@
     "id": "kakigolf",
     "name": "KäkiGolf",
     "city": "Pälkäne",
+    "country": "Finland",
     "lat": 61.354,
     "lon": 24.636
   },
@@ -591,6 +675,7 @@
     "id": "lakeside-golf-vammala",
     "name": "Lakeside Golf Vammala",
     "city": "Sastamala",
+    "country": "Finland",
     "lat": 61.4223,
     "lon": 23.0018
   },
@@ -598,6 +683,7 @@
     "id": "poltinkoski-golf",
     "name": "Poltinkoski Golf",
     "city": "Ikaalinen",
+    "country": "Finland",
     "lat": 61.8,
     "lon": 23.02
   },
@@ -605,6 +691,7 @@
     "id": "golf-virrat",
     "name": "Golf-Virrat",
     "city": "Virrat",
+    "country": "Finland",
     "lat": 62.2,
     "lon": 23.75
   },
@@ -612,6 +699,7 @@
     "id": "hattula-golf",
     "name": "Hattula Golf",
     "city": "Hattula",
+    "country": "Finland",
     "lat": 61.054,
     "lon": 24.364
   },
@@ -619,6 +707,7 @@
     "id": "lepaa-golf",
     "name": "Lepaa Golf",
     "city": "Hattula",
+    "country": "Finland",
     "lat": 61.0827,
     "lon": 24.3414
   },
@@ -626,6 +715,7 @@
     "id": "kanavagolf-vaaksy",
     "name": "Kanavagolf Vääksy",
     "city": "Asikkala",
+    "country": "Finland",
     "lat": 61.1598,
     "lon": 25.5748
   },
@@ -633,6 +723,7 @@
     "id": "anola-golf",
     "name": "Anola Golf Club",
     "city": "Pieksämäki",
+    "country": "Finland",
     "lat": 62.3305,
     "lon": 27.0972
   },
@@ -640,6 +731,7 @@
     "id": "holiday-club-saimaa",
     "name": "Holiday Club Golf Saimaa",
     "city": "Imatra",
+    "country": "Finland",
     "lat": 61.1894,
     "lon": 28.7177
   },
@@ -647,6 +739,7 @@
     "id": "iitti-golf",
     "name": "Iitti Golf",
     "city": "Iitti",
+    "country": "Finland",
     "lat": 60.9266,
     "lon": 26.3878
   },
@@ -654,6 +747,7 @@
     "id": "kaakon-golf",
     "name": "Kaakon Golf",
     "city": "Virolahti",
+    "country": "Finland",
     "lat": 60.5502,
     "lon": 27.6749
   },
@@ -661,6 +755,7 @@
     "id": "koski-golf",
     "name": "Koski-Golf",
     "city": "Kouvola",
+    "country": "Finland",
     "lat": 60.916,
     "lon": 26.651
   },
@@ -668,6 +763,7 @@
     "id": "kymen-golf",
     "name": "Kymen Golf",
     "city": "Kotka",
+    "country": "Finland",
     "lat": 60.4854,
     "lon": 26.8524
   },
@@ -675,6 +771,7 @@
     "id": "lampila-golf",
     "name": "Lampila Golf",
     "city": "Kouvola",
+    "country": "Finland",
     "lat": 61.0361,
     "lon": 26.4965
   },
@@ -682,6 +779,7 @@
     "id": "rantasalmi-golf",
     "name": "Rantasalmi Golf",
     "city": "Rantasalmi",
+    "country": "Finland",
     "lat": 62.0438,
     "lon": 28.4113
   },
@@ -689,6 +787,7 @@
     "id": "vola-golf",
     "name": "Vola-Golf",
     "city": "Mäntyharju",
+    "country": "Finland",
     "lat": 61.4339,
     "lon": 26.6265
   },
@@ -696,6 +795,7 @@
     "id": "la-cala-resort",
     "name": "La Cala Resort",
     "city": "Mijas",
+    "country": "Spain",
     "lat": 36.5364,
     "lon": -4.7178
   },
@@ -703,6 +803,7 @@
     "id": "mijas-golf",
     "name": "Mijas Golf",
     "city": "Mijas",
+    "country": "Spain",
     "lat": 36.5494,
     "lon": -4.6691
   },
@@ -710,7 +811,432 @@
     "id": "calanova-golf",
     "name": "Calanova Golf Club",
     "city": "Mijas",
+    "country": "Spain",
     "lat": 36.514,
     "lon": -4.7119
+  },
+  {
+    "id": "gogolf-isosaari",
+    "name": "GoGolf Isosaari",
+    "city": "Helsinki",
+    "country": "Finland",
+    "lat": 60.1019,
+    "lon": 25.0523
+  },
+  {
+    "id": "laukanlampi-golf",
+    "name": "Laukanlampi Golf Club",
+    "city": "Pieksämäki",
+    "country": "Finland",
+    "lat": 62.3773,
+    "lon": 27.4335
+  },
+  {
+    "id": "jami-snow-golf",
+    "name": "Jämi Snow Golf",
+    "city": "Jämijärvi",
+    "country": "Finland",
+    "lat": 61.7792,
+    "lon": 22.7166
+  },
+  {
+    "id": "punkalaitumen-golf",
+    "name": "Punkalaitumen Golf",
+    "city": "Punkalaidun",
+    "country": "Finland",
+    "lat": 61.1044,
+    "lon": 23.0878
+  },
+  {
+    "id": "puumala-golf",
+    "name": "Puumala Golf",
+    "city": "Puumala",
+    "country": "Finland",
+    "lat": 61.5958,
+    "lon": 28.3445
+  },
+  {
+    "id": "ranuan-golf",
+    "name": "Ranuan Golf",
+    "city": "Ranua",
+    "country": "Finland",
+    "lat": 65.9405,
+    "lon": 26.5362
+  },
+  {
+    "id": "wenoxa-golf",
+    "name": "Wenoxa Golf",
+    "city": "Vänoxa",
+    "country": "Finland",
+    "lat": 59.9753,
+    "lon": 22.615
+  },
+  {
+    "id": "laakasalo-golf",
+    "name": "Laakasalo Golf",
+    "city": "Loppi",
+    "country": "Finland",
+    "lat": 60.7358,
+    "lon": 24.171
+  },
+  {
+    "id": "bokars-golf",
+    "name": "Bökars Golf",
+    "city": "Porvoo",
+    "country": "Finland",
+    "lat": 60.298,
+    "lon": 25.8879
+  },
+  {
+    "id": "parkkivuoren-golf",
+    "name": "Parkkivuoren Golf",
+    "city": "Mänttä-Vilppula",
+    "country": "Finland",
+    "lat": 62.024,
+    "lon": 24.5336
+  },
+  {
+    "id": "vantti-golf",
+    "name": "Väntti Golf",
+    "city": "Mäntyharju",
+    "country": "Finland",
+    "lat": 61.5266,
+    "lon": 26.7934
+  },
+  {
+    "id": "eckero-golf",
+    "name": "Eckerö Golf",
+    "city": "Eckerö",
+    "country": "Finland",
+    "lat": 60.2144,
+    "lon": 19.6154
+  },
+  {
+    "id": "hirvihaaran-golf",
+    "name": "Hirvihaaran Golf",
+    "city": "Mäntsälä",
+    "country": "Finland",
+    "lat": 60.6304,
+    "lon": 25.2038
+  },
+  {
+    "id": "hirvensalon-golf",
+    "name": "Hirvensalon Golf",
+    "city": "Turku",
+    "country": "Finland",
+    "lat": 60.4177,
+    "lon": 22.2191
+  },
+  {
+    "id": "harma-golf",
+    "name": "Härmä Golf & Academy",
+    "city": "Kauhava",
+    "country": "Finland",
+    "lat": 63.1379,
+    "lon": 22.8288
+  },
+  {
+    "id": "pietarsaaren-golf",
+    "name": "Jakobstads Golf – Pietarsaaren Golf",
+    "city": "Pietarsaari",
+    "country": "Finland",
+    "lat": 63.6681,
+    "lon": 22.7804
+  },
+  {
+    "id": "jarviseudun-golf",
+    "name": "Järviseudun Golf",
+    "city": "Lappajärvi",
+    "country": "Finland",
+    "lat": 63.2518,
+    "lon": 23.636
+  },
+  {
+    "id": "kankaisten-golf",
+    "name": "Kankaisten Golf",
+    "city": "Masku",
+    "country": "Finland",
+    "lat": 60.5486,
+    "lon": 22.1099
+  },
+  {
+    "id": "kultaranta-golf",
+    "name": "Kultaranta Golf",
+    "city": "Naantali",
+    "country": "Finland",
+    "lat": 60.4552,
+    "lon": 21.9554
+  },
+  {
+    "id": "kuusamo-golf",
+    "name": "Kuusamo Golf",
+    "city": "Kuusamo",
+    "country": "Finland",
+    "lat": 65.9974,
+    "lon": 29.1832
+  },
+  {
+    "id": "nakkila-golf",
+    "name": "Nakkila Golf",
+    "city": "Nakkila",
+    "country": "Finland",
+    "lat": 61.4102,
+    "lon": 22.0601
+  },
+  {
+    "id": "oulujokilaakson-golf",
+    "name": "Oulujokilaakson Golf",
+    "city": "Muhos",
+    "country": "Finland",
+    "lat": 64.8523,
+    "lon": 26.0191
+  },
+  {
+    "id": "paltamo-golf",
+    "name": "Paltamo Golf",
+    "city": "Paltamo",
+    "country": "Finland",
+    "lat": 64.396,
+    "lon": 27.8685
+  },
+  {
+    "id": "porvoo-golf",
+    "name": "Porvoo Golf",
+    "city": "Porvoo",
+    "country": "Finland",
+    "lat": 60.4213,
+    "lon": 25.6978
+  },
+  {
+    "id": "ruuhikoski-golf",
+    "name": "Ruuhikoski Golf",
+    "city": "Seinäjoki",
+    "country": "Finland",
+    "lat": 62.7941,
+    "lon": 22.9802
+  },
+  {
+    "id": "santa-claus-golf",
+    "name": "Santa Claus Golf",
+    "city": "Rovaniemi",
+    "country": "Finland",
+    "lat": 66.5026,
+    "lon": 25.8284
+  },
+  {
+    "id": "st-lake-golf",
+    "name": "St. Lake Golf Club",
+    "city": "Pyhäjärvi",
+    "country": "Finland",
+    "lat": 63.6432,
+    "lon": 26.0482
+  },
+  {
+    "id": "syvari-golf",
+    "name": "Syväri Golf",
+    "city": "Nilsiä",
+    "country": "Finland",
+    "lat": 63.1991,
+    "lon": 28.1733
+  },
+  {
+    "id": "uudenkaupungin-golfklubi",
+    "name": "Uudenkaupungin Golfklubi",
+    "city": "Uusikaupunki",
+    "country": "Finland",
+    "lat": 60.7932,
+    "lon": 21.4312
+  },
+  {
+    "id": "virpiniemi-golf",
+    "name": "Virpiniemi Golf",
+    "city": "Oulu",
+    "country": "Finland",
+    "lat": 65.1275,
+    "lon": 25.2882
+  },
+  {
+    "id": "vora-golf",
+    "name": "Vörå Golf – Vöyrin Golf",
+    "city": "Vöyri",
+    "country": "Finland",
+    "lat": 63.1365,
+    "lon": 22.2599
+  },
+  {
+    "id": "yyteri-golf",
+    "name": "Yyteri Golf",
+    "city": "Pori",
+    "country": "Finland",
+    "lat": 61.5843,
+    "lon": 21.5014
+  },
+  {
+    "id": "ahtarin-golf",
+    "name": "Ähtärin Golf",
+    "city": "Ähtäri",
+    "country": "Finland",
+    "lat": 62.5303,
+    "lon": 24.205
+  },
+  {
+    "id": "rauma-golf",
+    "name": "Rauma Golf",
+    "city": "Rauma",
+    "country": "Finland",
+    "lat": 61.1401,
+    "lon": 21.5617
+  },
+  {
+    "id": "alands-golfklubb",
+    "name": "Ålands Golfklubb",
+    "city": "Kastelholm",
+    "country": "Finland",
+    "lat": 60.2257,
+    "lon": 20.0673
+  },
+  {
+    "id": "remson-golf",
+    "name": "Remson Golf Club",
+    "city": "Pedersöre",
+    "country": "Finland",
+    "lat": 63.6208,
+    "lon": 22.7421
+  },
+  {
+    "id": "raahentienoon-golf",
+    "name": "Raahentienoon Golf",
+    "city": "Siikajoki",
+    "country": "Finland",
+    "lat": 64.8155,
+    "lon": 24.7665
+  },
+  {
+    "id": "lofkulla-golf",
+    "name": "Löfkulla Golf",
+    "city": "Espoo",
+    "country": "Finland",
+    "lat": 60.2145,
+    "lon": 24.6581
+  },
+  {
+    "id": "laajasalon-golf",
+    "name": "Laajasalon Golf",
+    "city": "Helsinki",
+    "country": "Finland",
+    "lat": 60.1699,
+    "lon": 25.0635
+  },
+  {
+    "id": "wiurila-golf",
+    "name": "Wiurila Golf & Country Club",
+    "city": "Salo",
+    "country": "Finland",
+    "lat": 60.3772,
+    "lon": 23.06
+  },
+  {
+    "id": "nivalan-seudun-golf",
+    "name": "Nivalan Seudun Golf",
+    "city": "Nivala",
+    "country": "Finland",
+    "lat": 63.9056,
+    "lon": 25.0226
+  },
+  {
+    "id": "green-zone-golf",
+    "name": "Green Zone Golf",
+    "city": "Tornio",
+    "country": "Finland",
+    "lat": 65.8578,
+    "lon": 24.1338
+  },
+  {
+    "id": "kemin-golf",
+    "name": "Kemin Golf",
+    "city": "Kemi",
+    "country": "Finland",
+    "lat": 65.7511,
+    "lon": 24.6014
+  },
+  {
+    "id": "loimijoki-golf",
+    "name": "Loimijoki Golf",
+    "city": "Ypäjä",
+    "country": "Finland",
+    "lat": 60.819,
+    "lon": 23.2324
+  },
+  {
+    "id": "alastaro-golf",
+    "name": "Alastaro Golf",
+    "city": "Alastaro",
+    "country": "Finland",
+    "lat": 60.9847,
+    "lon": 22.6418
+  },
+  {
+    "id": "archipelagia-golf",
+    "name": "Archipelagia Golf Club",
+    "city": "Parainen",
+    "country": "Finland",
+    "lat": 60.316,
+    "lon": 22.2728
+  },
+  {
+    "id": "levi-golf",
+    "name": "Levi Golf",
+    "city": "Kittilä",
+    "country": "Finland",
+    "lat": 67.7992,
+    "lon": 24.8741
+  },
+  {
+    "id": "kuortane-golf",
+    "name": "Kuortane Golf",
+    "city": "Kuortane",
+    "country": "Finland",
+    "lat": 62.7608,
+    "lon": 23.5175
+  },
+  {
+    "id": "harjattula-golf",
+    "name": "Harjattula Golf",
+    "city": "Turku",
+    "country": "Finland",
+    "lat": 60.3669,
+    "lon": 22.285
+  },
+  {
+    "id": "porin-golfkerho",
+    "name": "Porin Golfkerho",
+    "city": "Pori",
+    "country": "Finland",
+    "lat": 61.5118,
+    "lon": 21.7622
+  },
+  {
+    "id": "hyvigolf",
+    "name": "Hyvigolf",
+    "city": "Hyvinkää",
+    "country": "Finland",
+    "lat": 60.6577,
+    "lon": 24.8162
+  },
+  {
+    "id": "rock-golf",
+    "name": "Rock Golf",
+    "city": "Siuntio",
+    "country": "Finland",
+    "lat": 60.1118,
+    "lon": 24.2491
+  },
+  {
+    "id": "meri-teijo-golf",
+    "name": "Meri-Teijo Golf",
+    "city": "Salo",
+    "country": "Finland",
+    "lat": 60.2384,
+    "lon": 22.9365
   }
 ]
