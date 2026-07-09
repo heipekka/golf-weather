@@ -14,6 +14,7 @@ import { HourlyRow } from "@/components/hourly-row";
 import { PlayabilityBadge } from "@/components/playability-badge";
 import { SourceComparisonTable } from "@/components/source-comparison-table";
 import { SourceToggle, type ViewMode } from "@/components/source-toggle";
+import { StartTimeButton } from "@/components/start-time-button";
 import { SunTimes } from "@/components/sun-times";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
@@ -23,7 +24,9 @@ import { getCourseById } from "@/data/golf-courses";
 import { useHasHydrated } from "@/hooks/use-color-scheme";
 import { useCourseWeather } from "@/hooks/use-course-weather";
 import { useCurrentHour } from "@/hooks/use-current-hour";
+import { useDarkScoring } from "@/hooks/use-dark-scoring";
 import { useLocation } from "@/hooks/use-location";
+import { resolveNow, useStartTime } from "@/hooks/use-start-time";
 import { useTheme } from "@/hooks/use-theme";
 import { useI18n } from "@/i18n";
 import { formatDistance } from "@/lib/format";
@@ -68,9 +71,15 @@ export default function CourseDetailScreen() {
   const course = getCourseById(id);
   const { coords } = useLocation();
   const [viewMode, setViewMode] = useState<ViewMode>("combined");
+  const { darkScoringEnabled } = useDarkScoring();
   const { t } = useI18n();
   const hourTick = useCurrentHour();
   const hasHydrated = useHasHydrated();
+  const { startTime } = useStartTime();
+  // `hourTick` is included so the "now" fallback (`startTime === null`) advances
+  // at each hour rollover, matching the refresh cadence used elsewhere.
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- hourTick is a deliberate recompute trigger, not read inside.
+  const now = useMemo(() => resolveNow(startTime), [startTime, hourTick]);
 
   const { weather, loading, error, refresh } = useCourseWeather(
     course?.lat ?? 0,
@@ -80,7 +89,10 @@ export default function CourseDetailScreen() {
 
   const distanceKm = course ? haversineKm(coords, course) : null;
   const sun = course && hasHydrated ? getSunTimes(course.lat, course.lon) : null;
-  const currentPoint = weather ? findCurrentPoint(weather.aggregated) : null;
+  const currentPoint = useMemo(
+    () => (weather ? findCurrentPoint(weather.aggregated, now) : null),
+    [weather, now],
+  );
   const playability = currentPoint
     ? scorePlayability({
         temperature: currentPoint.temperature,
@@ -88,6 +100,7 @@ export default function CourseDetailScreen() {
         windGust: currentPoint.windGust,
         precipitation: currentPoint.precipitation,
         precipitationProbability: currentPoint.precipitationProbability,
+        isDark: darkScoringEnabled && !!course && isNight(currentPoint.time, course.lat, course.lon),
       })
     : null;
 
@@ -173,6 +186,8 @@ export default function CourseDetailScreen() {
         </View>
 
         {sun && <SunTimes {...sun} variant="detailed" />}
+
+        <StartTimeButton />
 
         <SourceToggle value={viewMode} onChange={setViewMode} />
 

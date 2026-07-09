@@ -1,13 +1,14 @@
 import { Stack, useRouter } from 'expo-router';
 import { SymbolView } from 'expo-symbols';
 import { useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Switch, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { LocationPicker } from '@/components/location-picker';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
+import { useDarkScoring } from '@/hooks/use-dark-scoring';
 import { useLocation } from '@/hooks/use-location';
 import { useTheme } from '@/hooks/use-theme';
 import { useI18n, type Language } from '@/i18n';
@@ -88,6 +89,29 @@ function LocationSection() {
   );
 }
 
+function DarkScoringSection() {
+  const { t } = useI18n();
+  const { darkScoringEnabled, setDarkScoringEnabled } = useDarkScoring();
+
+  return (
+    <>
+      <View style={styles.sectionHeading}>
+        <ThemedText type="smallBold">{t('settings.darkScoring.title')}</ThemedText>
+        <ThemedText type="small" themeColor="textSecondary">
+          {t('settings.darkScoring.description')}
+        </ThemedText>
+      </View>
+
+      <ThemedView type="backgroundElement" style={styles.optionList}>
+        <View style={styles.option}>
+          <ThemedText type="default">{t('settings.darkScoring.toggle')}</ThemedText>
+          <Switch value={darkScoringEnabled} onValueChange={setDarkScoringEnabled} />
+        </View>
+      </ThemedView>
+    </>
+  );
+}
+
 function BackButton() {
   const router = useRouter();
   const theme = useTheme();
@@ -162,6 +186,8 @@ export default function SettingsScreen() {
               );
             })}
           </ThemedView>
+
+          <DarkScoringSection />
 
           {showLocationSection && <LocationSection />}
         </ScrollView>

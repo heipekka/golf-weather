@@ -1,6 +1,7 @@
 import { ScrollView, StyleSheet, View } from "react-native";
 
 import { Spacing } from "@/constants/theme";
+import { useDarkScoring } from "@/hooks/use-dark-scoring";
 import { useTheme } from "@/hooks/use-theme";
 import { useI18n } from "@/i18n";
 import {
@@ -25,6 +26,7 @@ export type HourlyStripProps = {
 export function HourlyStrip({ points, lat, lon }: HourlyStripProps) {
   const theme = useTheme();
   const { t, locale } = useI18n();
+  const { darkScoringEnabled } = useDarkScoring();
 
   if (points.length === 0) return null;
 
@@ -41,6 +43,7 @@ export function HourlyStrip({ points, lat, lon }: HourlyStripProps) {
           windGust: point.windGust,
           precipitation: point.precipitation,
           precipitationProbability: point.precipitationProbability,
+          isDark: darkScoringEnabled && isNight(point.time, lat, lon),
         });
 
         return (

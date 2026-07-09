@@ -6,6 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { CourseCard } from '@/components/course-card';
 import { CreatedByBanner } from '@/components/created-by-banner';
 import { SortControl } from '@/components/sort-control';
+import { StartTimeButton } from '@/components/start-time-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
@@ -14,9 +15,11 @@ import { useHasHydrated } from '@/hooks/use-color-scheme';
 import { SUBTITLE_KEY_BY_MODE, useCourseSort } from '@/hooks/use-course-sort';
 import { useCoursesWeather } from '@/hooks/use-courses-weather';
 import { useCurrentHour } from '@/hooks/use-current-hour';
+import { useDarkScoring } from '@/hooks/use-dark-scoring';
 import { useFavorites } from '@/hooks/use-favorites';
 import { useLocation } from '@/hooks/use-location';
 import { useSortedCourseOrder } from '@/hooks/use-sorted-course-order';
+import { resolveNow, useStartTime } from '@/hooks/use-start-time';
 import { useTheme } from '@/hooks/use-theme';
 import { useI18n } from '@/i18n';
 import { WINDOW_HOURS, currentPlayability } from '@/lib/course-sort';
@@ -30,10 +33,14 @@ export default function FavoritesScreen() {
   const { coords, loading: locationLoading, refresh } = useLocation();
   const { favorites } = useFavorites();
   const { sortMode, setSortMode } = useCourseSort();
+  const { darkScoringEnabled } = useDarkScoring();
   const { t } = useI18n();
   const theme = useTheme();
   const hourTick = useCurrentHour();
   const hasHydrated = useHasHydrated();
+  const { startTime } = useStartTime();
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- hourTick is a deliberate recompute trigger, not read inside.
+  const now = useMemo(() => resolveNow(startTime), [startTime, hourTick]);
 
   const favoriteCourses = useMemo(
     () => golfCourses.filter((course) => favorites.includes(course.id)),
@@ -47,11 +54,13 @@ export default function FavoritesScreen() {
   const { sortedCourses, orderIsStale, refreshOrder } = useSortedCourseOrder(
     coursesByDistance,
     weatherByCourse,
-    sortMode
+    sortMode,
+    startTime,
+    darkScoringEnabled
   );
   const listExtraData = useMemo(
-    () => ({ weatherByCourse, hourTick, hasHydrated }),
-    [weatherByCourse, hourTick, hasHydrated]
+    () => ({ weatherByCourse, hourTick, hasHydrated, startTime, darkScoringEnabled }),
+    [weatherByCourse, hourTick, hasHydrated, startTime, darkScoringEnabled]
   );
 
   return (
@@ -70,6 +79,7 @@ export default function FavoritesScreen() {
                 {t('favorites.title')}
               </ThemedText>
               <CreatedByBanner />
+              <StartTimeButton />
               <SortControl value={sortMode} onChange={setSortMode} />
               <ThemedText type="small" themeColor="textSecondary">
                 {t(SUBTITLE_KEY_BY_MODE[sortMode])}
@@ -100,13 +110,13 @@ export default function FavoritesScreen() {
           renderItem={({ item }: { item: GolfCourseWithDistance }) => {
             const entry = weatherByCourse[item.id];
             const aggregated = entry?.weather?.aggregated ?? [];
-            const current = entry?.weather ? findCurrentPoint(aggregated) : null;
+            const current = entry?.weather ? findCurrentPoint(aggregated, now) : null;
             const startIndex = current ? aggregated.indexOf(current) : 0;
             const hourly = aggregated.slice(
               Math.max(startIndex, 0),
               Math.max(startIndex, 0) + NEXT_HOURS_SHOWN
             );
-            const playability = currentPlayability(entry);
+            const playability = currentPlayability(entry, item.lat, item.lon, now, darkScoringEnabled);
             const sun = hasHydrated ? getSunTimes(item.lat, item.lon) : EMPTY_SUN_TIMES;
 
             return (
@@ -152,7 +162,7 @@ const styles = StyleSheet.create({
   },
   headerBlock: {
     gap: Spacing.three,
-    paddingBottom: Spacing.three,
+    paddingBottom: Spacing.two,
   },
   title: {
     fontSize: 34,

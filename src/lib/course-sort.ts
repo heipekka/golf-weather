@@ -5,6 +5,7 @@ import {
   type Playability,
   type PlayabilityLabel,
 } from "@/lib/golf";
+import { isNight } from "@/lib/sun";
 import { findCurrentPoint } from "@/lib/weather";
 
 export type SortMode = "location" | "weather" | "combined";
@@ -40,6 +41,7 @@ const COMBINED_WEATHER_SCORE: Record<PlayabilityLabel, number> = {
   Fair: 55,
   Poor: 25,
   Bad: 5,
+  Dark: 0,
 };
 
 /** Number of upcoming hours considered when scoring a course's playability. */
@@ -48,9 +50,13 @@ export const WINDOW_HOURS = 7;
 /** Derives the playability of a course over the next WINDOW_HOURS from its weather state, if loaded. */
 export function currentPlayability(
   entry: CourseWeatherState | undefined,
+  lat: number,
+  lon: number,
+  now?: Date,
+  includeDark = true,
 ): Playability | null {
   const aggregated = entry?.weather?.aggregated ?? [];
-  const current = entry?.weather ? findCurrentPoint(aggregated) : null;
+  const current = entry?.weather ? findCurrentPoint(aggregated, now) : null;
   if (!current) return null;
 
   const startIndex = aggregated.indexOf(current);
@@ -63,6 +69,7 @@ export function currentPlayability(
       windGust: point.windGust,
       precipitation: point.precipitation,
       precipitationProbability: point.precipitationProbability,
+      isDark: includeDark && isNight(point.time, lat, lon),
     })),
   );
 }
@@ -76,6 +83,8 @@ export function sortCourses(
   courses: GolfCourseWithDistance[],
   weatherByCourse: Record<string, CourseWeatherState>,
   mode: SortMode,
+  now?: Date,
+  includeDark = true,
 ): GolfCourseWithDistance[] {
   if (mode === "location") {
     return [...courses].sort((a, b) => a.distanceKm - b.distanceKm);
@@ -84,7 +93,7 @@ export function sortCourses(
   const playabilityById = new Map<string, Playability | null>(
     courses.map((course) => [
       course.id,
-      currentPlayability(weatherByCourse[course.id]),
+      currentPlayability(weatherByCourse[course.id], course.lat, course.lon, now, includeDark),
     ]),
   );
 

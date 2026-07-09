@@ -1,10 +1,8 @@
 import { useMemo } from "react";
-import { StyleSheet, View } from "react-native";
+import { Platform, StyleSheet, View, type ViewStyle } from "react-native";
 
-import { ThemedText } from "./themed-text";
-import { ThemedView } from "./themed-view";
-import { WeatherIcon } from "./weather-icon";
 import { Spacing } from "@/constants/theme";
+import { useDarkScoring } from "@/hooks/use-dark-scoring";
 import { useTheme } from "@/hooks/use-theme";
 import { useI18n } from "@/i18n";
 import {
@@ -15,8 +13,11 @@ import {
 } from "@/lib/format";
 import { PlayabilityColors, scorePlayability } from "@/lib/golf";
 import { isNight } from "@/lib/sun";
-import { indexByHour } from "@/lib/weather";
 import type { SourceForecast, SourceId } from "@/lib/weather";
+import { indexByHour } from "@/lib/weather";
+import { ThemedText } from "./themed-text";
+import { ThemedView } from "./themed-view";
+import { WeatherIcon } from "./weather-icon";
 
 const SHORT_LABELS: Record<SourceId, string> = {
   fmi: "FMI",
@@ -42,6 +43,7 @@ export function SourceComparisonTable({
 }: SourceComparisonTableProps) {
   const theme = useTheme();
   const { t, locale } = useI18n();
+  const { darkScoringEnabled } = useDarkScoring();
   const indexed = useMemo(
     () =>
       sources.map((source) => ({ source, byHour: indexByHour(source.hourly) })),
@@ -51,7 +53,7 @@ export function SourceComparisonTable({
   if (hours.length === 0) {
     return (
       <ThemedText type="small" themeColor="textSecondary">
-        {t('sourceTable.noForecastData')}
+        {t("sourceTable.noForecastData")}
       </ThemedText>
     );
   }
@@ -65,7 +67,7 @@ export function SourceComparisonTable({
         <View style={[styles.cell, styles.timeColumn]} />
         {indexed.map(({ source }) => (
           <View key={source.source} style={[styles.cell, styles.sourceColumn]}>
-            <ThemedText type="smallBold" numberOfLines={1}>
+            <ThemedText type="smallBold" style={styles.providerLabel}>
               {SHORT_LABELS[source.source]}
             </ThemedText>
             {source.error && (
@@ -74,23 +76,24 @@ export function SourceComparisonTable({
                 themeColor="textSecondary"
                 numberOfLines={1}
               >
-                {t('sourceTable.unavailable')}
+                {t("sourceTable.unavailable")}
               </ThemedText>
             )}
           </View>
         ))}
       </ThemedView>
 
-      {hours.map((hour) => {
+      {hours.map((hour, index) => {
         const night = isNight(hour, lat, lon);
+        const isLastRow = index === hours.length - 1;
 
         return (
           <View
             key={hour}
             style={[
               styles.row,
-              styles.bodyRow,
-              { borderColor: theme.textSecondary },
+              !isLastRow && styles.bodyRow,
+              !isLastRow && { borderColor: theme.textSecondary },
             ]}
           >
             <View style={[styles.cell, styles.timeColumn]}>
@@ -107,6 +110,7 @@ export function SourceComparisonTable({
                     windGust: point.windGust,
                     precipitation: point.precipitation,
                     precipitationProbability: point.precipitationProbability,
+                    isDark: darkScoringEnabled && night,
                   })
                 : null;
 
@@ -117,16 +121,18 @@ export function SourceComparisonTable({
                 >
                   {point ? (
                     <>
-                      <WeatherIcon
-                        weatherCode={point.weatherCode}
-                        precipitation={point.precipitation}
-                        cloudCover={point.cloudCover}
-                        size={18}
-                        isNight={night}
-                      />
-                      <ThemedText type="smallBold" numberOfLines={1}>
-                        {formatTemperature(point.temperature)}
-                      </ThemedText>
+                      <View style={styles.iconTempRow}>
+                        <WeatherIcon
+                          weatherCode={point.weatherCode}
+                          precipitation={point.precipitation}
+                          cloudCover={point.cloudCover}
+                          size={18}
+                          isNight={night}
+                        />
+                        <ThemedText type="smallBold" numberOfLines={1}>
+                          {formatTemperature(point.temperature)}
+                        </ThemedText>
+                      </View>
                       <ThemedText
                         type="small"
                         themeColor="textSecondary"
@@ -178,7 +184,11 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   headerRow: {
-    borderRadius: Spacing.two,
+    borderBottomWidth: 1,
+    borderBottomColor: "#808080",
+    ...(Platform.OS === "web"
+      ? ({ position: "sticky", top: -2, zIndex: 1 } as ViewStyle)
+      : null),
   },
   bodyRow: {
     borderBottomWidth: 1,
@@ -186,7 +196,7 @@ const styles = StyleSheet.create({
   },
   cell: {
     paddingVertical: Spacing.two,
-    paddingHorizontal: Spacing.two,
+    paddingHorizontal: Spacing.one,
     justifyContent: "center",
   },
   timeColumn: {
@@ -199,10 +209,20 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 20,
   },
+  providerLabel: {
+    fontSize: 12,
+    lineHeight: 15,
+    textAlign: "center",
+  },
   sourceColumn: {
     flex: 1,
     alignItems: "center",
     gap: Spacing.half,
+  },
+  iconTempRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.one,
   },
   playability: {
     fontSize: 11,

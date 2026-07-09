@@ -55,6 +55,15 @@ export const en: TranslationDictionary = {
     weather: 'Best weather',
     combined: 'Combined',
   },
+  startTime: {
+    open: 'Choose start time',
+    now: 'Now',
+    title: 'Choose start time',
+    selectDay: 'Day',
+    selectHour: 'Hour',
+    today: 'Today',
+    done: 'Done',
+  },
   playability: {
     trend: '{early} now, {late} later',
     labels: {
@@ -64,6 +73,7 @@ export const en: TranslationDictionary = {
       Hot: 'Hot',
       Poor: 'Poor',
       Bad: 'Bad',
+      Dark: 'Dark',
     },
     reasons: {
       badConditions: 'heavy rain, cold, or strong wind',
@@ -89,6 +99,12 @@ export const en: TranslationDictionary = {
     languageDescription: 'Choose the app language.',
     finnish: 'Suomi',
     english: 'English',
+    darkScoring: {
+      title: 'Dark scoring',
+      description:
+        'When on, hours with no playable light are labeled Dark and factored into playability.',
+      toggle: 'Account for darkness',
+    },
     location: {
       title: 'Default location',
       description:

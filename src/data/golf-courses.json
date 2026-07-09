@@ -691,5 +691,26 @@
     "city": "Mäntyharju",
     "lat": 61.4339,
     "lon": 26.6265
+  },
+  {
+    "id": "la-cala-resort",
+    "name": "La Cala Resort",
+    "city": "Mijas",
+    "lat": 36.5364,
+    "lon": -4.7178
+  },
+  {
+    "id": "mijas-golf",
+    "name": "Mijas Golf",
+    "city": "Mijas",
+    "lat": 36.5494,
+    "lon": -4.6691
+  },
+  {
+    "id": "calanova-golf",
+    "name": "Calanova Golf Club",
+    "city": "Mijas",
+    "lat": 36.514,
+    "lon": -4.7119
   }
 ]

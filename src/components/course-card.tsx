@@ -9,9 +9,9 @@ import { useTheme } from "@/hooks/use-theme";
 import { useI18n } from "@/i18n";
 import {
   formatDistance,
-  formatPrecipitation,
-  formatTemperature,
-  formatWind,
+  formatPrecipitationRange,
+  formatTemperatureAverage,
+  formatWindRange,
 } from "@/lib/format";
 import type { Playability } from "@/lib/golf";
 import type { SunTimes as SunTimesData } from "@/lib/sun";
@@ -99,7 +99,7 @@ export function CourseCard({
                       themeColor="textSecondary"
                       style={styles.statText}
                     >
-                      {formatWind(current?.windSpeed ?? null)}
+                      {formatWindRange(hourly.map((point) => point.windSpeed))}
                     </ThemedText>
                   </View>
                   <View style={styles.statRow}>
@@ -117,7 +117,7 @@ export function CourseCard({
                       themeColor="textSecondary"
                       style={styles.statText}
                     >
-                      {formatPrecipitation(current?.precipitation ?? null)}
+                      {formatPrecipitationRange(hourly.map((point) => point.precipitation))}
                     </ThemedText>
                   </View>
                 </>
@@ -134,7 +134,7 @@ export function CourseCard({
                 <ThemedText type="subtitle" style={styles.temp}>
                   {loading
                     ? "…"
-                    : formatTemperature(current?.temperature ?? null)}
+                    : formatTemperatureAverage(hourly.map((point) => point.temperature))}
                 </ThemedText>
               </View>
             </View>

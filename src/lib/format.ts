@@ -15,6 +15,37 @@ export function formatPrecipitation(value: number | null | undefined): string {
   return `${value.toFixed(1)} mm`;
 }
 
+function finiteNumbers(values: (number | null | undefined)[]): number[] {
+  return values.filter((v): v is number => v !== null && v !== undefined && !Number.isNaN(v));
+}
+
+/** Averages a window of temperature readings into a single formatted value. */
+export function formatTemperatureAverage(values: (number | null | undefined)[]): string {
+  const nums = finiteNumbers(values);
+  if (nums.length === 0) return formatTemperature(null);
+  return formatTemperature(nums.reduce((sum, v) => sum + v, 0) / nums.length);
+}
+
+/** Averages a window of wind readings, or shows a min-max range if the spread exceeds 0.5 m/s. */
+export function formatWindRange(values: (number | null | undefined)[]): string {
+  const nums = finiteNumbers(values);
+  if (nums.length === 0) return formatWind(null);
+  const min = Math.min(...nums);
+  const max = Math.max(...nums);
+  if (max - min > 0.5) return `${min.toFixed(1)}-${max.toFixed(1)} m/s`;
+  return formatWind(nums.reduce((sum, v) => sum + v, 0) / nums.length);
+}
+
+/** Shows a single precipitation value, or a min-max range if it changes across the window. */
+export function formatPrecipitationRange(values: (number | null | undefined)[]): string {
+  const nums = finiteNumbers(values);
+  if (nums.length === 0) return formatPrecipitation(null);
+  const min = Math.min(...nums);
+  const max = Math.max(...nums);
+  if (min.toFixed(1) !== max.toFixed(1)) return `${min.toFixed(1)}-${max.toFixed(1)} mm`;
+  return formatPrecipitation(min);
+}
+
 export function formatDistance(km: number): string {
   if (km < 10) return `${km.toFixed(1)} km`;
   return `${Math.round(km)} km`;
