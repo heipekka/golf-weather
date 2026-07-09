@@ -7,7 +7,7 @@ export const unstable_settings = {
 export default function CoursesLayout() {
   return (
     <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="index" />
+      <Stack.Screen name="index" options={{ headerShown: true }} />
       <Stack.Screen name="[id]" options={{ headerShown: true }} />
     </Stack>
   );

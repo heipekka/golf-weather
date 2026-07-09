@@ -1,5 +1,5 @@
 import { SymbolView } from 'expo-symbols';
-import { useState } from 'react';
+import { type ReactNode, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { StartTimePicker } from './start-time-picker';
@@ -16,8 +16,13 @@ function isSameDay(a: Date, b: Date): boolean {
   return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
 }
 
-/** Full-width button that opens the start-time picker dialog, meant to sit directly above the course listing. */
-export function StartTimeButton() {
+export type StartTimeButtonProps = {
+  /** Extra content rendered in the same row, next to the button (e.g. the course search input). */
+  children?: ReactNode;
+};
+
+/** Button that opens the start-time picker dialog, meant to sit directly above the course listing. Resetting back to "now" is available inside the picker dialog. */
+export function StartTimeButton({ children }: StartTimeButtonProps) {
   const { t, locale } = useI18n();
   const theme = useTheme();
   const { startTime, setStartTime } = useStartTime();
@@ -49,24 +54,7 @@ export function StartTimeButton() {
           </ThemedView>
         </Pressable>
 
-        {startTime && (
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel={t('startTime.now')}
-            onPress={() => setStartTime(null)}
-            style={({ pressed }) => pressed && styles.pressed}>
-            <ThemedView type="backgroundElement" style={styles.resetButtonInner}>
-              <SymbolView
-                name={{ ios: 'arrow.counterclockwise', android: 'history', web: 'history' }}
-                size={14}
-                tintColor={theme.textSecondary}
-              />
-              <ThemedText type="small" themeColor="textSecondary">
-                {t('startTime.now')}
-              </ThemedText>
-            </ThemedView>
-          </Pressable>
-        )}
+        {children && <View style={styles.childrenSlot}>{children}</View>}
       </View>
 
       <StartTimePicker
@@ -103,13 +91,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.three,
     borderRadius: Spacing.three,
   },
-  resetButtonInner: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.one,
-    paddingVertical: Spacing.two,
-    paddingHorizontal: Spacing.three,
-    borderRadius: Spacing.three,
+  childrenSlot: {
+    flex: 1,
   },
   pressed: {
     opacity: 0.7,

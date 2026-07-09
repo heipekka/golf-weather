@@ -41,6 +41,10 @@ export const fi = {
     combined: "Yhdistetty",
     bySource: "Lähteittäin",
   },
+  courseSearch: {
+    placeholder: "Hae",
+    clear: "Tyhjennä haku",
+  },
   sourceTable: {
     noForecastData: "Ennustetietoja ei saatavilla.",
     unavailable: "Ei saatavilla",

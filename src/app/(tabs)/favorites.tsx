@@ -65,7 +65,7 @@ export default function FavoritesScreen() {
 
   return (
     <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea} edges={['top']}>
+      <SafeAreaView style={styles.safeArea}>
         <FlatList
           data={sortedCourses}
           keyExtractor={(item) => item.id}
@@ -75,9 +75,6 @@ export default function FavoritesScreen() {
           refreshControl={<RefreshControl refreshing={locationLoading} onRefresh={refresh} />}
           ListHeaderComponent={
             <ThemedView style={styles.headerBlock}>
-              <ThemedText type="title" style={styles.title}>
-                {t('favorites.title')}
-              </ThemedText>
               <CreatedByBanner />
               <StartTimeButton />
               <SortControl value={sortMode} onChange={setSortMode} />
@@ -163,10 +160,6 @@ const styles = StyleSheet.create({
   headerBlock: {
     gap: Spacing.three,
     paddingBottom: Spacing.two,
-  },
-  title: {
-    fontSize: 34,
-    lineHeight: 38,
   },
   empty: {
     textAlign: 'center',

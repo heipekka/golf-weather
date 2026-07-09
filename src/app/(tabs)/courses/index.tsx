@@ -1,10 +1,18 @@
-import { Link } from 'expo-router';
+import { Link, Stack } from 'expo-router';
 import { SymbolView } from 'expo-symbols';
 import { useMemo, useState } from 'react';
-import { ActivityIndicator, FlatList, Pressable, RefreshControl, StyleSheet, View } from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  Pressable,
+  RefreshControl,
+  StyleSheet,
+  View,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { CourseCard } from '@/components/course-card';
+import { CourseSearchBar } from '@/components/course-search-bar';
 import { CreatedByBanner } from '@/components/created-by-banner';
 import { SortControl } from '@/components/sort-control';
 import { StartTimeButton } from '@/components/start-time-button';
@@ -45,6 +53,7 @@ export default function CoursesScreen() {
   const hourTick = useCurrentHour();
   const hasHydrated = useHasHydrated();
   const { startTime } = useStartTime();
+  const [searchQuery, setSearchQuery] = useState('');
   // eslint-disable-next-line react-hooks/exhaustive-deps -- hourTick is a deliberate recompute trigger, not read inside.
   const now = useMemo(() => resolveNow(startTime), [startTime, hourTick]);
 
@@ -65,27 +74,67 @@ export default function CoursesScreen() {
     [weatherByCourse, hourTick, hasHydrated, startTime, darkScoringEnabled]
   );
 
-  // Render-only pagination: `sortedCourses` is already fully fetched and
-  // ranked, this just limits how many cards are mounted at a time. Resets
-  // to the first page when the ranking basis changes (sort mode or preview
-  // time), so switching sort shows the new top of the list. Adjusted
-  // during render (React's recommended pattern for derived state) rather
-  // than in an effect, to avoid an extra commit.
+  const normalizedQuery = searchQuery.trim().toLowerCase();
+  const filteredCourses = useMemo(
+    () =>
+      normalizedQuery
+        ? sortedCourses.filter(
+            (course) =>
+              course.name.toLowerCase().includes(normalizedQuery) ||
+              course.city.toLowerCase().includes(normalizedQuery)
+          )
+        : sortedCourses,
+    [sortedCourses, normalizedQuery]
+  );
+
+  // Render-only pagination: `filteredCourses` is already fully fetched and
+  // ranked/filtered, this just limits how many cards are mounted at a time.
+  // Resets to the first page when the ranking/filtering basis changes (sort
+  // mode, preview time, or search query), so switching sort or searching
+  // shows the new top of the list. Adjusted during render (React's
+  // recommended pattern for derived state) rather than in an effect, to
+  // avoid an extra commit.
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
-  const [pageResetKey, setPageResetKey] = useState({ sortMode, startTime });
-  if (pageResetKey.sortMode !== sortMode || pageResetKey.startTime !== startTime) {
-    setPageResetKey({ sortMode, startTime });
+  const [pageResetKey, setPageResetKey] = useState({ sortMode, startTime, searchQuery });
+  if (
+    pageResetKey.sortMode !== sortMode ||
+    pageResetKey.startTime !== startTime ||
+    pageResetKey.searchQuery !== searchQuery
+  ) {
+    setPageResetKey({ sortMode, startTime, searchQuery });
     setVisibleCount(PAGE_SIZE);
   }
   const visibleCourses = useMemo(
-    () => sortedCourses.slice(0, visibleCount),
-    [sortedCourses, visibleCount]
+    () => filteredCourses.slice(0, visibleCount),
+    [filteredCourses, visibleCount]
   );
-  const hasMoreCourses = visibleCount < sortedCourses.length;
+  const hasMoreCourses = visibleCount < filteredCourses.length;
 
   return (
     <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea} edges={['top']}>
+      <Stack.Screen
+        options={{
+          title: t('app.title'),
+          headerTitleAlign: 'center',
+          headerRight: () => (
+            <Link href="/settings" asChild>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={t('courses.openSettings')}
+                hitSlop={Spacing.two}
+                style={({ pressed }) => [styles.settingsButton, pressed && styles.settingsButtonPressed]}>
+                <SymbolView
+                  name={{ ios: 'gearshape', android: 'settings', web: 'settings' }}
+                  size={24}
+                  tintColor={theme.textSecondary}
+                />
+              </Pressable>
+            </Link>
+          ),
+          headerRightContainerStyle: styles.headerSideContainer,
+        }}
+      />
+      <SafeAreaView style={styles.safeArea}>
         <FlatList
           data={visibleCourses}
           keyExtractor={(item) => item.id}
@@ -95,7 +144,7 @@ export default function CoursesScreen() {
           refreshControl={<RefreshControl refreshing={locationLoading} onRefresh={refresh} />}
           onEndReachedThreshold={0.6}
           onEndReached={() => {
-            setVisibleCount((count) => Math.min(count + PAGE_SIZE, sortedCourses.length));
+            setVisibleCount((count) => Math.min(count + PAGE_SIZE, filteredCourses.length));
           }}
           ListFooterComponent={
             hasMoreCourses ? (
@@ -106,26 +155,10 @@ export default function CoursesScreen() {
           }
           ListHeaderComponent={
             <ThemedView style={styles.headerBlock}>
-              <View style={styles.titleRow}>
-                <ThemedText type="title" style={styles.title}>
-                  {t('app.title')}
-                </ThemedText>
-                <Link href="/settings" asChild>
-                  <Pressable
-                    accessibilityRole="button"
-                    accessibilityLabel={t('courses.openSettings')}
-                    hitSlop={Spacing.two}
-                    style={({ pressed }) => [styles.settingsButton, pressed && styles.settingsButtonPressed]}>
-                    <SymbolView
-                      name={{ ios: 'gearshape', android: 'settings', web: 'settings' }}
-                      size={24}
-                      tintColor={theme.textSecondary}
-                    />
-                  </Pressable>
-                </Link>
-              </View>
               <CreatedByBanner />
-              <StartTimeButton />
+              <StartTimeButton>
+                <CourseSearchBar query={searchQuery} onChangeQuery={setSearchQuery} />
+              </StartTimeButton>
               <SortControl value={sortMode} onChange={setSortMode} />
               <ThemedText type="small" themeColor="textSecondary">
                 {isFallback
@@ -210,20 +243,14 @@ const styles = StyleSheet.create({
     gap: Spacing.three,
     paddingBottom: Spacing.two,
   },
-  titleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  title: {
-    fontSize: 34,
-    lineHeight: 38,
-  },
   settingsButton: {
     padding: Spacing.one,
   },
   settingsButtonPressed: {
     opacity: 0.6,
+  },
+  headerSideContainer: {
+    paddingHorizontal: Spacing.three,
   },
   refreshOrderButton: {
     flexDirection: 'row',

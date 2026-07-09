@@ -52,6 +52,9 @@ export default function TabsLayout() {
               tintColor={color}
             />
           ),
+          headerShown: true,
+          headerTitle: t("favorites.title"),
+          headerTitleAlign: "center",
         }}
       />
     </Tabs>

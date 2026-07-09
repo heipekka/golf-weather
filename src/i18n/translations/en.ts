@@ -42,6 +42,10 @@ export const en: TranslationDictionary = {
     combined: "Combined",
     bySource: "By source",
   },
+  courseSearch: {
+    placeholder: "Search",
+    clear: "Clear search",
+  },
   sourceTable: {
     noForecastData: "No forecast data available.",
     unavailable: "Unavailable",

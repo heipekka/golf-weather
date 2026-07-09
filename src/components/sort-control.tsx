@@ -13,7 +13,7 @@ const SORT_MODE_LABEL_KEYS: Record<SortMode, TranslationKey> = {
   combined: 'sort.combined',
 };
 
-const SORT_MODES: SortMode[] = ['location', 'weather', 'combined'];
+const SORT_MODES: SortMode[] = ['location', 'combined', 'weather'];
 
 type SortControlProps = {
   value: SortMode;
