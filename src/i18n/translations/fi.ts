@@ -10,8 +10,9 @@ export const fi = {
     subtitleLocation: 'Lähimmät kentät sijaintiisi nähden, päivitetty FMI:stä, YR.no:sta ja Open-Meteosta.',
     subtitleWeather: 'Parhaat pelisäät juuri nyt, lähimmät ensin.',
     subtitleCombined: 'Etäisyyden ja nykyisten olosuhteiden yhdistelmä, lähimmät ensin.',
-    locationDenied: 'Sijaintilupa epäätty — näytetään kenttiä Kuopion lähellä.',
+    locationDenied: 'Sijaintilupa epäätty — näytetään kenttiä Kuopion lähellä. Voit asettaa oletussijainnin asetuksista.',
     locationLoading: 'Etsitään sijaintiasi — näytetään toistaiseksi kenttiä Kuopion lähellä.',
+    locationSaved: 'Näytetään kenttiä tallennetun oletussijaintisi lähellä.',
     openSettings: 'Avaa asetukset',
     refreshOrder: 'Päivitä järjestys',
   },
@@ -88,6 +89,16 @@ export const fi = {
     languageDescription: 'Valitse sovelluksen käyttökieli.',
     finnish: 'Suomi',
     english: 'English',
+    location: {
+      title: 'Oletussijainti',
+      description:
+        'Sovellus käyttää laitteen sijaintia, kun se on saatavilla. Muussa tapauksessa käytetään tätä tallennettua oletussijaintia. Valitse sijainti napauttamalla karttaa.',
+      instruction: 'Napauta karttaa valitaksesi sijainnin.',
+      savedLabel: 'Tallennettu sijainti: {coords}',
+      notSet: 'Oletussijaintia ei ole asetettu — käytössä on Kuopio.',
+      save: 'Tallenna sijainti',
+      clear: 'Poista tallennettu sijainti',
+    },
   },
   tabs: {
     courses: 'Kentät',
@@ -117,6 +128,10 @@ export const fi = {
     exported: 'Kopioitu leikepöydälle',
     shared: 'Jaettu',
     reset: 'Tyhjennä käyttöloki',
+    passwordPrompt: 'Sivu on suojattu salasanalla.',
+    passwordPlaceholder: 'Salasana',
+    unlock: 'Avaa',
+    wrongPassword: 'Väärä salasana.',
   },
 };
 

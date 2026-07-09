@@ -1,21 +1,92 @@
 import { Stack, useRouter } from 'expo-router';
 import { SymbolView } from 'expo-symbols';
-import { useCallback, useEffect, useState } from 'react';
-import { Platform, Pressable, ScrollView, Share, StyleSheet, View } from 'react-native';
+import { useState } from 'react';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { LocationPicker } from '@/components/location-picker';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
+import { useLocation } from '@/hooks/use-location';
 import { useTheme } from '@/hooks/use-theme';
 import { useI18n, type Language } from '@/i18n';
-import { formatDateTime } from '@/lib/format';
-import { clearUsageLog, readUsageLog, summarizeUsage, type UsageLog, type UsageSummary } from '@/lib/usage-log';
+import type { Coordinates } from '@/lib/geo';
 
 const LANGUAGES: { code: Language; labelKey: 'settings.finnish' | 'settings.english' }[] = [
   { code: 'fi', labelKey: 'settings.finnish' },
   { code: 'en', labelKey: 'settings.english' },
 ];
+
+function formatCoordinate(coords: Coordinates): string {
+  return `${coords.lat.toFixed(4)}, ${coords.lon.toFixed(4)}`;
+}
+
+function LocationSection() {
+  const { t } = useI18n();
+  const theme = useTheme();
+  const { savedLocation, setSavedLocation, clearSavedLocation } = useLocation();
+  const [draft, setDraft] = useState<Coordinates | null>(savedLocation);
+
+  const hasChanges =
+    !!draft && (!savedLocation || draft.lat !== savedLocation.lat || draft.lon !== savedLocation.lon);
+
+  return (
+    <>
+      <View style={styles.sectionHeading}>
+        <ThemedText type="smallBold">{t('settings.location.title')}</ThemedText>
+        <ThemedText type="small" themeColor="textSecondary">
+          {t('settings.location.description')}
+        </ThemedText>
+      </View>
+
+      <ThemedText type="small" themeColor="textSecondary">
+        {savedLocation
+          ? t('settings.location.savedLabel', { coords: formatCoordinate(savedLocation) })
+          : t('settings.location.notSet')}
+      </ThemedText>
+
+      <ThemedText type="small" themeColor="textSecondary">
+        {t('settings.location.instruction')}
+      </ThemedText>
+
+      <LocationPicker value={draft} onChange={setDraft} />
+
+      <View style={styles.locationActions}>
+        <Pressable
+          accessibilityRole="button"
+          onPress={() => draft && setSavedLocation(draft)}
+          disabled={!hasChanges}
+          style={({ pressed }) => [
+            styles.locationButton,
+            { backgroundColor: theme.backgroundElement },
+            pressed && styles.optionPressed,
+            !hasChanges && styles.locationButtonDisabled,
+          ]}>
+          <ThemedText type="link" themeColor="text">
+            {t('settings.location.save')}
+          </ThemedText>
+        </Pressable>
+        <Pressable
+          accessibilityRole="button"
+          onPress={() => {
+            clearSavedLocation();
+            setDraft(null);
+          }}
+          disabled={!savedLocation}
+          style={({ pressed }) => [
+            styles.locationButton,
+            pressed && styles.optionPressed,
+            !savedLocation && styles.locationButtonDisabled,
+          ]}>
+          <ThemedText type="link" themeColor="textSecondary">
+            {t('settings.location.clear')}
+          </ThemedText>
+        </Pressable>
+      </View>
+    </>
+  );
+}
 
 function BackButton() {
   const router = useRouter();
@@ -26,7 +97,7 @@ function BackButton() {
       accessibilityRole="button"
       accessibilityLabel="Back"
       hitSlop={Spacing.two}
-      onPress={() => router.back()}
+      onPress={() => router.dismissTo('/courses')}
       style={({ pressed }) => [styles.backButton, pressed && styles.backButtonPressed]}>
       <SymbolView
         name={{ ios: 'chevron.left', android: 'arrow_back', web: 'arrow_back' }}
@@ -37,130 +108,11 @@ function BackButton() {
   );
 }
 
-function UsageSection() {
-  const { t, locale } = useI18n();
-  const [log, setLog] = useState<UsageLog | null>(null);
-  const [status, setStatus] = useState<string | null>(null);
-
-  const loadLog = useCallback(() => {
-    readUsageLog()
-      .then(setLog)
-      .catch(() => {});
-  }, []);
-
-  useEffect(() => {
-    loadLog();
-  }, [loadLog]);
-
-  const summary: UsageSummary | null = log ? summarizeUsage(log) : null;
-
-  const handleExport = useCallback(async () => {
-    if (!log) return;
-    setStatus(null);
-    const payload = JSON.stringify(log, null, 2);
-
-    try {
-      if (Platform.OS === 'web' && typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
-        await navigator.clipboard.writeText(payload);
-        setStatus(t('usage.exported'));
-        return;
-      }
-      await Share.share({ message: payload });
-      setStatus(t('usage.shared'));
-    } catch {
-      // Ignore share sheet cancellations or unsupported browsers.
-    }
-  }, [log, t]);
-
-  const handleReset = useCallback(() => {
-    clearUsageLog().then(loadLog);
-    setStatus(null);
-  }, [loadLog]);
-
-  return (
-    <>
-      <View style={styles.sectionHeading}>
-        <ThemedText type="smallBold">{t('usage.title')}</ThemedText>
-        <ThemedText type="small" themeColor="textSecondary">
-          {t('usage.description')}
-        </ThemedText>
-      </View>
-
-      <ThemedView type="backgroundElement" style={styles.usageCard}>
-        {!summary || summary.totalSessions === 0 ? (
-          <ThemedText type="small" themeColor="textSecondary">
-            {t('usage.empty')}
-          </ThemedText>
-        ) : (
-          <>
-            <View style={styles.usageStatsGrid}>
-              <UsageStat label={t('usage.totalSessions')} value={String(summary.totalSessions)} />
-              <UsageStat label={t('usage.distinctUsers')} value={String(summary.distinctUsers)} />
-              <UsageStat label={t('usage.distinctFingerprints')} value={String(summary.distinctFingerprints)} />
-              <UsageStat label={t('usage.firstSeen')} value={formatDateTime(summary.firstSeen, locale)} />
-              <UsageStat label={t('usage.lastSeen')} value={formatDateTime(summary.lastSeen, locale)} />
-            </View>
-
-            <View style={styles.usageRecentHeading}>
-              <ThemedText type="small" themeColor="textSecondary">
-                {t('usage.recent')}
-              </ThemedText>
-            </View>
-            <ScrollView style={styles.usageRecentList}>
-              {summary.recent.map((session, index) => (
-                <ThemedText key={`${session.at}-${index}`} type="small" style={styles.usageRecentRow}>
-                  {formatDateTime(session.at, locale)}
-                </ThemedText>
-              ))}
-            </ScrollView>
-          </>
-        )}
-      </ThemedView>
-
-      <View style={styles.usageActions}>
-        <Pressable
-          accessibilityRole="button"
-          onPress={handleExport}
-          disabled={!log || log.sessions.length === 0}
-          style={({ pressed }) => [styles.usageButton, pressed && styles.optionPressed]}>
-          <ThemedText type="link" themeColor="text">
-            {t('usage.export')}
-          </ThemedText>
-        </Pressable>
-        <Pressable
-          accessibilityRole="button"
-          onPress={handleReset}
-          disabled={!log || log.sessions.length === 0}
-          style={({ pressed }) => [styles.usageButton, pressed && styles.optionPressed]}>
-          <ThemedText type="link" themeColor="textSecondary">
-            {t('usage.reset')}
-          </ThemedText>
-        </Pressable>
-      </View>
-
-      {status && (
-        <ThemedText type="small" themeColor="textSecondary">
-          {status}
-        </ThemedText>
-      )}
-    </>
-  );
-}
-
-function UsageStat({ label, value }: { label: string; value: string }) {
-  return (
-    <View style={styles.usageStat}>
-      <ThemedText type="smallBold">{value}</ThemedText>
-      <ThemedText type="small" themeColor="textSecondary">
-        {label}
-      </ThemedText>
-    </View>
-  );
-}
-
 export default function SettingsScreen() {
   const { t, language, setLanguage } = useI18n();
   const theme = useTheme();
+  const { loading: locationLoading, source: locationSource } = useLocation();
+  const showLocationSection = !locationLoading && locationSource !== 'device';
 
   return (
     <ThemedView style={styles.container}>
@@ -174,7 +126,7 @@ export default function SettingsScreen() {
         }}
       />
       <SafeAreaView style={styles.safeArea} edges={['bottom']}>
-        <View style={styles.content}>
+        <ScrollView contentContainerStyle={styles.content}>
           <View style={styles.sectionHeading}>
             <ThemedText type="smallBold">{t('settings.language')}</ThemedText>
             <ThemedText type="small" themeColor="textSecondary">
@@ -211,8 +163,8 @@ export default function SettingsScreen() {
             })}
           </ThemedView>
 
-          <UsageSection />
-        </View>
+          {showLocationSection && <LocationSection />}
+        </ScrollView>
       </SafeAreaView>
     </ThemedView>
   );
@@ -252,6 +204,18 @@ const styles = StyleSheet.create({
   optionPressed: {
     opacity: 0.7,
   },
+  locationActions: {
+    flexDirection: 'row',
+    gap: Spacing.four,
+  },
+  locationButton: {
+    borderRadius: Spacing.two,
+    paddingVertical: Spacing.one,
+    paddingHorizontal: Spacing.two,
+  },
+  locationButtonDisabled: {
+    opacity: 0.4,
+  },
   backButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -262,35 +226,5 @@ const styles = StyleSheet.create({
   },
   headerSideContainer: {
     paddingHorizontal: Spacing.three,
-  },
-  usageCard: {
-    borderRadius: Spacing.three,
-    padding: Spacing.three,
-    gap: Spacing.three,
-  },
-  usageStatsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: Spacing.three,
-  },
-  usageStat: {
-    minWidth: 120,
-    gap: Spacing.half,
-  },
-  usageRecentHeading: {
-    gap: Spacing.half,
-  },
-  usageRecentList: {
-    maxHeight: 160,
-  },
-  usageRecentRow: {
-    paddingVertical: Spacing.half,
-  },
-  usageActions: {
-    flexDirection: 'row',
-    gap: Spacing.four,
-  },
-  usageButton: {
-    paddingVertical: Spacing.one,
   },
 });

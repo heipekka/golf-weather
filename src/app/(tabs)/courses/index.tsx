@@ -27,7 +27,7 @@ import { findCurrentPoint } from '@/lib/weather';
 const NEXT_HOURS_SHOWN = WINDOW_HOURS;
 
 export default function CoursesScreen() {
-  const { coords, loading: locationLoading, permissionDenied, isFallback, refresh } = useLocation();
+  const { coords, loading: locationLoading, permissionDenied, isFallback, source, refresh } = useLocation();
   const { sortMode, setSortMode } = useCourseSort();
   useSortModeUrlSync();
   const { t } = useI18n();
@@ -85,7 +85,9 @@ export default function CoursesScreen() {
               <ThemedText type="small" themeColor="textSecondary">
                 {isFallback
                   ? permissionDenied
-                    ? t('courses.locationDenied')
+                    ? source === 'saved'
+                      ? t('courses.locationSaved')
+                      : t('courses.locationDenied')
                     : t('courses.locationLoading')
                   : t(SUBTITLE_KEY_BY_MODE[sortMode])}
               </ThemedText>

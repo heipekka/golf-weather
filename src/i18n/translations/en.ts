@@ -10,8 +10,9 @@ export const en: TranslationDictionary = {
     subtitleLocation: 'Courses nearest to your location, updated from FMI, YR.no and Open-Meteo.',
     subtitleWeather: 'Courses with the best playing conditions right now, nearest first.',
     subtitleCombined: 'Balancing distance and current conditions, nearest first.',
-    locationDenied: 'Location permission denied — showing courses near Kuopio.',
+    locationDenied: 'Location permission denied — showing courses near Kuopio. You can set a default location in Settings.',
     locationLoading: 'Finding your location — showing courses near Kuopio for now.',
+    locationSaved: 'Showing courses near your saved default location.',
     openSettings: 'Open settings',
     refreshOrder: 'Refresh order',
   },
@@ -88,6 +89,16 @@ export const en: TranslationDictionary = {
     languageDescription: 'Choose the app language.',
     finnish: 'Suomi',
     english: 'English',
+    location: {
+      title: 'Default location',
+      description:
+        'The app uses your device location when it is available. Otherwise, this saved default location is used instead. Pick a location by tapping the map.',
+      instruction: 'Tap the map to choose a location.',
+      savedLabel: 'Saved location: {coords}',
+      notSet: 'No default location set — Kuopio is used.',
+      save: 'Save location',
+      clear: 'Clear saved location',
+    },
   },
   tabs: {
     courses: 'Courses',
@@ -117,5 +128,9 @@ export const en: TranslationDictionary = {
     exported: 'Copied to clipboard',
     shared: 'Shared',
     reset: 'Clear usage log',
+    passwordPrompt: 'This page is password protected.',
+    passwordPlaceholder: 'Password',
+    unlock: 'Unlock',
+    wrongPassword: 'Wrong password.',
   },
 };
