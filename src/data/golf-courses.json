@@ -1,0 +1,695 @@
+[
+  {
+    "id": "tali",
+    "name": "Helsingin Golfklubi (Tali)",
+    "city": "Helsinki",
+    "lat": 60.2287,
+    "lon": 24.8267
+  },
+  {
+    "id": "vuosaari",
+    "name": "Vuosaaren Golf",
+    "city": "Helsinki",
+    "lat": 60.2078,
+    "lon": 25.1479
+  },
+  {
+    "id": "espoon-golfseura",
+    "name": "Espoon Golfseura",
+    "city": "Espoo",
+    "lat": 60.17,
+    "lon": 24.6885
+  },
+  {
+    "id": "master-golf",
+    "name": "Master Golf Club",
+    "city": "Espoo",
+    "lat": 60.1972,
+    "lon": 24.609
+  },
+  {
+    "id": "sarfvik",
+    "name": "Sarfvik Golf & Country Club",
+    "city": "Kirkkonummi",
+    "lat": 60.1339,
+    "lon": 24.4453
+  },
+  {
+    "id": "peuramaa-golf",
+    "name": "Peuramaa Golf",
+    "city": "Kirkkonummi",
+    "lat": 60.1011,
+    "lon": 24.4596
+  },
+  {
+    "id": "vantaankoski",
+    "name": "Vantaankosken Golf",
+    "city": "Vantaa",
+    "lat": 60.3345,
+    "lon": 24.839
+  },
+  {
+    "id": "golf-talma",
+    "name": "Golf Talma",
+    "city": "Sipoo",
+    "lat": 60.3546,
+    "lon": 25.241
+  },
+  {
+    "id": "pickala",
+    "name": "Pickala Golf",
+    "city": "Siuntio",
+    "lat": 60.0967,
+    "lon": 24.2233
+  },
+  {
+    "id": "nevas-golf",
+    "name": "Nevas Golf",
+    "city": "Inkoo",
+    "lat": 60.0333,
+    "lon": 24.0333
+  },
+  {
+    "id": "hanko-golf",
+    "name": "Hanko Golf",
+    "city": "Hanko",
+    "lat": 59.8231,
+    "lon": 22.9575
+  },
+  {
+    "id": "nordcenter",
+    "name": "Nordcenter Golf & Country Club",
+    "city": "Nurmijärvi",
+    "lat": 60.4629,
+    "lon": 24.79
+  },
+  {
+    "id": "kytaja",
+    "name": "Kytäjä Golf",
+    "city": "Hyvinkää",
+    "lat": 60.6892,
+    "lon": 24.6172
+  },
+  {
+    "id": "porvoon-golfkerho",
+    "name": "Porvoon Golfkerho",
+    "city": "Porvoo",
+    "lat": 60.4064,
+    "lon": 25.6656
+  },
+  {
+    "id": "sea-golf-ronnas",
+    "name": "Sea Golf Rönnäs",
+    "city": "Loviisa",
+    "lat": 60.4487,
+    "lon": 26.1721
+  },
+  {
+    "id": "aura-golf",
+    "name": "Aura Golf",
+    "city": "Turku",
+    "lat": 60.4518,
+    "lon": 22.2666
+  },
+  {
+    "id": "ruissalo-golf",
+    "name": "Ruissalo Golf",
+    "city": "Turku",
+    "lat": 60.4372,
+    "lon": 22.1494
+  },
+  {
+    "id": "salo-golf",
+    "name": "Salo Golf",
+    "city": "Salo",
+    "lat": 60.3833,
+    "lon": 23.1333
+  },
+  {
+    "id": "aurinko-golf",
+    "name": "Aurinko Golf",
+    "city": "Naantali",
+    "lat": 60.4994,
+    "lon": 22.0678
+  },
+  {
+    "id": "tammer-golf",
+    "name": "Tammer Golf",
+    "city": "Tampere",
+    "lat": 61.459,
+    "lon": 23.83
+  },
+  {
+    "id": "tampereen-golfseura",
+    "name": "Tampereen Golfseura (Kalkku)",
+    "city": "Tampere",
+    "lat": 61.4978,
+    "lon": 23.651
+  },
+  {
+    "id": "katinala-golf",
+    "name": "Katinala Golf",
+    "city": "Kangasala",
+    "lat": 61.4569,
+    "lon": 24.0759
+  },
+  {
+    "id": "linna-golf",
+    "name": "Linna Golf",
+    "city": "Hämeenlinna",
+    "lat": 60.9796,
+    "lon": 24.5596
+  },
+  {
+    "id": "aulanko-golf-eversti",
+    "name": "Aulanko Golf (Eversti)",
+    "city": "Hämeenlinna",
+    "lat": 61.035,
+    "lon": 24.4605
+  },
+  {
+    "id": "aulanko-golf-hugo",
+    "name": "Aulanko Golf (Hugo)",
+    "city": "Hämeenlinna",
+    "lat": 61.0261,
+    "lon": 24.4386
+  },
+  {
+    "id": "tawast-golf",
+    "name": "Tawast Golf",
+    "city": "Hämeenlinna",
+    "lat": 60.9987,
+    "lon": 24.5257
+  },
+  {
+    "id": "lahden-golf",
+    "name": "Lahden Golf",
+    "city": "Lahti",
+    "lat": 60.9827,
+    "lon": 25.6612
+  },
+  {
+    "id": "messila-golf",
+    "name": "Messilä Golf",
+    "city": "Hollola",
+    "lat": 61.0968,
+    "lon": 25.468
+  },
+  {
+    "id": "vierumaki-golf",
+    "name": "Vierumäki Golf",
+    "city": "Heinola",
+    "lat": 61.0587,
+    "lon": 25.5809
+  },
+  {
+    "id": "vuoksen-golf",
+    "name": "Imatran Golf",
+    "city": "Imatra",
+    "lat": 61.2269,
+    "lon": 28.8563
+  },
+  {
+    "id": "etela-saimaa-golf",
+    "name": "Etelä-Saimaa Golf (Viipurin Golf)",
+    "city": "Lappeenranta",
+    "lat": 61.1049,
+    "lon": 28.2575
+  },
+  {
+    "id": "kahilanniemi-golf",
+    "name": "Kahilanniemi (Viipurin Golf)",
+    "city": "Lappeenranta",
+    "lat": 61.0641,
+    "lon": 28.2132
+  },
+  {
+    "id": "tarinagolf",
+    "name": "Tarinagolf",
+    "city": "Siilinjärvi",
+    "lat": 63.0606,
+    "lon": 27.6535
+  },
+  {
+    "id": "tahko-golf",
+    "name": "Tahko Golf (Old Course)",
+    "city": "Tahkovuori",
+    "lat": 63.2985,
+    "lon": 28.0464
+  },
+  {
+    "id": "tahko-golf-lake-forest",
+    "name": "Tahko Golf (Lake & Forest)",
+    "city": "Tahkovuori",
+    "lat": 63.2454,
+    "lon": 28.0487
+  },
+  {
+    "id": "eerikkala-golf",
+    "name": "Eerikkala Golf",
+    "city": "Tervo",
+    "lat": 62.9454,
+    "lon": 26.76
+  },
+  {
+    "id": "konnus-golf",
+    "name": "Konnus-Golf",
+    "city": "Leppävirta",
+    "lat": 62.53,
+    "lon": 27.79
+  },
+  {
+    "id": "kartanogolf",
+    "name": "Kartanogolf",
+    "city": "Joroinen",
+    "lat": 62.1772,
+    "lon": 27.8825
+  },
+  {
+    "id": "yla-savon-golf",
+    "name": "Ylä-Savon Golfseura",
+    "city": "Iisalmi",
+    "lat": 63.5341,
+    "lon": 27.2759
+  },
+  {
+    "id": "karelia-golf",
+    "name": "Karelia Golf ",
+    "city": "Kontiolahti",
+    "lat": 62.7478,
+    "lon": 29.8214
+  },
+  {
+    "id": "outokummun-golf",
+    "name": "Outokummun Golf",
+    "city": "Outokumpu",
+    "lat": 62.7146,
+    "lon": 28.9863
+  },
+  {
+    "id": "pielis-golf",
+    "name": "Pielis-Golf",
+    "city": "Nurmes",
+    "lat": 63.533,
+    "lon": 29.1979
+  },
+  {
+    "id": "katinkulta-golf",
+    "name": "Katinkulta Golf",
+    "city": "Sotkamo",
+    "lat": 64.1482,
+    "lon": 28.2351
+  },
+  {
+    "id": "kajaanin-golf",
+    "name": "Kajaanin Golf",
+    "city": "Kajaani",
+    "lat": 64.2089,
+    "lon": 27.6656
+  },
+  {
+    "id": "kerigolf",
+    "name": "Kerigolf",
+    "city": "Kerimäki",
+    "lat": 61.8845,
+    "lon": 29.1613
+  },
+  {
+    "id": "mikkelin-golf",
+    "name": "Mikkelin Golf",
+    "city": "Mikkeli",
+    "lat": 61.6887,
+    "lon": 27.2198
+  },
+  {
+    "id": "golf-porrassalmi",
+    "name": "Annilan Golfkeskus",
+    "city": "Mikkeli",
+    "lat": 61.6496,
+    "lon": 27.2813
+  },
+  {
+    "id": "puula-golf",
+    "name": "PuulaGolf",
+    "city": "Kangasniemi",
+    "lat": 62.0033,
+    "lon": 26.6862
+  },
+  {
+    "id": "jyvas-golf",
+    "name": "Jyväs-Golf (Sippulanniemi)",
+    "city": "Jyväskylä",
+    "lat": 62.2125,
+    "lon": 25.729
+  },
+  {
+    "id": "muurame-golf",
+    "name": "Muurame Golf",
+    "city": "Muurame",
+    "lat": 62.1315,
+    "lon": 25.6808
+  },
+  {
+    "id": "laukaan-peurunkagolf",
+    "name": "Laukaan Peurunkagolf",
+    "city": "Laukaa",
+    "lat": 62.4339,
+    "lon": 25.869
+  },
+  {
+    "id": "revontuli-golf",
+    "name": "Revontuli Golf",
+    "city": "Hankasalmi",
+    "lat": 62.329,
+    "lon": 26.5199
+  },
+  {
+    "id": "himos-golf",
+    "name": "Himos Golf",
+    "city": "Jämsä",
+    "lat": 61.8831,
+    "lon": 25.2903
+  },
+  {
+    "id": "botnia-golf",
+    "name": "Botnia Golf",
+    "city": "Seinäjoki",
+    "lat": 62.7873,
+    "lon": 22.8412
+  },
+  {
+    "id": "vaasan-golfseura",
+    "name": "Vaasan Golfseura",
+    "city": "Vaasa",
+    "lat": 63.0951,
+    "lon": 21.6165
+  },
+  {
+    "id": "kokkolan-golfkerho",
+    "name": "Kokkolan Golfkerho",
+    "city": "Kokkola",
+    "lat": 63.8384,
+    "lon": 23.1307
+  },
+  {
+    "id": "kalajoki-golf",
+    "name": "Kalajoki Golf",
+    "city": "Kalajoki",
+    "lat": 64.2282,
+    "lon": 23.7889
+  },
+  {
+    "id": "oulun-golfkerho",
+    "name": "Oulun Golfkerho",
+    "city": "Oulu",
+    "lat": 65.0121,
+    "lon": 25.4651
+  },
+  {
+    "id": "rovaniemen-golfkerho",
+    "name": "Rovaniemen Golfkerho",
+    "city": "Rovaniemi",
+    "lat": 66.5039,
+    "lon": 25.7294
+  },
+  {
+    "id": "hartola-golf",
+    "name": "Hartola Golf",
+    "city": "Hartola",
+    "lat": 61.5764,
+    "lon": 26.04
+  },
+  {
+    "id": "paloheina-golf",
+    "name": "Paloheinä Golf",
+    "city": "Helsinki",
+    "lat": 60.2589,
+    "lon": 24.9372
+  },
+  {
+    "id": "tapiola-golf",
+    "name": "Tapiola Golf",
+    "city": "Espoo",
+    "lat": 60.1972,
+    "lon": 24.7823
+  },
+  {
+    "id": "gumbole-golf",
+    "name": "Gumböle Golf",
+    "city": "Espoo",
+    "lat": 60.224,
+    "lon": 24.6113
+  },
+  {
+    "id": "espoo-ringside-golf",
+    "name": "Espoo Ringside Golf",
+    "city": "Espoo",
+    "lat": 60.2768,
+    "lon": 24.7442
+  },
+  {
+    "id": "suur-helsingin-golf-luukki",
+    "name": "Suur-Helsingin Golf (Luukki)",
+    "city": "Espoo",
+    "lat": 60.3171,
+    "lon": 24.6702
+  },
+  {
+    "id": "hirsala-golf",
+    "name": "Hirsala Golf",
+    "city": "Kirkkonummi",
+    "lat": 60.1184,
+    "lon": 24.5234
+  },
+  {
+    "id": "kurk-golf",
+    "name": "Kurk Golf",
+    "city": "Kirkkonummi",
+    "lat": 60.181,
+    "lon": 24.3889
+  },
+  {
+    "id": "keimola-golf",
+    "name": "Keimola Golf",
+    "city": "Vantaa",
+    "lat": 60.3208,
+    "lon": 24.8056
+  },
+  {
+    "id": "hiekkaharju-golf",
+    "name": "Hiekkaharju Golf",
+    "city": "Vantaa",
+    "lat": 60.3058,
+    "lon": 25.0536
+  },
+  {
+    "id": "st-laurence-golf",
+    "name": "St. Laurence Golf",
+    "city": "Lohja",
+    "lat": 60.2297,
+    "lon": 24.0607
+  },
+  {
+    "id": "hill-side-golf",
+    "name": "Hill Side Golf & Country Club",
+    "city": "Vihti",
+    "lat": 60.3395,
+    "lon": 24.2831
+  },
+  {
+    "id": "vihti-golf",
+    "name": "Vihti Golf",
+    "city": "Vihti",
+    "lat": 60.3663,
+    "lon": 24.3727
+  },
+  {
+    "id": "nurmijarvi-golf",
+    "name": "Nurmijärvi Golf",
+    "city": "Nurmijärvi",
+    "lat": 60.4357,
+    "lon": 24.6468
+  },
+  {
+    "id": "tuusulan-golfklubi",
+    "name": "Tuusulan Golfklubi",
+    "city": "Tuusula",
+    "lat": 60.415,
+    "lon": 25.0492
+  },
+  {
+    "id": "kotojarvi-golf",
+    "name": "Kotojärvi Golf",
+    "city": "Pornainen",
+    "lat": 60.4499,
+    "lon": 25.3848
+  },
+  {
+    "id": "kullo-golf",
+    "name": "Kullo Golf Club",
+    "city": "Porvoo",
+    "lat": 60.3324,
+    "lon": 25.4997
+  },
+  {
+    "id": "virvik-golf",
+    "name": "Virvik Golf",
+    "city": "Porvoo",
+    "lat": 60.3505,
+    "lon": 25.9023
+  },
+  {
+    "id": "eke-golf",
+    "name": "Eke Golf",
+    "city": "Raasepori",
+    "lat": 59.9961,
+    "lon": 23.4681
+  },
+  {
+    "id": "ruukkigolf",
+    "name": "Ruukkigolf",
+    "city": "Raasepori",
+    "lat": 60.1108,
+    "lon": 23.4725
+  },
+  {
+    "id": "golf-pirkkala",
+    "name": "Golf Pirkkala",
+    "city": "Pirkkala",
+    "lat": 61.4428,
+    "lon": 23.6335
+  },
+  {
+    "id": "nokia-river-golf",
+    "name": "Nokia River Golf",
+    "city": "Nokia",
+    "lat": 61.4475,
+    "lon": 23.4116
+  },
+  {
+    "id": "hiisi-golf",
+    "name": "Hiisi-Golf",
+    "city": "Lempäälä",
+    "lat": 61.3033,
+    "lon": 23.7736
+  },
+  {
+    "id": "pirkanmaan-golf",
+    "name": "Pirkanmaan Golf",
+    "city": "Tampere",
+    "lat": 61.4722,
+    "lon": 23.8294
+  },
+  {
+    "id": "kakigolf",
+    "name": "KäkiGolf",
+    "city": "Pälkäne",
+    "lat": 61.354,
+    "lon": 24.636
+  },
+  {
+    "id": "lakeside-golf-vammala",
+    "name": "Lakeside Golf Vammala",
+    "city": "Sastamala",
+    "lat": 61.4223,
+    "lon": 23.0018
+  },
+  {
+    "id": "poltinkoski-golf",
+    "name": "Poltinkoski Golf",
+    "city": "Ikaalinen",
+    "lat": 61.8,
+    "lon": 23.02
+  },
+  {
+    "id": "golf-virrat",
+    "name": "Golf-Virrat",
+    "city": "Virrat",
+    "lat": 62.2,
+    "lon": 23.75
+  },
+  {
+    "id": "hattula-golf",
+    "name": "Hattula Golf",
+    "city": "Hattula",
+    "lat": 61.054,
+    "lon": 24.364
+  },
+  {
+    "id": "lepaa-golf",
+    "name": "Lepaa Golf",
+    "city": "Hattula",
+    "lat": 61.0827,
+    "lon": 24.3414
+  },
+  {
+    "id": "kanavagolf-vaaksy",
+    "name": "Kanavagolf Vääksy",
+    "city": "Asikkala",
+    "lat": 61.1598,
+    "lon": 25.5748
+  },
+  {
+    "id": "anola-golf",
+    "name": "Anola Golf Club",
+    "city": "Pieksämäki",
+    "lat": 62.3305,
+    "lon": 27.0972
+  },
+  {
+    "id": "holiday-club-saimaa",
+    "name": "Holiday Club Golf Saimaa",
+    "city": "Imatra",
+    "lat": 61.1894,
+    "lon": 28.7177
+  },
+  {
+    "id": "iitti-golf",
+    "name": "Iitti Golf",
+    "city": "Iitti",
+    "lat": 60.9266,
+    "lon": 26.3878
+  },
+  {
+    "id": "kaakon-golf",
+    "name": "Kaakon Golf",
+    "city": "Virolahti",
+    "lat": 60.5502,
+    "lon": 27.6749
+  },
+  {
+    "id": "koski-golf",
+    "name": "Koski-Golf",
+    "city": "Kouvola",
+    "lat": 60.916,
+    "lon": 26.651
+  },
+  {
+    "id": "kymen-golf",
+    "name": "Kymen Golf",
+    "city": "Kotka",
+    "lat": 60.4854,
+    "lon": 26.8524
+  },
+  {
+    "id": "lampila-golf",
+    "name": "Lampila Golf",
+    "city": "Kouvola",
+    "lat": 61.0361,
+    "lon": 26.4965
+  },
+  {
+    "id": "rantasalmi-golf",
+    "name": "Rantasalmi Golf",
+    "city": "Rantasalmi",
+    "lat": 62.0438,
+    "lon": 28.4113
+  },
+  {
+    "id": "vola-golf",
+    "name": "Vola-Golf",
+    "city": "Mäntyharju",
+    "lat": 61.4339,
+    "lon": 26.6265
+  }
+]
