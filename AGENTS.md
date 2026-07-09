@@ -78,7 +78,7 @@ Sun times come from `suncalc` locally, no network call.
 - Use `import type` for type-only imports
 - Styling is plain React Native `StyleSheet` (no NativeWind/Tamagui); theme via `useTheme()` -> `Colors` in `src/constants/theme.ts`; spacing via the `Spacing` scale
 - Global state is React Context only (language, favorites, sort mode) + AsyncStorage, keys prefixed `golf-weather.*`; no Redux/Zustand
-- Weather state is local to hooks, not global (in-memory `Map` cache, 15 min TTL, disabled in `__DEV__`)
+- Weather state is local to hooks, not global (in-memory `Map` cache, 30 min TTL, always enabled, only caches results with at least one successful source)
 
 ## Common task pointers
 

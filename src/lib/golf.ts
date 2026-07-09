@@ -1,4 +1,10 @@
-export type PlayabilityLabel = 'Excellent' | 'Good' | 'Fair' | 'Hot' | 'Poor' | 'Bad';
+export type PlayabilityLabel =
+  | "Excellent"
+  | "Good"
+  | "Fair"
+  | "Hot"
+  | "Poor"
+  | "Bad";
 
 export type PlayabilityConditions = {
   temperature: number | null;
@@ -9,7 +15,12 @@ export type PlayabilityConditions = {
 };
 
 /** Stable codes for playability reasons; UI resolves these to translated text. */
-export type PlayabilityReasonCode = 'badConditions' | 'poorConditions' | 'fairConditions' | 'hot' | 'hotSpell';
+export type PlayabilityReasonCode =
+  | "badConditions"
+  | "poorConditions"
+  | "fairConditions"
+  | "hot"
+  | "hotSpell";
 
 export type Playability = {
   score: number;
@@ -20,12 +31,12 @@ export type Playability = {
 };
 
 export const PlayabilityColors: Record<PlayabilityLabel, string> = {
-  Excellent: '#1F9254',
-  Good: '#3C87F7',
-  Fair: '#D98C1F',
-  Hot: '#E0662B',
-  Poor: '#D9483C',
-  Bad: '#B3261E',
+  Excellent: "#1F9254",
+  Good: "#3C87F7",
+  Fair: "#D98C1F",
+  Hot: "#E0662B",
+  Poor: "#D9483C",
+  Bad: "#B3261E",
 };
 
 /** Ladder position for each tier, worst to best; used when aggregating a window of hours. */
@@ -38,7 +49,13 @@ const TIER_RANK: Record<PlayabilityLabel, number> = {
   Excellent: 4,
 };
 
-const RANK_TIER: PlayabilityLabel[] = ['Bad', 'Poor', 'Fair', 'Good', 'Excellent'];
+const RANK_TIER: PlayabilityLabel[] = [
+  "Bad",
+  "Poor",
+  "Fair",
+  "Good",
+  "Excellent",
+];
 
 /** Representative score for each tier, used for the `weather`/`combined` sort ranking. */
 const TIER_SCORE: Record<PlayabilityLabel, number> = {
@@ -50,7 +67,7 @@ const TIER_SCORE: Record<PlayabilityLabel, number> = {
   Bad: 8,
 };
 
-const HOT_TEMPERATURE_C = 27;
+const HOT_TEMPERATURE_C = 30;
 
 const BAD_PRECIPITATION_MM = 2;
 const BAD_TEMPERATURE_C = 3;
@@ -64,6 +81,7 @@ const FAIR_PRECIPITATION_MM = 0.5;
 const FAIR_TEMPERATURE_C = 10;
 const FAIR_WIND_MS = 8;
 
+const GOOD_PRECIPITATION_MM = 0.1;
 const GOOD_TEMPERATURE_C = 16;
 const GOOD_WIND_MS = 5;
 
@@ -72,10 +90,15 @@ const GOOD_WIND_MS = 5;
  * before classification, so the label never disagrees with the number the
  * user can actually see. Wind and precipitation are left at full precision.
  */
-function roundToDisplay(conditions: PlayabilityConditions): PlayabilityConditions {
+function roundToDisplay(
+  conditions: PlayabilityConditions,
+): PlayabilityConditions {
   return {
     ...conditions,
-    temperature: conditions.temperature === null ? null : Math.round(conditions.temperature),
+    temperature:
+      conditions.temperature === null
+        ? null
+        : Math.round(conditions.temperature),
   };
 }
 
@@ -85,7 +108,9 @@ function roundToDisplay(conditions: PlayabilityConditions): PlayabilityCondition
  * drag the hour down a tier, since a single bad factor can ruin a round.
  * Evaluated worst-first, so the first matching tier wins.
  */
-export function classifyHour(conditions: PlayabilityConditions): PlayabilityLabel {
+export function classifyHour(
+  conditions: PlayabilityConditions,
+): PlayabilityLabel {
   const { temperature, windSpeed, precipitation } = roundToDisplay(conditions);
   const isHot = temperature !== null && temperature > HOT_TEMPERATURE_C;
 
@@ -94,7 +119,7 @@ export function classifyHour(conditions: PlayabilityConditions): PlayabilityLabe
     (temperature !== null && temperature < BAD_TEMPERATURE_C) ||
     (windSpeed !== null && windSpeed > BAD_WIND_MS)
   ) {
-    return 'Bad';
+    return "Bad";
   }
 
   if (
@@ -102,40 +127,41 @@ export function classifyHour(conditions: PlayabilityConditions): PlayabilityLabe
     (temperature !== null && temperature < POOR_TEMPERATURE_C) ||
     (windSpeed !== null && windSpeed > POOR_WIND_MS)
   ) {
-    return 'Poor';
+    return "Poor";
   }
 
   if (
-    (precipitation !== null && precipitation > FAIR_PRECIPITATION_MM) ||
+    (precipitation !== null && precipitation >= FAIR_PRECIPITATION_MM) ||
     (temperature !== null && temperature < FAIR_TEMPERATURE_C) ||
     (windSpeed !== null && windSpeed > FAIR_WIND_MS)
   ) {
-    return 'Fair';
+    return "Fair";
   }
 
   // Good/Excellent both count as "otherwise pleasant", so a hot spell can
   // override either of them without being masked by an unrelated factor
   // (e.g. a bit of wind) that already capped the tier at Good.
   if (
+    (precipitation !== null && precipitation > GOOD_PRECIPITATION_MM) ||
     (temperature !== null && temperature < GOOD_TEMPERATURE_C) ||
     (windSpeed !== null && windSpeed > GOOD_WIND_MS)
   ) {
-    return isHot ? 'Hot' : 'Good';
+    return isHot ? "Hot" : "Good";
   }
 
-  return isHot ? 'Hot' : 'Excellent';
+  return isHot ? "Hot" : "Excellent";
 }
 
 function reasonsFor(label: PlayabilityLabel): PlayabilityReasonCode[] {
   switch (label) {
-    case 'Bad':
-      return ['badConditions'];
-    case 'Poor':
-      return ['poorConditions'];
-    case 'Fair':
-      return ['fairConditions'];
-    case 'Hot':
-      return ['hot'];
+    case "Bad":
+      return ["badConditions"];
+    case "Poor":
+      return ["poorConditions"];
+    case "Fair":
+      return ["fairConditions"];
+    case "Hot":
+      return ["hot"];
     default:
       return [];
   }
@@ -147,7 +173,9 @@ function reasonsFor(label: PlayabilityLabel): PlayabilityReasonCode[] {
  * tier — a single heavy rain shower shouldn't be masked by otherwise calm
  * conditions.
  */
-export function scorePlayability(conditions: PlayabilityConditions): Playability {
+export function scorePlayability(
+  conditions: PlayabilityConditions,
+): Playability {
   const label = classifyHour(conditions);
   return { score: TIER_SCORE[label], label, reasons: reasonsFor(label) };
 }
@@ -155,16 +183,29 @@ export function scorePlayability(conditions: PlayabilityConditions): Playability
 /** Minimum number of hours (out of the window) needed for a tier/spell to "count". */
 const WINDOW_MAJORITY_HOURS = 4;
 
-/** Minimum tier-rank gap between the early and late half of the window to show a divided badge. */
-const SPLIT_RANK_DELTA = 2;
+/** Minimum raw-average tier-rank gap between the early and late half to show a divided badge. */
+const SPLIT_AVG_DELTA = 1;
 
 /** Minimum window length needed for a chronological early/late split to be meaningful. */
 const SPLIT_MIN_HOURS = 4;
+
+/** Number of hours at each end of the window used to compute the early/late split. */
+const SPLIT_HALF_HOURS = 4;
 
 function majorityThreshold(windowLength: number): number {
   return windowLength >= WINDOW_MAJORITY_HOURS + 3
     ? WINDOW_MAJORITY_HOURS
     : Math.ceil((windowLength + 1) / 2);
+}
+
+/**
+ * Raw average of the given hours' tier ranks. Used to summarize a half of
+ * the window as a single number without being dominated by any single
+ * extreme hour.
+ */
+function averageRank(hours: PlayabilityConditions[]): number {
+  const ranks = hours.map((hour) => TIER_RANK[classifyHour(hour)]);
+  return ranks.reduce((sum, rank) => sum + rank, 0) / ranks.length;
 }
 
 /**
@@ -174,62 +215,44 @@ function majorityThreshold(windowLength: number): number {
  *
  * Each hour is classified independently, then:
  * - A `Hot` spell (enough hot hours) overrides everything else.
- * - If the window swings widely (e.g. Excellent down to Fair), the badge
- *   settles on the tier roughly in the middle rather than the extremes.
- * - Otherwise the badge is the worst tier if it covers enough of the
- *   window, or the best tier if the bad hours are only a minority.
+ * - The first and last `SPLIT_HALF_HOURS` hours are each averaged into a
+ *   representative tier, rounded down so a mixed half reads as its lower
+ *   tier rather than being flattered by its best hours; if the two raw
+ *   averages differ considerably, the badge is divided into an early ->
+ *   late trend.
+ * - The main label (used when not divided, and for sorting) is always the
+ *   worse of the two half-tiers, since a spell of bad weather anywhere in
+ *   the window shouldn't be masked by a good spell elsewhere.
  */
 export function scoreWindow(hours: PlayabilityConditions[]): Playability {
   if (hours.length === 0) {
-    return { score: 0, label: 'Fair', reasons: [] };
+    return { score: 0, label: "Fair", reasons: [] };
   }
 
   const threshold = majorityThreshold(hours.length);
   const rounded = hours.map(roundToDisplay);
 
   const hotHours = rounded.filter(
-    ({ temperature }) => temperature !== null && temperature > HOT_TEMPERATURE_C
+    ({ temperature }) =>
+      temperature !== null && temperature > HOT_TEMPERATURE_C,
   ).length;
   if (hotHours >= threshold) {
-    return { score: TIER_SCORE.Hot, label: 'Hot', reasons: ['hotSpell'] };
+    return { score: TIER_SCORE.Hot, label: "Hot", reasons: ["hotSpell"] };
   }
 
-  const tiers = rounded.map((hour) => classifyHour(hour));
-  const ranks = tiers.map((tier) => TIER_RANK[tier]);
-  const bestRank = Math.max(...ranks);
-  const worstRank = Math.min(...ranks);
+  const earlyAvg = averageRank(rounded.slice(0, SPLIT_HALF_HOURS));
+  const lateAvg = averageRank(rounded.slice(-SPLIT_HALF_HOURS));
 
-  let resultRank: number;
-  if (bestRank - worstRank >= 2) {
-    resultRank = Math.round((bestRank + worstRank) / 2);
-  } else {
-    const worstCount = ranks.filter((rank) => rank === worstRank).length;
-    resultRank = worstCount >= threshold ? worstRank : bestRank;
-  }
+  const early = RANK_TIER[Math.floor(earlyAvg)];
+  const late = RANK_TIER[Math.floor(lateAvg)];
 
-  const label = RANK_TIER[resultRank];
-  const trend = detectTrend(hours);
+  const label = TIER_RANK[early] <= TIER_RANK[late] ? early : late;
+
+  const trend =
+    rounded.length >= SPLIT_MIN_HOURS &&
+    Math.abs(earlyAvg - lateAvg) >= SPLIT_AVG_DELTA
+      ? { early, late }
+      : undefined;
+
   return { score: TIER_SCORE[label], label, reasons: reasonsFor(label), trend };
-}
-
-/**
- * Detects a significant chronological swing within the window (e.g. bad now,
- * good later) by comparing a representative tier for the early vs. late
- * half. Returns undefined when the window is too short to split meaningfully
- * or the halves are close enough in tier that a divided badge would be noise.
- */
-function detectTrend(
-  hours: PlayabilityConditions[]
-): Playability['trend'] {
-  if (hours.length < SPLIT_MIN_HOURS) return undefined;
-
-  const midpoint = Math.ceil(hours.length / 2);
-  const early = scoreWindow(hours.slice(0, midpoint)).label;
-  const late = scoreWindow(hours.slice(midpoint)).label;
-
-  if (Math.abs(TIER_RANK[early] - TIER_RANK[late]) < SPLIT_RANK_DELTA) {
-    return undefined;
-  }
-
-  return { early, late };
 }
