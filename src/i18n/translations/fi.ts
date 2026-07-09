@@ -11,7 +11,7 @@ export const fi = {
       "Lähimmät kentät sijaintiisi nähden, päivitetty FMI:stä, YR.no:sta ja Open-Meteosta.",
     subtitleWeather: "Parhaat pelisäät juuri nyt, lähimmät ensin.",
     subtitleCombined:
-      "Etäisyyden ja nykyisten olosuhteiden yhdistelmä, lähimmät ensin.",
+      "Etäisyyden ja nykyisten olosuhteiden yhdistelmä, lähin ensin.",
     locationDenied:
       "Sijaintilupa epäätty — näytetään kenttiä Kuopion lähellä. Voit asettaa oletussijainnin asetuksista.",
     locationLoading:
