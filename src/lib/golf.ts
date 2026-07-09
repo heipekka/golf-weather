@@ -241,7 +241,10 @@ function averageRank(hours: PlayabilityConditions[]): number {
  * so a single stray Good or Hot hour doesn't mask an otherwise Excellent
  * half. Any Fair/Poor/Bad hour disables this and keeps the strict floor.
  */
-function halfTier(hours: PlayabilityConditions[], avg: number): PlayabilityLabel {
+function halfTier(
+  hours: PlayabilityConditions[],
+  avg: number,
+): PlayabilityLabel {
   const floored = RANK_TIER[Math.floor(avg)];
   if (
     floored === "Good" &&
@@ -297,8 +300,12 @@ export function scoreWindow(hours: PlayabilityConditions[]): Playability {
   const threshold = majorityThreshold(lightHours.length);
   const rounded = lightHours.map(roundToDisplay);
 
-  const earlyDark = hours.slice(0, SPLIT_HALF_HOURS).filter((hour) => hour.isDark).length;
-  const lateDark = hours.slice(-SPLIT_HALF_HOURS).filter((hour) => hour.isDark).length;
+  const earlyDark = hours
+    .slice(0, SPLIT_HALF_HOURS)
+    .filter((hour) => hour.isDark).length;
+  const lateDark = hours
+    .slice(-SPLIT_HALF_HOURS)
+    .filter((hour) => hour.isDark).length;
 
   const hotHours = rounded.filter(
     ({ temperature }) =>
@@ -325,7 +332,8 @@ export function scoreWindow(hours: PlayabilityConditions[]): Playability {
   // trend badge below) stay light-only.
   const earlyMain = earlyDark >= DARK_HALF_HOURS ? "Dark" : early;
   const lateMain = lateDark >= DARK_HALF_HOURS ? "Dark" : late;
-  const label = TIER_RANK[earlyMain] <= TIER_RANK[lateMain] ? earlyMain : lateMain;
+  const label =
+    TIER_RANK[earlyMain] <= TIER_RANK[lateMain] ? earlyMain : lateMain;
 
   const trend =
     rounded.length >= SPLIT_MIN_HOURS &&

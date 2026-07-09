@@ -44,6 +44,9 @@ const COMBINED_WEATHER_SCORE: Record<PlayabilityLabel, number> = {
   Dark: 0,
 };
 
+/** Small combined-mode nudge (max ~a few points) so sunnier courses edge ahead among near-ties. */
+const COMBINED_SUNSHINE_WEIGHT = 0.05;
+
 /** Number of upcoming hours considered when scoring a course's playability. */
 export const WINDOW_HOURS = 7;
 
@@ -79,6 +82,34 @@ export function distanceScore(distanceKm: number): number {
   return Math.max(0, 100 - (distanceKm / MAX_SCORED_DISTANCE_KM) * 100);
 }
 
+/**
+ * Estimates "sunshine" over the same WINDOW_HOURS window used for
+ * playability, as 100 minus the average cloud cover across daylight hours
+ * only (cloud cover during dark hours doesn't affect perceived sunshine).
+ * Returns null when the window hasn't loaded or has no daylight hours with
+ * cloud cover data.
+ */
+export function windowSunshine(
+  entry: CourseWeatherState | undefined,
+  lat: number,
+  lon: number,
+  now?: Date,
+): number | null {
+  const aggregated = entry?.weather?.aggregated ?? [];
+  const current = entry?.weather ? findCurrentPoint(aggregated, now) : null;
+  if (!current) return null;
+
+  const startIndex = aggregated.indexOf(current);
+  const window = aggregated.slice(startIndex, startIndex + WINDOW_HOURS);
+  const clouds = window
+    .filter((point) => !isNight(point.time, lat, lon))
+    .map((point) => point.cloudCover)
+    .filter((c): c is number => c !== null && Number.isFinite(c));
+  if (clouds.length === 0) return null;
+
+  return 100 - clouds.reduce((sum, c) => sum + c, 0) / clouds.length;
+}
+
 export function sortCourses(
   courses: GolfCourseWithDistance[],
   weatherByCourse: Record<string, CourseWeatherState>,
@@ -97,14 +128,31 @@ export function sortCourses(
     ]),
   );
 
+  const sunshineById = new Map<string, number | null>(
+    courses.map((course) => [
+      course.id,
+      windowSunshine(weatherByCourse[course.id], course.lat, course.lon, now),
+    ]),
+  );
+
   const rankScore = (course: GolfCourseWithDistance): number | null => {
     const playability = playabilityById.get(course.id) ?? null;
     if (!playability) return null;
 
     if (mode === "weather") return playability.score;
+
+    const sunshine = sunshineById.get(course.id) ?? null;
+    const sunTerm =
+      sunshine === null
+        ? 0
+        : COMBINED_SUNSHINE_WEIGHT *
+          (sunshine - 50) *
+          (playability.label === "Hot" ? -1 : 1);
+
     return (
       COMBINED_DISTANCE_WEIGHT * distanceScore(course.distanceKm) +
-      COMBINED_WEATHER_WEIGHT * COMBINED_WEATHER_SCORE[playability.label]
+      COMBINED_WEATHER_WEIGHT * COMBINED_WEATHER_SCORE[playability.label] +
+      sunTerm
     );
   };
 
@@ -116,6 +164,17 @@ export function sortCourses(
     if (scoreA === null && scoreB === null) return a.distanceKm - b.distanceKm;
     if (scoreA === null) return 1;
     if (scoreB === null) return -1;
+
+    if (scoreA === scoreB && mode === "weather") {
+      const sunA = sunshineById.get(a.id) ?? null;
+      const sunB = sunshineById.get(b.id) ?? null;
+      if (sunA === null && sunB === null) return a.distanceKm - b.distanceKm;
+      if (sunA === null) return 1;
+      if (sunB === null) return -1;
+
+      const label = playabilityById.get(a.id)?.label;
+      return label === "Hot" ? sunA - sunB : sunB - sunA;
+    }
 
     return scoreB - scoreA;
   });
