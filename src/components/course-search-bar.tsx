@@ -1,5 +1,5 @@
 import { SymbolView } from "expo-symbols";
-import { Pressable, StyleSheet, TextInput, View } from "react-native";
+import { Keyboard, Pressable, StyleSheet, TextInput, View } from "react-native";
 
 import { Spacing } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
@@ -36,6 +36,7 @@ export function CourseSearchBar({
         placeholder={t("courseSearch.placeholder")}
         placeholderTextColor={theme.textSecondary}
         returnKeyType="search"
+        onSubmitEditing={() => Keyboard.dismiss()}
         style={[styles.input, { color: theme.text }]}
       />
       <Pressable

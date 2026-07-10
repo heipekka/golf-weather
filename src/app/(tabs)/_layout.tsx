@@ -1,6 +1,8 @@
-import { Tabs } from "expo-router";
+import { Link, Tabs } from "expo-router";
 import { SymbolView } from "expo-symbols";
+import { Pressable, StyleSheet } from "react-native";
 
+import { Spacing } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
 import { useI18n } from "@/i18n";
 
@@ -55,8 +57,36 @@ export default function TabsLayout() {
           headerShown: true,
           headerTitle: t("favorites.title"),
           headerTitleAlign: "center",
+          headerRight: () => (
+            <Link href="/settings" asChild>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={t("courses.openSettings")}
+                hitSlop={Spacing.two}
+                style={({ pressed }) => [styles.settingsButton, pressed && styles.settingsButtonPressed]}>
+                <SymbolView
+                  name={{ ios: "gearshape", android: "settings", web: "settings" }}
+                  size={24}
+                  tintColor={theme.textSecondary}
+                />
+              </Pressable>
+            </Link>
+          ),
+          headerRightContainerStyle: styles.headerSideContainer,
         }}
       />
     </Tabs>
   );
 }
+
+const styles = StyleSheet.create({
+  settingsButton: {
+    padding: Spacing.one,
+  },
+  settingsButtonPressed: {
+    opacity: 0.6,
+  },
+  headerSideContainer: {
+    paddingHorizontal: Spacing.three,
+  },
+});

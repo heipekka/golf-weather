@@ -792,7 +792,7 @@
     "lon": 26.6265
   },
   {
-    "id": "la-cala-resort",
+    "id": "spain-la-cala-resort",
     "name": "La Cala Resort",
     "city": "Mijas",
     "country": "Spain",
@@ -800,7 +800,7 @@
     "lon": -4.7178
   },
   {
-    "id": "mijas-golf",
+    "id": "spain-mijas-golf",
     "name": "Mijas Golf",
     "city": "Mijas",
     "country": "Spain",
@@ -808,7 +808,7 @@
     "lon": -4.6691
   },
   {
-    "id": "calanova-golf",
+    "id": "spain-calanova-golf",
     "name": "Calanova Golf Club",
     "city": "Mijas",
     "country": "Spain",
@@ -1230,5 +1230,1989 @@
     "country": "Finland",
     "lat": 60.2384,
     "lon": 22.9365
+  },
+  {
+    "id": "estonia-estonian-gcc",
+    "name": "Estonian Golf & Country Club",
+    "city": "Manniva",
+    "country": "Estonia",
+    "lat": 59.4664,
+    "lon": 25.1388
+  },
+  {
+    "id": "estonia-niitvalja-golf",
+    "name": "Niitvälja Golf",
+    "city": "Niitvälja",
+    "country": "Estonia",
+    "lat": 59.318,
+    "lon": 24.3171
+  },
+  {
+    "id": "estonia-parnu-bay-golf-links",
+    "name": "Pärnu Bay Golf Links",
+    "city": "Reiu",
+    "country": "Estonia",
+    "lat": 58.3271,
+    "lon": 24.5866
+  },
+  {
+    "id": "estonia-rae-golf",
+    "name": "Rae Golf",
+    "city": "Suuresta",
+    "country": "Estonia",
+    "lat": 59.2562,
+    "lon": 24.9751
+  },
+  {
+    "id": "estonia-saaremaa-gcc",
+    "name": "Saaremaa Golf & Country Club",
+    "city": "Kuressaare",
+    "country": "Estonia",
+    "lat": 58.2546,
+    "lon": 22.4951
+  },
+  {
+    "id": "estonia-white-beach-golf",
+    "name": "White Beach Golf",
+    "city": "Valgeranna",
+    "country": "Estonia",
+    "lat": 58.3878,
+    "lon": 24.3717
+  },
+  {
+    "id": "estonia-otepaa-golf-center",
+    "name": "Otepää Golf Center",
+    "city": "Mäha",
+    "country": "Estonia",
+    "lat": 58.0498,
+    "lon": 26.4111
+  },
+  {
+    "id": "estonia-ojasaare-golf",
+    "name": "Ojasaare Golf",
+    "city": "Aarla",
+    "country": "Estonia",
+    "lat": 59.2974,
+    "lon": 26.5401
+  },
+  {
+    "id": "estonia-elamusgolfikeskus",
+    "name": "Elamusgolfikeskus (Indoor)",
+    "city": "Tallinn",
+    "country": "Estonia",
+    "lat": 59.4339,
+    "lon": 24.7448
+  },
+  {
+    "id": "spain-aloha-golf",
+    "name": "Aloha Golf Club",
+    "city": "Marbella",
+    "country": "Spain",
+    "lat": 36.5097,
+    "lon": -4.9455
+  },
+  {
+    "id": "spain-las-brisas-golf",
+    "name": "Real Club de Golf Las Brisas",
+    "city": "Marbella",
+    "country": "Spain",
+    "lat": 36.5126,
+    "lon": -4.9567
+  },
+  {
+    "id": "spain-los-naranjos-golf",
+    "name": "Los Naranjos Golf Club",
+    "city": "Marbella",
+    "country": "Spain",
+    "lat": 36.5113,
+    "lon": -4.9691
+  },
+  {
+    "id": "spain-la-quinta-golf",
+    "name": "La Quinta Golf & Country Club",
+    "city": "Marbella",
+    "country": "Spain",
+    "lat": 36.5052,
+    "lon": -4.9922
+  },
+  {
+    "id": "spain-magna-marbella-golf",
+    "name": "Magna Marbella Golf",
+    "city": "Marbella",
+    "country": "Spain",
+    "lat": 36.5039,
+    "lon": -4.9614
+  },
+  {
+    "id": "spain-rio-real-golf",
+    "name": "Río Real Golf Marbella",
+    "city": "Marbella",
+    "country": "Spain",
+    "lat": 36.5173,
+    "lon": -4.8493
+  },
+  {
+    "id": "spain-santa-clara-golf",
+    "name": "Santa Clara Golf Marbella",
+    "city": "Marbella",
+    "country": "Spain",
+    "lat": 36.5117,
+    "lon": -4.8322
+  },
+  {
+    "id": "spain-marbella-golf-country-club",
+    "name": "Marbella Golf Country Club",
+    "city": "Marbella",
+    "country": "Spain",
+    "lat": 36.5135,
+    "lon": -4.8219
+  },
+  {
+    "id": "spain-santa-maria-golf",
+    "name": "Santa María Golf & Country Club",
+    "city": "Marbella",
+    "country": "Spain",
+    "lat": 36.4975,
+    "lon": -4.7794
+  },
+  {
+    "id": "spain-greenlife-golf",
+    "name": "Greenlife Golf Club Marbella",
+    "city": "Marbella",
+    "country": "Spain",
+    "lat": 36.4988,
+    "lon": -4.7675
+  },
+  {
+    "id": "spain-cabopino-golf",
+    "name": "Cabopino Golf Marbella",
+    "city": "Marbella",
+    "country": "Spain",
+    "lat": 36.4913,
+    "lon": -4.7431
+  },
+  {
+    "id": "spain-guadalmina-golf",
+    "name": "Real Club de Golf Guadalmina",
+    "city": "Marbella",
+    "country": "Spain",
+    "lat": 36.4716,
+    "lon": -5.0004
+  },
+  {
+    "id": "spain-marbella-club-golf",
+    "name": "Marbella Club Golf Resort",
+    "city": "Benahavís",
+    "country": "Spain",
+    "lat": 36.4984,
+    "lon": -5.0401
+  },
+  {
+    "id": "spain-los-arqueros-golf",
+    "name": "Los Arqueros Golf & Country Club",
+    "city": "Benahavís",
+    "country": "Spain",
+    "lat": 36.5161,
+    "lon": -5.0116
+  },
+  {
+    "id": "spain-villa-padierna-golf",
+    "name": "Villa Padierna Golf Club",
+    "city": "Benahavís",
+    "country": "Spain",
+    "lat": 36.4755,
+    "lon": -5.0442
+  },
+  {
+    "id": "spain-el-higueral-golf",
+    "name": "El Higueral Golf",
+    "city": "Benahavís",
+    "country": "Spain",
+    "lat": 36.5008,
+    "lon": -5.0183
+  },
+  {
+    "id": "spain-la-zagaleta-golf",
+    "name": "La Zagaleta Country Club",
+    "city": "Benahavís",
+    "country": "Spain",
+    "lat": 36.5367,
+    "lon": -5.0117
+  },
+  {
+    "id": "spain-monte-mayor-golf",
+    "name": "Monte Mayor Golf & Country Club",
+    "city": "Benahavís",
+    "country": "Spain",
+    "lat": 36.5186,
+    "lon": -5.0931
+  },
+  {
+    "id": "spain-atalaya-golf",
+    "name": "Atalaya Golf & Country Club",
+    "city": "Estepona",
+    "country": "Spain",
+    "lat": 36.4836,
+    "lon": -5.0194
+  },
+  {
+    "id": "spain-el-paraiso-golf",
+    "name": "El Paraíso Golf Club",
+    "city": "Estepona",
+    "country": "Spain",
+    "lat": 36.4792,
+    "lon": -5.0291
+  },
+  {
+    "id": "spain-guadalhorce-golf",
+    "name": "Guadalhorce Club de Golf",
+    "city": "Málaga",
+    "country": "Spain",
+    "lat": 36.6972,
+    "lon": -4.5161
+  },
+  {
+    "id": "spain-parador-malaga-golf",
+    "name": "Parador de Málaga Golf",
+    "city": "Málaga",
+    "country": "Spain",
+    "lat": 36.6508,
+    "lon": -4.4842
+  },
+  {
+    "id": "spain-lauro-golf",
+    "name": "Lauro Golf",
+    "city": "Alhaurín de la Torre",
+    "country": "Spain",
+    "lat": 36.6575,
+    "lon": -4.6075
+  },
+  {
+    "id": "spain-alhaurin-golf",
+    "name": "Alhaurín Golf Resort",
+    "city": "Alhaurín el Grande",
+    "country": "Spain",
+    "lat": 36.6214,
+    "lon": -4.6908
+  },
+  {
+    "id": "spain-jimenez-golf-academy",
+    "name": "Miguel Ángel Jiménez Golf Academy",
+    "city": "Torremolinos",
+    "country": "Spain",
+    "lat": 36.6431,
+    "lon": -4.5097
+  },
+  {
+    "id": "spain-torrequebrada-golf",
+    "name": "Torrequebrada Golf",
+    "city": "Benalmádena",
+    "country": "Spain",
+    "lat": 36.5961,
+    "lon": -4.5447
+  },
+  {
+    "id": "spain-benalmadena-golf",
+    "name": "Benalmádena Golf",
+    "city": "Benalmádena",
+    "country": "Spain",
+    "lat": 36.6083,
+    "lon": -4.5261
+  },
+  {
+    "id": "spain-bil-bil-golf",
+    "name": "Bil Bil Golf",
+    "city": "Benalmádena",
+    "country": "Spain",
+    "lat": 36.6019,
+    "lon": -4.5408
+  },
+  {
+    "id": "spain-reserva-higueron-golf",
+    "name": "Reserva del Higuerón Pitch & Putt",
+    "city": "Fuengirola",
+    "country": "Spain",
+    "lat": 36.5811,
+    "lon": -4.5986
+  },
+  {
+    "id": "spain-fuengirola-adventure-golf",
+    "name": "Fuengirola Adventure Golf",
+    "city": "Fuengirola",
+    "country": "Spain",
+    "lat": 36.5394,
+    "lon": -4.6308
+  },
+  {
+    "id": "spain-santana-golf",
+    "name": "Santana Golf Club",
+    "city": "Mijas",
+    "country": "Spain",
+    "lat": 36.5469,
+    "lon": -4.6853
+  },
+  {
+    "id": "spain-chaparral-golf",
+    "name": "Chaparral Golf Club",
+    "city": "Mijas",
+    "country": "Spain",
+    "lat": 36.5164,
+    "lon": -4.6402
+  },
+  {
+    "id": "spain-miraflores-golf",
+    "name": "Miraflores Golf Club",
+    "city": "Mijas",
+    "country": "Spain",
+    "lat": 36.5108,
+    "lon": -4.7197
+  },
+  {
+    "id": "spain-la-siesta-golf",
+    "name": "Club de Golf La Siesta",
+    "city": "Mijas",
+    "country": "Spain",
+    "lat": 36.4952,
+    "lon": -4.7261
+  },
+  {
+    "id": "spain-la-noria-golf",
+    "name": "La Noria Golf Resort",
+    "city": "Mijas",
+    "country": "Spain",
+    "lat": 36.5025,
+    "lon": -4.6931
+  },
+  {
+    "id": "spain-cerrado-aguila-golf",
+    "name": "Cerrado del Águila Golf",
+    "city": "Mijas",
+    "country": "Spain",
+    "lat": 36.5358,
+    "lon": -4.6433
+  },
+  {
+    "id": "spain-anoreta-golf",
+    "name": "Anoreta Golf",
+    "city": "Rincón de la Victoria",
+    "country": "Spain",
+    "lat": 36.7236,
+    "lon": -4.2547
+  },
+  {
+    "id": "spain-finca-cortesin-golf",
+    "name": "Finca Cortesín Golf Club",
+    "city": "Casares",
+    "country": "Spain",
+    "lat": 36.3828,
+    "lon": -5.2238
+  },
+  {
+    "id": "spain-valderrama-golf",
+    "name": "Valderrama Golf Club",
+    "city": "Sotogrande",
+    "country": "Spain",
+    "lat": 36.2944,
+    "lon": -5.3217
+  },
+  {
+    "id": "spain-sotogrande-golf",
+    "name": "Real Club de Golf Sotogrande",
+    "city": "Sotogrande",
+    "country": "Spain",
+    "lat": 36.2842,
+    "lon": -5.3089
+  },
+  {
+    "id": "sweden-a6-golf",
+    "name": "A6 Golfklubb",
+    "city": "Jönköping",
+    "country": "Sweden",
+    "lat": 57.7725,
+    "lon": 14.2044
+  },
+  {
+    "id": "sweden-abbekas-golf",
+    "name": "Abbekås Golfklubb",
+    "city": "Skåne",
+    "country": "Sweden",
+    "lat": 55.4017,
+    "lon": 13.5939
+  },
+  {
+    "id": "sweden-albatross-golf",
+    "name": "Albatross Golfklubb",
+    "city": "Västra Götaland",
+    "country": "Sweden",
+    "lat": 57.7719,
+    "lon": 11.9161
+  },
+  {
+    "id": "sweden-alingsas-golf",
+    "name": "Alingsås Golfklubb",
+    "city": "Västra Götaland",
+    "country": "Sweden",
+    "lat": 57.9622,
+    "lon": 12.5186
+  },
+  {
+    "id": "sweden-arlandastad-golf",
+    "name": "Arlandastad Golf",
+    "city": "Stockholm",
+    "country": "Sweden",
+    "lat": 59.6194,
+    "lon": 17.8711
+  },
+  {
+    "id": "sweden-barseback-golf",
+    "name": "Barsebäck Golf & Country Club",
+    "city": "Skåne",
+    "country": "Sweden",
+    "lat": 55.7744,
+    "lon": 12.9431
+  },
+  {
+    "id": "sweden-billingens-golf",
+    "name": "Billingens Golfklubb",
+    "city": "Västra Götaland",
+    "country": "Sweden",
+    "lat": 58.4611,
+    "lon": 13.7297
+  },
+  {
+    "id": "sweden-bokskogens-golf",
+    "name": "Bokskogens Golfklubb",
+    "city": "Skåne",
+    "country": "Sweden",
+    "lat": 55.5514,
+    "lon": 13.2508
+  },
+  {
+    "id": "sweden-boras-golf",
+    "name": "Borås Golfklubb",
+    "city": "Västra Götaland",
+    "country": "Sweden",
+    "lat": 57.7128,
+    "lon": 12.8711
+  },
+  {
+    "id": "sweden-bredareds-golf",
+    "name": "Bredareds Golfklubb",
+    "city": "Västra Götaland",
+    "country": "Sweden",
+    "lat": 57.8114,
+    "lon": 12.8942
+  },
+  {
+    "id": "sweden-bro-hof-slott-golf",
+    "name": "Bro Hof Slott Golf Club",
+    "city": "Stockholm",
+    "country": "Sweden",
+    "lat": 59.4956,
+    "lon": 17.6258
+  },
+  {
+    "id": "sweden-bastad-golf",
+    "name": "Båstad Golfklubb",
+    "city": "Skåne",
+    "country": "Sweden",
+    "lat": 56.4172,
+    "lon": 12.8197
+  },
+  {
+    "id": "sweden-chalmers-golf",
+    "name": "Chalmers Golfklubb",
+    "city": "Västra Götaland",
+    "country": "Sweden",
+    "lat": 57.6339,
+    "lon": 12.0628
+  },
+  {
+    "id": "sweden-djursholms-golf",
+    "name": "Djursholms Golfklubb",
+    "city": "Stockholm",
+    "country": "Sweden",
+    "lat": 59.4072,
+    "lon": 18.0694
+  },
+  {
+    "id": "sweden-drottningholms-golf",
+    "name": "Drottningholms Golfklubb",
+    "city": "Stockholm",
+    "country": "Sweden",
+    "lat": 59.3242,
+    "lon": 17.8631
+  },
+  {
+    "id": "sweden-ekerum-golf",
+    "name": "Ekerum Golf & Resort",
+    "city": "Öland",
+    "country": "Sweden",
+    "lat": 56.7869,
+    "lon": 16.5914
+  },
+  {
+    "id": "sweden-eskilstuna-golf",
+    "name": "Eskilstuna Golfklubb",
+    "city": "Södermanland",
+    "country": "Sweden",
+    "lat": 59.3667,
+    "lon": 16.4689
+  },
+  {
+    "id": "sweden-falkenbergs-golf",
+    "name": "Falkenbergs Golfklubb",
+    "city": "Halland",
+    "country": "Sweden",
+    "lat": 56.9114,
+    "lon": 12.5531
+  },
+  {
+    "id": "sweden-falsterbo-golf",
+    "name": "Falsterbo Golf Club",
+    "city": "Skåne",
+    "country": "Sweden",
+    "lat": 55.3833,
+    "lon": 12.8167
+  },
+  {
+    "id": "sweden-flens-golf",
+    "name": "Flens Golfklubb",
+    "city": "Södermanland",
+    "country": "Sweden",
+    "lat": 59.0436,
+    "lon": 16.5714
+  },
+  {
+    "id": "sweden-forsgardens-golf",
+    "name": "Forsgårdens Golfklubb",
+    "city": "Halland",
+    "country": "Sweden",
+    "lat": 57.4897,
+    "lon": 12.0839
+  },
+  {
+    "id": "sweden-frosaker-golf",
+    "name": "Frösåker Golf & Country Club",
+    "city": "Västmanland",
+    "country": "Sweden",
+    "lat": 59.5492,
+    "lon": 16.7328
+  },
+  {
+    "id": "sweden-fagelbro-golf",
+    "name": "Fågelbro Golf & Country Club",
+    "city": "Stockholm",
+    "country": "Sweden",
+    "lat": 59.2981,
+    "lon": 18.5719
+  },
+  {
+    "id": "sweden-gavle-golf",
+    "name": "Gävle Golfklubb",
+    "city": "Gävleborg",
+    "country": "Sweden",
+    "lat": 60.6728,
+    "lon": 17.0942
+  },
+  {
+    "id": "sweden-goteborgs-golf",
+    "name": "Göteborgs Golfklubb",
+    "city": "Västra Götaland",
+    "country": "Sweden",
+    "lat": 57.6019,
+    "lon": 11.9214
+  },
+  {
+    "id": "sweden-halmstad-golf",
+    "name": "Halmstad Golfklubb",
+    "city": "Halland",
+    "country": "Sweden",
+    "lat": 56.6623,
+    "lon": 12.7493
+  },
+  {
+    "id": "sweden-haninge-golf",
+    "name": "Haninge Golfklubb",
+    "city": "Stockholm",
+    "country": "Sweden",
+    "lat": 59.1556,
+    "lon": 18.1328
+  },
+  {
+    "id": "sweden-helsingborgs-golf",
+    "name": "Helsingborgs Golfklubb",
+    "city": "Skåne",
+    "country": "Sweden",
+    "lat": 56.0911,
+    "lon": 12.6592
+  },
+  {
+    "id": "sweden-hook-golf",
+    "name": "Hook Golfklubb",
+    "city": "Jönköping",
+    "country": "Sweden",
+    "lat": 57.5192,
+    "lon": 14.2811
+  },
+  {
+    "id": "sweden-ingaro-golf",
+    "name": "Ingarö Golfklubb",
+    "city": "Stockholm",
+    "country": "Sweden",
+    "lat": 59.2611,
+    "lon": 18.4214
+  },
+  {
+    "id": "sweden-jonkopings-golf",
+    "name": "Jönköpings Golfklubb",
+    "city": "Jönköping",
+    "country": "Sweden",
+    "lat": 57.7381,
+    "lon": 14.1294
+  },
+  {
+    "id": "sweden-kalmar-golf",
+    "name": "Kalmar Golfklubb",
+    "city": "Kalmar",
+    "country": "Sweden",
+    "lat": 56.6897,
+    "lon": 16.3214
+  },
+  {
+    "id": "sweden-karlstads-golf",
+    "name": "Karlstads Golfklubb",
+    "city": "Värmland",
+    "country": "Sweden",
+    "lat": 59.4172,
+    "lon": 13.5639
+  },
+  {
+    "id": "sweden-kristianstads-golf",
+    "name": "Kristianstads Golfklubb",
+    "city": "Skåne",
+    "country": "Sweden",
+    "lat": 55.9392,
+    "lon": 14.3161
+  },
+  {
+    "id": "sweden-kungsbacka-golf",
+    "name": "Kungsbacka Golfklubb",
+    "city": "Halland",
+    "country": "Sweden",
+    "lat": 57.5494,
+    "lon": 12.0114
+  },
+  {
+    "id": "sweden-landskrona-golf",
+    "name": "Landskrona Golfklubb",
+    "city": "Skåne",
+    "country": "Sweden",
+    "lat": 55.8856,
+    "lon": 12.8139
+  },
+  {
+    "id": "sweden-ljunghusens-golf",
+    "name": "Ljunghusens Golf Club",
+    "city": "Skåne",
+    "country": "Sweden",
+    "lat": 55.3986,
+    "lon": 12.9125
+  },
+  {
+    "id": "sweden-lunds-akademiska-golf",
+    "name": "Lunds Akademiska Golfklubb",
+    "city": "Skåne",
+    "country": "Sweden",
+    "lat": 55.7231,
+    "lon": 13.2725
+  },
+  {
+    "id": "sweden-lysegardens-golf",
+    "name": "Lysegårdens Golfklubb",
+    "city": "Västra Götaland",
+    "country": "Sweden",
+    "lat": 57.9431,
+    "lon": 12.0394
+  },
+  {
+    "id": "sweden-molndals-golf",
+    "name": "Mölndals Golfklubb",
+    "city": "Västra Götaland",
+    "country": "Sweden",
+    "lat": 57.5811,
+    "lon": 12.0914
+  },
+  {
+    "id": "sweden-pga-national-golf",
+    "name": "PGA Sweden National",
+    "city": "Skåne",
+    "country": "Sweden",
+    "lat": 55.5491,
+    "lon": 13.2039
+  },
+  {
+    "id": "sweden-rya-golf",
+    "name": "Rya Golfklubb",
+    "city": "Skåne",
+    "country": "Sweden",
+    "lat": 56.0097,
+    "lon": 12.6628
+  },
+  {
+    "id": "sweden-saltsjobadens-golf",
+    "name": "Saltsjöbadens Golfklubb",
+    "city": "Stockholm",
+    "country": "Sweden",
+    "lat": 59.2728,
+    "lon": 18.2614
+  },
+  {
+    "id": "sweden-sand-golf",
+    "name": "Sand Golf Club",
+    "city": "Jönköping",
+    "country": "Sweden",
+    "lat": 57.8541,
+    "lon": 14.0201
+  },
+  {
+    "id": "sweden-stockholms-golf",
+    "name": "Stockholms Golfklubb",
+    "city": "Stockholm",
+    "country": "Sweden",
+    "lat": 59.3894,
+    "lon": 18.0211
+  },
+  {
+    "id": "sweden-ullna-golf",
+    "name": "Ullna Golf Club",
+    "city": "Stockholm",
+    "country": "Sweden",
+    "lat": 59.4719,
+    "lon": 18.1284
+  },
+  {
+    "id": "sweden-upsala-golf",
+    "name": "Upsala Golfklubb",
+    "city": "Uppsala",
+    "country": "Sweden",
+    "lat": 59.8392,
+    "lon": 17.5211
+  },
+  {
+    "id": "sweden-vasatorps-golf",
+    "name": "Vasatorps Golfklubb",
+    "city": "Skåne",
+    "country": "Sweden",
+    "lat": 56.0691,
+    "lon": 12.7912
+  },
+  {
+    "id": "sweden-vesterby-links-golf",
+    "name": "Vesterby Links (Landeryds GK)",
+    "city": "Östergötland",
+    "country": "Sweden",
+    "lat": 58.2325,
+    "lon": 15.7214
+  },
+  {
+    "id": "sweden-visby-golf",
+    "name": "Visby Golf Club",
+    "city": "Gotland",
+    "country": "Sweden",
+    "lat": 57.4812,
+    "lon": 18.1189
+  },
+  {
+    "id": "norway-aalesund-golf",
+    "name": "Aalesund Golfklubb",
+    "city": "Møre og Romsdal",
+    "country": "Norway",
+    "lat": 62.5317,
+    "lon": 6.5594
+  },
+  {
+    "id": "norway-asker-golf",
+    "name": "Asker Golfklubb",
+    "city": "Akershus",
+    "country": "Norway",
+    "lat": 59.8394,
+    "lon": 10.4281
+  },
+  {
+    "id": "norway-askim-golf",
+    "name": "Askim Golfklubb",
+    "city": "Østfold",
+    "country": "Norway",
+    "lat": 59.5911,
+    "lon": 11.1436
+  },
+  {
+    "id": "norway-atlantis-golf",
+    "name": "Atlantis Golf Center",
+    "city": "Vestfold",
+    "country": "Norway",
+    "lat": 59.1106,
+    "lon": 10.4328
+  },
+  {
+    "id": "norway-atlungstad-golf",
+    "name": "Atlungstad Golf",
+    "city": "Innlandet",
+    "country": "Norway",
+    "lat": 60.7681,
+    "lon": 11.0261
+  },
+  {
+    "id": "norway-baerum-golf",
+    "name": "Bærum Golfklubb",
+    "city": "Akershus",
+    "country": "Norway",
+    "lat": 59.9536,
+    "lon": 10.5144
+  },
+  {
+    "id": "norway-ballerud-golf",
+    "name": "Ballerud Golf",
+    "city": "Akershus",
+    "country": "Norway",
+    "lat": 59.9042,
+    "lon": 10.5978
+  },
+  {
+    "id": "norway-bergen-golf",
+    "name": "Bergen Golfklubb",
+    "city": "Vestland",
+    "country": "Norway",
+    "lat": 60.4394,
+    "lon": 5.3325
+  },
+  {
+    "id": "norway-bjaavann-golf",
+    "name": "Bjaavann Golfklubb",
+    "city": "Agder",
+    "country": "Norway",
+    "lat": 58.1956,
+    "lon": 8.0494
+  },
+  {
+    "id": "norway-bodo-golf",
+    "name": "Bodø Golfklubb",
+    "city": "Nordland",
+    "country": "Norway",
+    "lat": 67.3197,
+    "lon": 14.4725
+  },
+  {
+    "id": "norway-borre-golf",
+    "name": "Borre Golfklubb",
+    "city": "Vestfold",
+    "country": "Norway",
+    "lat": 59.3906,
+    "lon": 10.4214
+  },
+  {
+    "id": "norway-drobak-golf",
+    "name": "Drøbak Golfklubb",
+    "city": "Akershus",
+    "country": "Norway",
+    "lat": 59.6644,
+    "lon": 10.6514
+  },
+  {
+    "id": "norway-egersund-golf",
+    "name": "Egersund Golfklubb",
+    "city": "Rogaland",
+    "country": "Norway",
+    "lat": 58.4839,
+    "lon": 5.9611
+  },
+  {
+    "id": "norway-elverum-golf",
+    "name": "Elverum Golfklubb",
+    "city": "Innlandet",
+    "country": "Norway",
+    "lat": 60.8911,
+    "lon": 11.6033
+  },
+  {
+    "id": "norway-evje-golf",
+    "name": "Evje Golfpark",
+    "city": "Østfold",
+    "country": "Norway",
+    "lat": 59.3878,
+    "lon": 10.6869
+  },
+  {
+    "id": "norway-fana-golf",
+    "name": "Fana Golfklubb",
+    "city": "Vestland",
+    "country": "Norway",
+    "lat": 60.3014,
+    "lon": 5.3406
+  },
+  {
+    "id": "norway-fjallbacka-golf",
+    "name": "Fjällbacka Golfklubb",
+    "city": "Innlandet",
+    "country": "Norway",
+    "lat": 59.0117,
+    "lon": 11.5833
+  },
+  {
+    "id": "norway-flam-golf",
+    "name": "Flåm Golfklubb",
+    "city": "Vestland",
+    "country": "Norway",
+    "lat": 60.8419,
+    "lon": 7.1136
+  },
+  {
+    "id": "norway-gamle-fredrikstad-golf",
+    "name": "Gamle Fredrikstad Golfklubb",
+    "city": "Østfold",
+    "country": "Norway",
+    "lat": 59.2086,
+    "lon": 10.9631
+  },
+  {
+    "id": "norway-gjersjoen-golf",
+    "name": "Gjersjøen Golfklubb",
+    "city": "Akershus",
+    "country": "Norway",
+    "lat": 59.7892,
+    "lon": 10.7814
+  },
+  {
+    "id": "norway-gjovik-og-toten-golf",
+    "name": "Gjøvik og Toten Golfklubb",
+    "city": "Innlandet",
+    "country": "Norway",
+    "lat": 60.7236,
+    "lon": 10.7417
+  },
+  {
+    "id": "norway-grimstad-golf",
+    "name": "Grimstad Golfklubb",
+    "city": "Agder",
+    "country": "Norway",
+    "lat": 58.3547,
+    "lon": 8.5292
+  },
+  {
+    "id": "norway-gronmo-golf",
+    "name": "Grønmo Golfklubb",
+    "city": "Oslo",
+    "country": "Norway",
+    "lat": 59.8669,
+    "lon": 10.8436
+  },
+  {
+    "id": "norway-haga-golf",
+    "name": "Haga Golfklubb",
+    "city": "Oslo",
+    "country": "Norway",
+    "lat": 59.9483,
+    "lon": 10.5694
+  },
+  {
+    "id": "norway-hallingdal-golf",
+    "name": "Hallingdal Golfklubb",
+    "city": "Buskerud",
+    "country": "Norway",
+    "lat": 60.5511,
+    "lon": 8.9719
+  },
+  {
+    "id": "norway-haugaland-golf",
+    "name": "Haugaland Golfklubb",
+    "city": "Rogaland",
+    "country": "Norway",
+    "lat": 59.3769,
+    "lon": 5.3897
+  },
+  {
+    "id": "norway-holtsmark-golf",
+    "name": "Holtsmark Golf",
+    "city": "Buskerud",
+    "country": "Norway",
+    "lat": 59.7714,
+    "lon": 10.2814
+  },
+  {
+    "id": "norway-hvam-golf",
+    "name": "Hvam Golfklubb",
+    "city": "Akershus",
+    "country": "Norway",
+    "lat": 60.1064,
+    "lon": 11.3917
+  },
+  {
+    "id": "norway-jaeren-golf",
+    "name": "Jæren Golfklubb",
+    "city": "Rogaland",
+    "country": "Norway",
+    "lat": 58.7183,
+    "lon": 5.6694
+  },
+  {
+    "id": "norway-kjekstad-golf",
+    "name": "Kjekstad Golfklubb",
+    "city": "Buskerud",
+    "country": "Norway",
+    "lat": 59.7431,
+    "lon": 10.3725
+  },
+  {
+    "id": "norway-kongsberg-golf",
+    "name": "Kongsberg Golfklubb",
+    "city": "Buskerud",
+    "country": "Norway",
+    "lat": 59.6547,
+    "lon": 9.6892
+  },
+  {
+    "id": "norway-kongsvinger-golf",
+    "name": "Kongsvinger Golfklubb",
+    "city": "Innlandet",
+    "country": "Norway",
+    "lat": 60.1514,
+    "lon": 12.0628
+  },
+  {
+    "id": "norway-kragero-golf",
+    "name": "Kragerø Golf Resort",
+    "city": "Telemark",
+    "country": "Norway",
+    "lat": 58.8911,
+    "lon": 9.3622
+  },
+  {
+    "id": "norway-kvinesdal-golf",
+    "name": "Kvinesdal Golfklubb",
+    "city": "Agder",
+    "country": "Norway",
+    "lat": 58.3344,
+    "lon": 6.9414
+  },
+  {
+    "id": "norway-larvik-golf",
+    "name": "Larvik Golfklubb",
+    "city": "Vestfold",
+    "country": "Norway",
+    "lat": 59.0436,
+    "lon": 10.0892
+  },
+  {
+    "id": "norway-lofoten-links-golf",
+    "name": "Lofoten Links",
+    "city": "Nordland",
+    "country": "Norway",
+    "lat": 68.3292,
+    "lon": 14.0931
+  },
+  {
+    "id": "norway-losby-golf",
+    "name": "Losby Golfklubb",
+    "city": "Akershus",
+    "country": "Norway",
+    "lat": 59.8894,
+    "lon": 10.9856
+  },
+  {
+    "id": "norway-meland-golf",
+    "name": "Meland Golfklubb",
+    "city": "Vestland",
+    "country": "Norway",
+    "lat": 60.5494,
+    "lon": 5.2131
+  },
+  {
+    "id": "norway-miklagard-golf",
+    "name": "Miklagard Golf",
+    "city": "Akershus",
+    "country": "Norway",
+    "lat": 60.0811,
+    "lon": 11.1444
+  },
+  {
+    "id": "norway-mjosen-golf",
+    "name": "Mjøsen Golfklubb",
+    "city": "Innlandet",
+    "country": "Norway",
+    "lat": 60.9125,
+    "lon": 10.8261
+  },
+  {
+    "id": "norway-narvik-golf",
+    "name": "Narvik Golfklubb",
+    "city": "Nordland",
+    "country": "Norway",
+    "lat": 68.2561,
+    "lon": 17.2431
+  },
+  {
+    "id": "norway-nordhaug-golf",
+    "name": "Nordhaug Golfklubb",
+    "city": "Akershus",
+    "country": "Norway",
+    "lat": 59.9511,
+    "lon": 10.5592
+  },
+  {
+    "id": "norway-norsjo-golf",
+    "name": "Norsjø Golfklubb",
+    "city": "Telemark",
+    "country": "Norway",
+    "lat": 59.3517,
+    "lon": 9.2814
+  },
+  {
+    "id": "norway-notteroy-golf",
+    "name": "Nøtterøy Golfklubb",
+    "city": "Vestfold",
+    "country": "Norway",
+    "lat": 59.2139,
+    "lon": 10.3986
+  },
+  {
+    "id": "norway-oslo-golf",
+    "name": "Oslo Golfklubb (Bogstad)",
+    "city": "Oslo",
+    "country": "Norway",
+    "lat": 59.9678,
+    "lon": 10.6433
+  },
+  {
+    "id": "norway-preikestolen-golf",
+    "name": "Preikestolen Golfklubb",
+    "city": "Rogaland",
+    "country": "Norway",
+    "lat": 58.9917,
+    "lon": 6.0894
+  },
+  {
+    "id": "norway-sandnes-golf",
+    "name": "Sandnes Golfklubb",
+    "city": "Rogaland",
+    "country": "Norway",
+    "lat": 58.8419,
+    "lon": 5.7611
+  },
+  {
+    "id": "norway-sola-golf",
+    "name": "Sola Golfklubb",
+    "city": "Rogaland",
+    "country": "Norway",
+    "lat": 58.8872,
+    "lon": 5.6417
+  },
+  {
+    "id": "norway-stavanger-golf",
+    "name": "Stavanger Golfklubb",
+    "city": "Rogaland",
+    "country": "Norway",
+    "lat": 58.9567,
+    "lon": 5.6836
+  },
+  {
+    "id": "norway-trondheim-golf",
+    "name": "Trondheim Golfklubb",
+    "city": "Trøndelag",
+    "country": "Norway",
+    "lat": 63.4214,
+    "lon": 10.4628
+  },
+  {
+    "id": "norway-tyrifjord-golf",
+    "name": "Tyrifjord Golfklubb",
+    "city": "Buskerud",
+    "country": "Norway",
+    "lat": 59.9839,
+    "lon": 10.1411
+  },
+  {
+    "id": "norway-valdres-golf",
+    "name": "Valdres Golfklubb",
+    "city": "Innlandet",
+    "country": "Norway",
+    "lat": 60.9414,
+    "lon": 9.2561
+  },
+  {
+    "id": "denmark-scandinavian-golf",
+    "name": "The Scandinavian",
+    "city": "Farum",
+    "country": "Denmark",
+    "lat": 55.8286,
+    "lon": 12.3581
+  },
+  {
+    "id": "denmark-great-northern-golf",
+    "name": "Great Northern",
+    "city": "Kerteminde",
+    "country": "Denmark",
+    "lat": 55.4594,
+    "lon": 10.6486
+  },
+  {
+    "id": "denmark-lubker-golf",
+    "name": "Lübker Golf Resort",
+    "city": "Nimtofte",
+    "country": "Denmark",
+    "lat": 56.4311,
+    "lon": 10.5731
+  },
+  {
+    "id": "denmark-esbjerg-golf",
+    "name": "Esbjerg Golfklub",
+    "city": "Esbjerg",
+    "country": "Denmark",
+    "lat": 55.5392,
+    "lon": 8.3517
+  },
+  {
+    "id": "denmark-holstebro-golf",
+    "name": "Holstebro Golfklub",
+    "city": "Vemb",
+    "country": "Denmark",
+    "lat": 56.3475,
+    "lon": 8.3914
+  },
+  {
+    "id": "denmark-rungsted-golf",
+    "name": "Rungsted Golf Klub",
+    "city": "Hørsholm",
+    "country": "Denmark",
+    "lat": 55.8856,
+    "lon": 12.5283
+  },
+  {
+    "id": "denmark-royal-copenhagen-golf",
+    "name": "Royal Copenhagen Golf Club",
+    "city": "Klampenborg",
+    "country": "Denmark",
+    "lat": 55.7831,
+    "lon": 12.5714
+  },
+  {
+    "id": "denmark-simons-golf",
+    "name": "Simon's Golf Club",
+    "city": "Kvistgård",
+    "country": "Denmark",
+    "lat": 55.9925,
+    "lon": 12.4839
+  },
+  {
+    "id": "denmark-nordvestjysk-golf",
+    "name": "Nordvestjysk Golfklub",
+    "city": "Thisted",
+    "country": "Denmark",
+    "lat": 56.9856,
+    "lon": 8.5217
+  },
+  {
+    "id": "denmark-aarhus-golf",
+    "name": "Aarhus Golf Club",
+    "city": "Højbjerg",
+    "country": "Denmark",
+    "lat": 56.0956,
+    "lon": 10.2189
+  },
+  {
+    "id": "denmark-lyngbygaard-golf",
+    "name": "Lyngbygaard Golf",
+    "city": "Brabrand",
+    "country": "Denmark",
+    "lat": 56.1611,
+    "lon": 10.0514
+  },
+  {
+    "id": "denmark-silkeborg-ry-golf",
+    "name": "Silkeborg Ry Golfklub",
+    "city": "Silkeborg",
+    "country": "Denmark",
+    "lat": 56.1261,
+    "lon": 9.5894
+  },
+  {
+    "id": "denmark-stensballegaard-golf",
+    "name": "Stensballegaard Golfklub",
+    "city": "Horsens",
+    "country": "Denmark",
+    "lat": 55.8711,
+    "lon": 9.9142
+  },
+  {
+    "id": "denmark-trehoje-golf",
+    "name": "Trehøje Golfklub",
+    "city": "Vildbjerg",
+    "country": "Denmark",
+    "lat": 56.1836,
+    "lon": 8.7114
+  },
+  {
+    "id": "denmark-himmerland-golf",
+    "name": "HimmerLand",
+    "city": "Gatten",
+    "country": "Denmark",
+    "lat": 56.8456,
+    "lon": 9.4211
+  },
+  {
+    "id": "denmark-romo-golf",
+    "name": "Rømø Golf Links",
+    "city": "Rømø Island",
+    "country": "Denmark",
+    "lat": 55.0894,
+    "lon": 8.5414
+  },
+  {
+    "id": "denmark-koge-golf",
+    "name": "Køge Golf Klub",
+    "city": "Køge",
+    "country": "Denmark",
+    "lat": 55.4394,
+    "lon": 12.1811
+  },
+  {
+    "id": "denmark-mariagerfjord-golf",
+    "name": "Mariagerfjord Golfklub",
+    "city": "Hadsund",
+    "country": "Denmark",
+    "lat": 56.7056,
+    "lon": 10.0325
+  },
+  {
+    "id": "denmark-vejle-golf",
+    "name": "Vejle Golf Club",
+    "city": "Vejle",
+    "country": "Denmark",
+    "lat": 55.7231,
+    "lon": 9.5986
+  },
+  {
+    "id": "denmark-odense-golf",
+    "name": "Odense Golfklub",
+    "city": "Odense",
+    "country": "Denmark",
+    "lat": 55.3614,
+    "lon": 10.4394
+  },
+  {
+    "id": "denmark-skanderborg-golf",
+    "name": "Skanderborg Golf Klub",
+    "city": "Skanderborg",
+    "country": "Denmark",
+    "lat": 56.0592,
+    "lon": 9.9411
+  },
+  {
+    "id": "denmark-hvide-klit-golf",
+    "name": "Hvide Klit Golfklub",
+    "city": "Skagen Area",
+    "country": "Denmark",
+    "lat": 57.6592,
+    "lon": 10.4131
+  },
+  {
+    "id": "denmark-bornholms-golf",
+    "name": "Bornholms Golf Klub",
+    "city": "Rønne (Bornholm)",
+    "country": "Denmark",
+    "lat": 55.1214,
+    "lon": 14.7317
+  },
+  {
+    "id": "denmark-asserbo-golf",
+    "name": "Asserbo Golf Club",
+    "city": "Frederiksværk",
+    "country": "Denmark",
+    "lat": 56.0114,
+    "lon": 12.0628
+  },
+  {
+    "id": "denmark-royal-golf",
+    "name": "Royal Golf Club",
+    "city": "Copenhagen",
+    "country": "Denmark",
+    "lat": 55.6367,
+    "lon": 12.5833
+  },
+  {
+    "id": "denmark-odsherred-golf",
+    "name": "Odsherred Golfklub",
+    "city": "Højby",
+    "country": "Denmark",
+    "lat": 55.9083,
+    "lon": 11.6033
+  },
+  {
+    "id": "denmark-falster-golf",
+    "name": "Falster Golfklub",
+    "city": "Eskilstrup",
+    "country": "Denmark",
+    "lat": 54.8592,
+    "lon": 11.9214
+  },
+  {
+    "id": "denmark-breinholtgard-golf",
+    "name": "Breinholtgård Golf Klub",
+    "city": "Esbjerg V",
+    "country": "Denmark",
+    "lat": 55.5161,
+    "lon": 8.4114
+  },
+  {
+    "id": "denmark-aabenraa-golf",
+    "name": "Aabenraa Golf Club",
+    "city": "Aabenraa",
+    "country": "Denmark",
+    "lat": 55.0811,
+    "lon": 9.4444
+  },
+  {
+    "id": "denmark-aabybro-golf",
+    "name": "Aabybro Golf Club",
+    "city": "Aabybro",
+    "country": "Denmark",
+    "lat": 57.1514,
+    "lon": 9.7214
+  },
+  {
+    "id": "denmark-aalborg-golf",
+    "name": "Aalborg Golf Klub",
+    "city": "Aalborg",
+    "country": "Denmark",
+    "lat": 57.0197,
+    "lon": 9.8114
+  },
+  {
+    "id": "denmark-aarhus-aadal-golf",
+    "name": "Aarhus Aadal Golf Club",
+    "city": "Harlev",
+    "country": "Denmark",
+    "lat": 56.1436,
+    "lon": 10.0097
+  },
+  {
+    "id": "denmark-aars-golf",
+    "name": "Aars Golf Klub",
+    "city": "Aars",
+    "country": "Denmark",
+    "lat": 56.8114,
+    "lon": 9.4892
+  },
+  {
+    "id": "denmark-aaskov-golf",
+    "name": "Aaskov Golfklub",
+    "city": "Sdr. Felding",
+    "country": "Denmark",
+    "lat": 55.9922,
+    "lon": 8.7892
+  },
+  {
+    "id": "denmark-aero-golf",
+    "name": "Ærø Golf Klub",
+    "city": "Ærø Island",
+    "country": "Denmark",
+    "lat": 54.9392,
+    "lon": 10.3114
+  },
+  {
+    "id": "denmark-albertslund-golf",
+    "name": "Albertslund Golfklub",
+    "city": "Albertslund",
+    "country": "Denmark",
+    "lat": 55.6725,
+    "lon": 12.3325
+  },
+  {
+    "id": "denmark-benniksgaard-golf",
+    "name": "Benniksgaard Golf Klub",
+    "city": "Gråsten",
+    "country": "Denmark",
+    "lat": 54.8911,
+    "lon": 9.5144
+  },
+  {
+    "id": "denmark-birkemose-golf",
+    "name": "Birkemose Golf Club",
+    "city": "Kolding",
+    "country": "Denmark",
+    "lat": 55.5317,
+    "lon": 9.5097
+  },
+  {
+    "id": "denmark-blavandshuk-golf",
+    "name": "Blåvandshuk Golfklub",
+    "city": "Blåvand",
+    "country": "Denmark",
+    "lat": 55.5614,
+    "lon": 8.1631
+  },
+  {
+    "id": "denmark-blokhus-golf",
+    "name": "Blokhus Golfcenter",
+    "city": "Blokhus",
+    "country": "Denmark",
+    "lat": 57.2431,
+    "lon": 9.6111
+  },
+  {
+    "id": "denmark-brande-golf",
+    "name": "Brande Golfklub",
+    "city": "Brande",
+    "country": "Denmark",
+    "lat": 55.9414,
+    "lon": 9.1106
+  },
+  {
+    "id": "denmark-brondby-golf",
+    "name": "Brøndby Golfklub",
+    "city": "Brøndby",
+    "country": "Denmark",
+    "lat": 55.6431,
+    "lon": 12.4111
+  },
+  {
+    "id": "denmark-bronderslev-golf",
+    "name": "Brønderslev Golfklub",
+    "city": "Brønderslev",
+    "country": "Denmark",
+    "lat": 57.2831,
+    "lon": 9.9536
+  },
+  {
+    "id": "denmark-maribo-so-golf",
+    "name": "Maribo Sø Golfklub",
+    "city": "Maribo",
+    "country": "Denmark",
+    "lat": 54.7611,
+    "lon": 11.5144
+  },
+  {
+    "id": "denmark-sindal-golf",
+    "name": "Sindal Golf Klub",
+    "city": "Sindal",
+    "country": "Denmark",
+    "lat": 57.4914,
+    "lon": 10.2086
+  },
+  {
+    "id": "denmark-tange-so-golf",
+    "name": "Tange Sø Golfklub",
+    "city": "Bjerringbro",
+    "country": "Denmark",
+    "lat": 56.3547,
+    "lon": 9.6019
+  },
+  {
+    "id": "denmark-soro-golf",
+    "name": "Sorø Golfklub",
+    "city": "Sorø",
+    "country": "Denmark",
+    "lat": 55.4628,
+    "lon": 11.5408
+  },
+  {
+    "id": "denmark-randers-golf",
+    "name": "Randers Golf Klub",
+    "city": "Randers",
+    "country": "Denmark",
+    "lat": 56.4839,
+    "lon": 10.0261
+  },
+  {
+    "id": "denmark-ebeltoft-golf",
+    "name": "Ebeltoft Golf Club",
+    "city": "Ebeltoft",
+    "country": "Denmark",
+    "lat": 56.1956,
+    "lon": 10.6869
+  },
+  {
+    "id": "denmark-fano-golf",
+    "name": "Fanø Vesterhavsbad Golfklub",
+    "city": "Fanø Island",
+    "country": "Denmark",
+    "lat": 55.4444,
+    "lon": 8.3622
+  },
+  {
+    "id": "denmark-fredericia-golf",
+    "name": "Fredericia Golf Club",
+    "city": "Fredericia",
+    "country": "Denmark",
+    "lat": 55.5833,
+    "lon": 9.7417
+  },
+  {
+    "id": "denmark-fureso-golf",
+    "name": "Furesø Golfklub",
+    "city": "Birkerød",
+    "country": "Denmark",
+    "lat": 55.8394,
+    "lon": 12.4328
+  },
+  {
+    "id": "denmark-gilleleje-golf",
+    "name": "Gilleleje Golfklub",
+    "city": "Gilleleje",
+    "country": "Denmark",
+    "lat": 56.1106,
+    "lon": 12.2814
+  },
+  {
+    "id": "denmark-greve-golf",
+    "name": "Greve Golfklub",
+    "city": "Karlslunde",
+    "country": "Denmark",
+    "lat": 55.5511,
+    "lon": 12.1836
+  },
+  {
+    "id": "denmark-haderslev-golf",
+    "name": "Haderslev Golfklub",
+    "city": "Haderslev",
+    "country": "Denmark",
+    "lat": 55.2561,
+    "lon": 9.4725
+  },
+  {
+    "id": "denmark-hals-golf",
+    "name": "Hals Golf Klub",
+    "city": "Hals",
+    "country": "Denmark",
+    "lat": 56.9917,
+    "lon": 10.3131
+  },
+  {
+    "id": "denmark-hammel-golf",
+    "name": "Hammel Golf Klub",
+    "city": "Hammel",
+    "country": "Denmark",
+    "lat": 56.2546,
+    "lon": 9.8436
+  },
+  {
+    "id": "denmark-harre-vig-golf",
+    "name": "Harre Vig Golfklub",
+    "city": "Roslev",
+    "country": "Denmark",
+    "lat": 56.7164,
+    "lon": 8.9719
+  },
+  {
+    "id": "denmark-hedeland-golf",
+    "name": "Hedeland Golfklub",
+    "city": "Hedehusene",
+    "country": "Denmark",
+    "lat": 55.6339,
+    "lon": 12.1436
+  },
+  {
+    "id": "denmark-helsingor-golf",
+    "name": "Helsingør Golf Club",
+    "city": "Helsingør",
+    "country": "Denmark",
+    "lat": 56.0394,
+    "lon": 12.5833
+  },
+  {
+    "id": "denmark-herning-golf",
+    "name": "Herning Golf Klub",
+    "city": "Herning",
+    "country": "Denmark",
+    "lat": 56.1431,
+    "lon": 8.9856
+  },
+  {
+    "id": "denmark-hillerod-golf",
+    "name": "Hillerød Golf Klub",
+    "city": "Hillerød",
+    "country": "Denmark",
+    "lat": 55.9392,
+    "lon": 12.2614
+  },
+  {
+    "id": "denmark-hjorring-golf",
+    "name": "Hjørring Golfklub",
+    "city": "Hjørring",
+    "country": "Denmark",
+    "lat": 57.4725,
+    "lon": 10.0114
+  },
+  {
+    "id": "denmark-holluf-park-golf",
+    "name": "Holluf Park (Odense Eventyr)",
+    "city": "Odense",
+    "country": "Denmark",
+    "lat": 55.3667,
+    "lon": 10.4628
+  },
+  {
+    "id": "denmark-holbaek-golf",
+    "name": "Holbæk Golfklub",
+    "city": "Holbæk",
+    "country": "Denmark",
+    "lat": 55.7236,
+    "lon": 11.6892
+  },
+  {
+    "id": "denmark-hornbaek-golf",
+    "name": "Hornbæk Golfklub",
+    "city": "Hornbæk",
+    "country": "Denmark",
+    "lat": 56.0691,
+    "lon": 12.4328
+  },
+  {
+    "id": "denmark-horsens-golf",
+    "name": "Horsens Golfklub",
+    "city": "Horsens",
+    "country": "Denmark",
+    "lat": 55.8597,
+    "lon": 9.8139
+  },
+  {
+    "id": "denmark-ikast-golf",
+    "name": "Ikast Golf Klub",
+    "city": "Ikast",
+    "country": "Denmark",
+    "lat": 56.1556,
+    "lon": 9.1411
+  },
+  {
+    "id": "denmark-ishoj-golf",
+    "name": "Ishøj Golf Center",
+    "city": "Ishøj",
+    "country": "Denmark",
+    "lat": 55.6194,
+    "lon": 12.2814
+  },
+  {
+    "id": "denmark-jelling-golf",
+    "name": "Jelling Golfklub",
+    "city": "Jelling",
+    "country": "Denmark",
+    "lat": 55.7514,
+    "lon": 9.4214
+  },
+  {
+    "id": "denmark-juelsminde-golf",
+    "name": "Juelsminde Golfklub",
+    "city": "Juelsminde",
+    "country": "Denmark",
+    "lat": 55.7173,
+    "lon": 10.0004
+  },
+  {
+    "id": "denmark-kalundborg-golf",
+    "name": "Kalundborg Golfklub",
+    "city": "Kalundborg",
+    "country": "Denmark",
+    "lat": 55.6972,
+    "lon": 11.0839
+  },
+  {
+    "id": "denmark-karloby-golf",
+    "name": "Karloby Golf Klub",
+    "city": "Middelfart",
+    "country": "Denmark",
+    "lat": 55.5039,
+    "lon": 9.8219
+  },
+  {
+    "id": "denmark-kolding-golf",
+    "name": "Kolding Golf Club",
+    "city": "Kolding",
+    "country": "Denmark",
+    "lat": 55.5113,
+    "lon": 9.4842
+  },
+  {
+    "id": "denmark-korsor-golf",
+    "name": "Korsør Golf Klub",
+    "city": "Korsør",
+    "country": "Denmark",
+    "lat": 55.3344,
+    "lon": 11.1444
+  },
+  {
+    "id": "denmark-langeso-golf",
+    "name": "Langesø Golf",
+    "city": "Morud",
+    "country": "Denmark",
+    "lat": 55.4314,
+    "lon": 10.2039
+  },
+  {
+    "id": "denmark-lemvig-golf",
+    "name": "Lemvig Golfklub",
+    "city": "Lemvig",
+    "country": "Denmark",
+    "lat": 56.5521,
+    "lon": 8.2811
+  },
+  {
+    "id": "denmark-laeso-golf",
+    "name": "Læsø Seaside Golf Klub",
+    "city": "Læsø Island",
+    "country": "Denmark",
+    "lat": 57.3197,
+    "lon": 11.1294
+  },
+  {
+    "id": "denmark-midtsjaellands-golf",
+    "name": "Midtsjællands Golfklub",
+    "city": "Kvanløse",
+    "country": "Denmark",
+    "lat": 55.6575,
+    "lon": 11.6596
+  },
+  {
+    "id": "denmark-moen-golf",
+    "name": "Møen Golfklub",
+    "city": "Møn Island",
+    "country": "Denmark",
+    "lat": 54.9811,
+    "lon": 12.2431
+  },
+  {
+    "id": "denmark-morso-golf",
+    "name": "Morsø Golfklub",
+    "city": "Nykøbing Mors",
+    "country": "Denmark",
+    "lat": 56.7955,
+    "lon": 8.8493
+  },
+  {
+    "id": "denmark-naestved-golf",
+    "name": "Næstved Golfklub",
+    "city": "Næstved",
+    "country": "Denmark",
+    "lat": 55.2139,
+    "lon": 11.7214
+  },
+  {
+    "id": "denmark-nordborg-golf",
+    "name": "Nordborg Golfklub",
+    "city": "Nordborg",
+    "country": "Denmark",
+    "lat": 55.0436,
+    "lon": 9.7431
+  },
+  {
+    "id": "denmark-nyborg-golf",
+    "name": "Nyborg Golfklub",
+    "city": "Nyborg",
+    "country": "Denmark",
+    "lat": 55.3126,
+    "lon": 10.7794
+  },
+  {
+    "id": "denmark-passebaekgaard-golf",
+    "name": "Passebækgaard Golf",
+    "city": "Dronningmølle",
+    "country": "Denmark",
+    "lat": 56.0911,
+    "lon": 12.3533
+  },
+  {
+    "id": "denmark-ribe-golf",
+    "name": "Ribe Golfklub",
+    "city": "Ribe",
+    "country": "Denmark",
+    "lat": 55.3271,
+    "lon": 8.8144
+  },
+  {
+    "id": "denmark-ringsted-golf",
+    "name": "Ringsted Golfklub",
+    "city": "Ringsted",
+    "country": "Denmark",
+    "lat": 55.4514,
+    "lon": 11.7814
+  },
+  {
+    "id": "denmark-roskilde-golf",
+    "name": "Roskilde Golf Klub",
+    "city": "Roskilde",
+    "country": "Denmark",
+    "lat": 55.6419,
+    "lon": 12.0628
+  },
+  {
+    "id": "denmark-samso-golf",
+    "name": "Samsø Golfklub",
+    "city": "Samsø Island",
+    "country": "Denmark",
+    "lat": 55.8894,
+    "lon": 10.6111
+  },
+  {
+    "id": "denmark-sebber-kloster-golf",
+    "name": "Sebber Kloster Golfklub",
+    "city": "Nibe",
+    "country": "Denmark",
+    "lat": 56.9511,
+    "lon": 9.5261
+  },
+  {
+    "id": "denmark-skagen-golf",
+    "name": "Skagen Golfklub (Pay & Play)",
+    "city": "Skagen",
+    "country": "Denmark",
+    "lat": 57.7231,
+    "lon": 10.5592
+  },
+  {
+    "id": "denmark-skovbo-golf",
+    "name": "Skovbo Golfklub",
+    "city": "Borup",
+    "country": "Denmark",
+    "lat": 55.4952,
+    "lon": 11.9691
+  },
+  {
+    "id": "denmark-sollerod-golf",
+    "name": "Søllerød Golfklub",
+    "city": "Holte",
+    "country": "Denmark",
+    "lat": 55.8214,
+    "lon": 12.5097
+  },
+  {
+    "id": "denmark-sonderjyllands-golf",
+    "name": "Sønderjyllands Golfklub",
+    "city": "Tinglev",
+    "country": "Denmark",
+    "lat": 54.9431,
+    "lon": 9.3161
+  },
+  {
+    "id": "denmark-sydsjaellands-golf",
+    "name": "Sydsjællands Golfklub",
+    "city": "Mogenstrup",
+    "country": "Denmark",
+    "lat": 55.1811,
+    "lon": 11.8436
+  },
+  {
+    "id": "denmark-trelleborg-golf",
+    "name": "Trelleborg Golfklub",
+    "city": "Slagelse",
+    "country": "Denmark",
+    "lat": 55.3986,
+    "lon": 11.3171
+  },
+  {
+    "id": "denmark-vaerlose-golf",
+    "name": "Værløse Golfklub",
+    "city": "Værløse",
+    "country": "Denmark",
+    "lat": 55.7725,
+    "lon": 12.3917
   }
 ]

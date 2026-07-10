@@ -52,9 +52,6 @@ const styles = StyleSheet.create({
     borderRadius: Spacing.three,
     padding: Spacing.half,
     gap: Spacing.half,
-    // The parent header's `gap` spaces every child uniformly; pull the
-    // subtitle directly below closer without affecting spacing above.
-    marginBottom: -Spacing.two,
   },
   button: {
     flex: 1,

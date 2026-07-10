@@ -19,6 +19,7 @@ export const fi = {
     locationSaved: "Näytetään kenttiä tallennetun oletussijaintisi lähellä.",
     openSettings: "Avaa asetukset",
     refreshOrder: "Päivitä järjestys",
+    locationMoved: "Sijainti muuttunut — päivitä",
   },
   courseDetail: {
     backToCourses: "Takaisin kentille",
@@ -73,6 +74,20 @@ export const fi = {
     today: "Tänään",
     done: "Valmis",
   },
+  locationButton: {
+    open: "Valitse sijainti",
+    title: "Valitse sijainti",
+    done: "Valmis",
+    loading: "Ladataan…",
+    myLocation: "Oma sijainti",
+  },
+  distance: {
+    open: "Valitse etäisyysraja",
+    title: "Etäisyysraja",
+    description: "Näytä kentät enintään tähän etäisyyteen.",
+    done: "Valmis",
+    label: "{km} km",
+  },
   playability: {
     trend: "{early} nyt, {late} myöhemmin",
     labels: {
@@ -108,6 +123,23 @@ export const fi = {
     languageDescription: "Valitse sovelluksen käyttökieli.",
     finnish: "Suomi",
     english: "English",
+    swedish: "Svenska",
+    norwegian: "Norsk",
+    estonian: "Eesti",
+    lithuanian: "Lietuvių",
+    latvian: "Latviešu",
+    danish: "Dansk",
+    tabs: {
+      user: "Käyttäjä",
+      search: "Haku",
+    },
+    theme: {
+      title: "Teema",
+      description: "Valitse sovelluksen ulkoasu.",
+      system: "Järjestelmä",
+      light: "Vaalea",
+      dark: "Tumma",
+    },
     darkScoring: {
       title: "Pimeän pisteytys",
       description:

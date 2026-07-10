@@ -1,0 +1,195 @@
+import type { TranslationDictionary } from './fi';
+
+// Typed against `TranslationDictionary` so a missing or extra key here is a
+// compile error, keeping this locale in sync with the canonical `fi` shape.
+export const no: TranslationDictionary = {
+  app: {
+    title: 'Golfvær',
+  },
+  courses: {
+    subtitleLocation:
+      'Baner nærmest din posisjon, oppdatert fra FMI, YR.no og Open-Meteo.',
+    subtitleWeather:
+      'Baner med best spilleforhold akkurat nå, nærmest først.',
+    subtitleCombined:
+      'Balanserer avstand og nåværende forhold, nærmest først.',
+    locationDenied:
+      'Posisjonstilgang avslått — viser baner nær Kuopio. Du kan angi en standardposisjon i innstillingene.',
+    locationLoading:
+      'Finner posisjonen din — viser baner nær Kuopio i mellomtiden.',
+    locationSaved: 'Viser baner nær din lagrede standardposisjon.',
+    openSettings: 'Åpne innstillinger',
+    refreshOrder: 'Oppdater rekkefølge',
+    locationMoved: 'Posisjonen er endret — oppdater',
+  },
+  courseDetail: {
+    backToCourses: 'Tilbake til baner',
+    courseNotFound: 'Banen ble ikke funnet',
+    courseNotFoundBody: 'Vi fant ikke den golfbanen.',
+    away: 'unna',
+    nextHours: 'Neste timer (kombinert gjennomsnitt)',
+    noForecastData: 'Ingen prognosedata tilgjengelig.',
+    bySource: 'Per kilde (neste timer)',
+    attribution:
+      'Værdata fra FMI (Ilmatieteen laitos), YR.no (MET Norway) og Open-Meteo.',
+  },
+  courseCard: {
+    loadingForecast: 'Laster prognose…',
+    hourlyForecast: 'Timeprognose',
+    hideHourlyForecast: 'Skjul timeprognose',
+    showHourlyForecast: 'Vis timeprognose',
+  },
+  sourceToggle: {
+    combined: 'Kombinert',
+    bySource: 'Per kilde',
+  },
+  courseSearch: {
+    placeholder: 'Søk',
+    clear: 'Tøm søk',
+  },
+  sourceTable: {
+    noForecastData: 'Ingen prognosedata tilgjengelig.',
+    unavailable: 'Ikke tilgjengelig',
+  },
+  sunTimes: {
+    sunrise: 'Soloppgang',
+    sunset: 'Solnedgang',
+    daylight: 'Dagslys',
+    playableLight: 'Spillbart lys (borgerlig skumring): {dawn} – {dusk}',
+  },
+  weatherSummary: {
+    loadingForecast: 'Laster prognose…',
+    windAndPrecipitation: '{wind} vind · {precipitation}',
+  },
+  sort: {
+    location: 'Posisjon',
+    weather: 'Best vær',
+    combined: 'Kombinert',
+  },
+  startTime: {
+    open: 'Velg starttid',
+    now: 'Nå',
+    title: 'Velg starttid',
+    selectDay: 'Dag',
+    selectHour: 'Time',
+    today: 'I dag',
+    done: 'Ferdig',
+  },
+  locationButton: {
+    open: 'Velg posisjon',
+    title: 'Velg posisjon',
+    done: 'Ferdig',
+    loading: 'Laster…',
+    myLocation: 'Min posisjon',
+  },
+  distance: {
+    open: 'Velg avstandsgrense',
+    title: 'Avstandsgrense',
+    description: 'Vis baner innenfor denne avstanden.',
+    done: 'Ferdig',
+    label: '{km} km',
+  },
+  playability: {
+    trend: '{early} nå, {late} senere',
+    labels: {
+      Excellent: 'Utmerket',
+      Good: 'Bra',
+      Fair: 'Middels',
+      Hot: 'Varmt',
+      Poor: 'Dårlig',
+      Bad: 'Elendig',
+      Dark: 'Mørkt',
+    },
+    reasons: {
+      badConditions: 'kraftig regn, kaldt eller sterk vind',
+      poorConditions: 'regn, kaldt eller vindfullt',
+      fairConditions: 'lett regn, kjølig eller vind',
+      hot: 'varmt',
+      hotSpell: 'hetebølge forventet',
+    },
+  },
+  format: {
+    hourUnit: 't',
+    minuteUnit: 'min',
+  },
+  errors: {
+    failedToGetLocation: 'Kunne ikke hente posisjon',
+    failedToLoadWeather: 'Kunne ikke laste værdata',
+    forecastTimedOut: 'Prognoseforespørselen tok for lang tid',
+    failedToLoadForecast: 'Kunne ikke laste prognosen',
+  },
+  settings: {
+    title: 'Innstillinger',
+    language: 'Språk',
+    languageDescription: 'Velg appens språk.',
+    finnish: 'Suomi',
+    english: 'English',
+    swedish: 'Svenska',
+    norwegian: 'Norsk',
+    estonian: 'Eesti',
+    lithuanian: 'Lietuvių',
+    latvian: 'Latviešu',
+    danish: 'Dansk',
+    tabs: {
+      user: 'Bruker',
+      search: 'Søk',
+    },
+    theme: {
+      title: 'Tema',
+      description: 'Velg appens utseende.',
+      system: 'System',
+      light: 'Lyst',
+      dark: 'Mørkt',
+    },
+    darkScoring: {
+      title: 'Mørkepoeng',
+      description:
+        'Når aktivert, merkes timer uten spillbart lys som Mørkt og tas med i poengberegningen.',
+      toggle: 'Ta hensyn til mørke',
+    },
+    location: {
+      title: 'Standardposisjon',
+      description:
+        'Appen bruker enhetens posisjon når den er tilgjengelig. Ellers brukes denne lagrede standardposisjonen. Velg en posisjon ved å trykke på kartet.',
+      instruction: 'Trykk på kartet for å velge en posisjon.',
+      savedLabel: 'Lagret posisjon: {coords}',
+      notSet: 'Ingen standardposisjon angitt — Kuopio brukes.',
+      save: 'Lagre posisjon',
+      clear: 'Fjern lagret posisjon',
+    },
+  },
+  tabs: {
+    courses: 'Baner',
+    favorites: 'Favoritter',
+  },
+  favorites: {
+    title: 'Favoritter',
+    empty: 'Ingen favoritter ennå. Legg til baner som favoritter med stjernen.',
+    addFavorite: 'Legg til favoritt',
+    removeFavorite: 'Fjern fra favoritter',
+  },
+  createdBy: {
+    credit: 'Laget av Pekka Heikkinen',
+    contact: 'Kontakt',
+  },
+  usage: {
+    title: 'Bruk',
+    description:
+      'Lokal brukslogg kun på denne enheten. Ingenting sendes noe sted.',
+    totalSessions: 'Åpninger',
+    distinctUsers: 'Unike bruker-ID-er',
+    distinctFingerprints: 'Unike enhetsfingeravtrykk',
+    firstSeen: 'Første besøk',
+    lastSeen: 'Siste besøk',
+    recent: 'Nylige brukstider',
+    empty: 'Ingen bruksdata ennå.',
+    export: 'Eksporter brukslogg',
+    exported: 'Kopiert til utklippstavlen',
+    shared: 'Delt',
+    reset: 'Tøm brukslogg',
+    passwordPrompt: 'Denne siden er passordbeskyttet.',
+    passwordPlaceholder: 'Passord',
+    unlock: 'Lås opp',
+    wrongPassword: 'Feil passord.',
+  },
+};

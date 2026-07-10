@@ -14,6 +14,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { CourseCard } from '@/components/course-card';
 import { CourseSearchBar } from '@/components/course-search-bar';
 import { CreatedByBanner } from '@/components/created-by-banner';
+import { DistanceButton } from '@/components/distance-button';
+import { LocationButton } from '@/components/location-button';
 import { SortControl } from '@/components/sort-control';
 import { StartTimeButton } from '@/components/start-time-button';
 import { ThemedText } from '@/components/themed-text';
@@ -21,10 +23,11 @@ import { ThemedView } from '@/components/themed-view';
 import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
 import { golfCourses } from '@/data/golf-courses';
 import { useHasHydrated } from '@/hooks/use-color-scheme';
-import { SUBTITLE_KEY_BY_MODE, useCourseSort, useSortModeUrlSync } from '@/hooks/use-course-sort';
+import { useCourseSort, useSortModeUrlSync } from '@/hooks/use-course-sort';
 import { useCoursesWeather } from '@/hooks/use-courses-weather';
 import { useCurrentHour } from '@/hooks/use-current-hour';
 import { useDarkScoring } from '@/hooks/use-dark-scoring';
+import { useDistanceFilter } from '@/hooks/use-distance-filter';
 import { useLocation } from '@/hooks/use-location';
 import { useSortedCourseOrder } from '@/hooks/use-sorted-course-order';
 import { resolveNow, useStartTime } from '@/hooks/use-start-time';
@@ -44,10 +47,11 @@ const NEXT_HOURS_SHOWN = WINDOW_HOURS;
 const PAGE_SIZE = 15;
 
 export default function CoursesScreen() {
-  const { coords, loading: locationLoading, permissionDenied, isFallback, source, refresh } = useLocation();
+  const { coords, loading: locationLoading, deviceMovedFar, refresh } = useLocation();
   const { sortMode, setSortMode } = useCourseSort();
   useSortModeUrlSync();
   const { darkScoringEnabled } = useDarkScoring();
+  const { maxDistanceKm } = useDistanceFilter();
   const { t } = useI18n();
   const theme = useTheme();
   const hourTick = useCurrentHour();
@@ -61,9 +65,13 @@ export default function CoursesScreen() {
     () => sortByDistance(golfCourses, { lat: coords.lat, lon: coords.lon }),
     [coords.lat, coords.lon]
   );
-  const weatherByCourse = useCoursesWeather(coursesByDistance, hourTick);
+  const coursesInRange = useMemo(
+    () => coursesByDistance.filter((c) => c.distanceKm <= maxDistanceKm),
+    [coursesByDistance, maxDistanceKm]
+  );
+  const weatherByCourse = useCoursesWeather(coursesInRange, hourTick);
   const { sortedCourses, orderIsStale, refreshOrder } = useSortedCourseOrder(
-    coursesByDistance,
+    coursesInRange,
     weatherByCourse,
     sortMode,
     startTime,
@@ -156,32 +164,27 @@ export default function CoursesScreen() {
           ListHeaderComponent={
             <ThemedView style={styles.headerBlock}>
               <CreatedByBanner />
+              <View style={styles.buttonRow}>
+                <LocationButton />
+                <DistanceButton />
+              </View>
               <StartTimeButton>
                 <CourseSearchBar query={searchQuery} onChangeQuery={setSearchQuery} />
               </StartTimeButton>
               <SortControl value={sortMode} onChange={setSortMode} />
-              <ThemedText type="small" themeColor="textSecondary">
-                {isFallback
-                  ? permissionDenied
-                    ? source === 'saved'
-                      ? t('courses.locationSaved')
-                      : t('courses.locationDenied')
-                    : t('courses.locationLoading')
-                  : t(SUBTITLE_KEY_BY_MODE[sortMode])}
-              </ThemedText>
-              {orderIsStale && (
+              {(deviceMovedFar || orderIsStale) && (
                 <Pressable
                   accessibilityRole="button"
-                  accessibilityLabel={t('courses.refreshOrder')}
+                  accessibilityLabel={deviceMovedFar ? t('courses.locationMoved') : t('courses.refreshOrder')}
                   style={({ pressed }) => [styles.refreshOrderButton, pressed && styles.settingsButtonPressed]}
-                  onPress={refreshOrder}>
+                  onPress={deviceMovedFar ? refresh : refreshOrder}>
                   <SymbolView
                     name={{ ios: 'arrow.clockwise', android: 'refresh', web: 'refresh' }}
                     size={14}
                     tintColor={theme.textSecondary}
                   />
                   <ThemedText type="small" themeColor="textSecondary">
-                    {t('courses.refreshOrder')}
+                    {deviceMovedFar ? t('courses.locationMoved') : t('courses.refreshOrder')}
                   </ThemedText>
                 </Pressable>
               )}
@@ -240,7 +243,7 @@ const styles = StyleSheet.create({
     rowGap: Spacing.two,
   },
   headerBlock: {
-    gap: Spacing.three,
+    gap: Spacing.two,
     paddingBottom: Spacing.two,
   },
   settingsButton: {
@@ -262,5 +265,10 @@ const styles = StyleSheet.create({
   listFooter: {
     paddingVertical: Spacing.four,
     alignItems: 'center',
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.one,
   },
 });

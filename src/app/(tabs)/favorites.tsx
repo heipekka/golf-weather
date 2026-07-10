@@ -12,7 +12,7 @@ import { ThemedView } from '@/components/themed-view';
 import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
 import { golfCourses } from '@/data/golf-courses';
 import { useHasHydrated } from '@/hooks/use-color-scheme';
-import { SUBTITLE_KEY_BY_MODE, useCourseSort } from '@/hooks/use-course-sort';
+import { useCourseSort } from '@/hooks/use-course-sort';
 import { useCoursesWeather } from '@/hooks/use-courses-weather';
 import { useCurrentHour } from '@/hooks/use-current-hour';
 import { useDarkScoring } from '@/hooks/use-dark-scoring';
@@ -30,7 +30,7 @@ import { findCurrentPoint } from '@/lib/weather';
 const NEXT_HOURS_SHOWN = WINDOW_HOURS;
 
 export default function FavoritesScreen() {
-  const { coords, loading: locationLoading, refresh } = useLocation();
+  const { coords, loading: locationLoading, deviceMovedFar, refresh } = useLocation();
   const { favorites } = useFavorites();
   const { sortMode, setSortMode } = useCourseSort();
   const { darkScoringEnabled } = useDarkScoring();
@@ -78,22 +78,19 @@ export default function FavoritesScreen() {
               <CreatedByBanner />
               <StartTimeButton />
               <SortControl value={sortMode} onChange={setSortMode} />
-              <ThemedText type="small" themeColor="textSecondary">
-                {t(SUBTITLE_KEY_BY_MODE[sortMode])}
-              </ThemedText>
-              {orderIsStale && (
+              {(deviceMovedFar || orderIsStale) && (
                 <Pressable
                   accessibilityRole="button"
-                  accessibilityLabel={t('courses.refreshOrder')}
+                  accessibilityLabel={deviceMovedFar ? t('courses.locationMoved') : t('courses.refreshOrder')}
                   style={({ pressed }) => [styles.refreshOrderButton, pressed && styles.refreshOrderButtonPressed]}
-                  onPress={refreshOrder}>
+                  onPress={deviceMovedFar ? refresh : refreshOrder}>
                   <SymbolView
                     name={{ ios: 'arrow.clockwise', android: 'refresh', web: 'refresh' }}
                     size={14}
                     tintColor={theme.textSecondary}
                   />
                   <ThemedText type="small" themeColor="textSecondary">
-                    {t('courses.refreshOrder')}
+                    {deviceMovedFar ? t('courses.locationMoved') : t('courses.refreshOrder')}
                   </ThemedText>
                 </Pressable>
               )}
@@ -158,7 +155,7 @@ const styles = StyleSheet.create({
     rowGap: Spacing.two,
   },
   headerBlock: {
-    gap: Spacing.three,
+    gap: Spacing.two,
     paddingBottom: Spacing.two,
   },
   empty: {

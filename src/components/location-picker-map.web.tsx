@@ -8,7 +8,7 @@ import type { Coordinates } from '@/lib/geo';
 // is picked.
 const DEFAULT_CENTER: Coordinates = { lat: 64.5, lon: 26 };
 const DEFAULT_ZOOM = 5;
-const SELECTED_ZOOM = 9;
+const SELECTED_ZOOM = 6;
 const MAP_HEIGHT = 260;
 
 // A plain divIcon avoids bundling Leaflet's default marker PNGs, which don't

@@ -10,26 +10,42 @@ import {
   type ReactNode,
 } from 'react';
 
+import { da } from './translations/da';
 import { en } from './translations/en';
+import { et } from './translations/et';
 import { fi } from './translations/fi';
+import { lt } from './translations/lt';
+import { lv } from './translations/lv';
+import { no } from './translations/no';
+import { sv } from './translations/sv';
 import type { TranslationKey } from './types';
 
-export type Language = 'fi' | 'en';
-export type Locale = 'fi-FI' | 'en-GB';
+export type Language = 'fi' | 'en' | 'sv' | 'no' | 'et' | 'lt' | 'lv' | 'da';
+export type Locale = 'fi-FI' | 'en-GB' | 'sv-SE' | 'nb-NO' | 'et-EE' | 'lt-LT' | 'lv-LV' | 'da-DK';
 
 const STORAGE_KEY = 'golf-weather.language';
 
-const DICTIONARIES = { fi, en };
-const LOCALES: Record<Language, Locale> = { fi: 'fi-FI', en: 'en-GB' };
+const DICTIONARIES = { fi, en, sv, no, et, lt, lv, da };
+const LOCALES: Record<Language, Locale> = {
+  fi: 'fi-FI',
+  en: 'en-GB',
+  sv: 'sv-SE',
+  no: 'nb-NO',
+  et: 'et-EE',
+  lt: 'lt-LT',
+  lv: 'lv-LV',
+  da: 'da-DK',
+};
 
 function isLanguage(value: unknown): value is Language {
-  return value === 'fi' || value === 'en';
+  return value === 'fi' || value === 'en' || value === 'sv' || value === 'no' || value === 'et' || value === 'lt' || value === 'lv' || value === 'da';
 }
 
 /** Uses the device's preferred language when there's no stored choice yet, defaulting to Finnish. */
 function detectDeviceLanguage(): Language {
   const [primary] = Localization.getLocales();
-  return primary?.languageCode === 'en' ? 'en' : 'fi';
+  const code = primary?.languageCode;
+  return isLanguage(code) ? code : 'fi';
 }
 
 function interpolate(template: string, params?: Record<string, string | number>): string {

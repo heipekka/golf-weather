@@ -1,3 +1,4 @@
+import Slider from '@react-native-community/slider';
 import { Stack, useRouter } from 'expo-router';
 import { SymbolView } from 'expo-symbols';
 import { useState } from 'react';
@@ -9,82 +10,177 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { useDarkScoring } from '@/hooks/use-dark-scoring';
+import { useDistanceFilter } from '@/hooks/use-distance-filter';
 import { useLocation } from '@/hooks/use-location';
 import { useTheme } from '@/hooks/use-theme';
+import { useThemeMode, type ThemeMode } from '@/hooks/use-theme-mode';
 import { useI18n, type Language } from '@/i18n';
 import type { Coordinates } from '@/lib/geo';
 
-const LANGUAGES: { code: Language; labelKey: 'settings.finnish' | 'settings.english' }[] = [
+const MIN_DISTANCE_KM = 30;
+const MAX_DISTANCE_KM = 700;
+const DISTANCE_STEP_KM = 10;
+
+const LANGUAGES: {
+  code: Language;
+  labelKey:
+    | 'settings.finnish'
+    | 'settings.english'
+    | 'settings.swedish'
+    | 'settings.norwegian'
+    | 'settings.estonian'
+    | 'settings.lithuanian'
+    | 'settings.latvian'
+    | 'settings.danish';
+}[] = [
   { code: 'fi', labelKey: 'settings.finnish' },
   { code: 'en', labelKey: 'settings.english' },
+  { code: 'sv', labelKey: 'settings.swedish' },
+  { code: 'no', labelKey: 'settings.norwegian' },
+  { code: 'et', labelKey: 'settings.estonian' },
+  { code: 'lt', labelKey: 'settings.lithuanian' },
+  { code: 'lv', labelKey: 'settings.latvian' },
+  { code: 'da', labelKey: 'settings.danish' },
 ];
 
-function formatCoordinate(coords: Coordinates): string {
+const THEME_MODES: {
+  mode: ThemeMode;
+  labelKey: 'settings.theme.system' | 'settings.theme.light' | 'settings.theme.dark';
+}[] = [
+  { mode: 'system', labelKey: 'settings.theme.system' },
+  { mode: 'light', labelKey: 'settings.theme.light' },
+  { mode: 'dark', labelKey: 'settings.theme.dark' },
+];
+
+type SettingsTab = 'user' | 'search';
+
+const SETTINGS_TABS: { id: SettingsTab; labelKey: 'settings.tabs.user' | 'settings.tabs.search' }[] = [
+  { id: 'user', labelKey: 'settings.tabs.user' },
+  { id: 'search', labelKey: 'settings.tabs.search' },
+];
+
+function formatCoords(coords: Coordinates): string {
   return `${coords.lat.toFixed(4)}, ${coords.lon.toFixed(4)}`;
 }
 
-function LocationSection() {
+function SettingsTabControl({ value, onChange }: { value: SettingsTab; onChange: (tab: SettingsTab) => void }) {
   const { t } = useI18n();
   const theme = useTheme();
-  const { savedLocation, setSavedLocation, clearSavedLocation } = useLocation();
-  const [draft, setDraft] = useState<Coordinates | null>(savedLocation);
 
-  const hasChanges =
-    !!draft && (!savedLocation || draft.lat !== savedLocation.lat || draft.lon !== savedLocation.lon);
+  return (
+    <View style={[styles.tabBar, { backgroundColor: theme.background, borderBottomColor: theme.backgroundElement }]}>
+      <View style={styles.tabBarInner}>
+        {SETTINGS_TABS.map(({ id, labelKey }) => {
+          const isSelected = id === value;
+          return (
+            <Pressable
+              key={id}
+              accessibilityRole="tab"
+              accessibilityState={{ selected: isSelected }}
+              onPress={() => onChange(id)}
+              style={({ pressed }) => [
+                styles.tabItem,
+                { borderBottomColor: isSelected ? theme.text : 'transparent' },
+                pressed && styles.optionPressed,
+              ]}>
+              <ThemedText type="smallBold" themeColor={isSelected ? 'text' : 'textSecondary'}>
+                {t(labelKey)}
+              </ThemedText>
+            </Pressable>
+          );
+        })}
+      </View>
+    </View>
+  );
+}
+
+function LanguageSection() {
+  const { t, language, setLanguage } = useI18n();
+  const theme = useTheme();
 
   return (
     <>
       <View style={styles.sectionHeading}>
-        <ThemedText type="smallBold">{t('settings.location.title')}</ThemedText>
+        <ThemedText type="smallBold">{t('settings.language')}</ThemedText>
         <ThemedText type="small" themeColor="textSecondary">
-          {t('settings.location.description')}
+          {t('settings.languageDescription')}
         </ThemedText>
       </View>
 
-      <ThemedText type="small" themeColor="textSecondary">
-        {savedLocation
-          ? t('settings.location.savedLabel', { coords: formatCoordinate(savedLocation) })
-          : t('settings.location.notSet')}
-      </ThemedText>
+      <ThemedView type="backgroundElement" style={styles.optionList}>
+        {LANGUAGES.map(({ code, labelKey }, index) => {
+          const selected = code === language;
+          return (
+            <Pressable
+              key={code}
+              accessibilityRole="button"
+              onPress={() => setLanguage(code)}
+              style={({ pressed }) => [
+                styles.option,
+                index > 0 && styles.optionBorder,
+                { borderColor: theme.background },
+                pressed && styles.optionPressed,
+              ]}>
+              <ThemedText type="default" themeColor={selected ? 'text' : 'textSecondary'}>
+                {t(labelKey)}
+              </ThemedText>
+              {selected && (
+                <SymbolView
+                  name={{ ios: 'checkmark', android: 'check', web: 'check' }}
+                  size={18}
+                  tintColor={theme.text}
+                />
+              )}
+            </Pressable>
+          );
+        })}
+      </ThemedView>
+    </>
+  );
+}
 
-      <ThemedText type="small" themeColor="textSecondary">
-        {t('settings.location.instruction')}
-      </ThemedText>
+function ThemeSection() {
+  const { t } = useI18n();
+  const theme = useTheme();
+  const { themeMode, setThemeMode } = useThemeMode();
 
-      <LocationPicker value={draft} onChange={setDraft} />
-
-      <View style={styles.locationActions}>
-        <Pressable
-          accessibilityRole="button"
-          onPress={() => draft && setSavedLocation(draft)}
-          disabled={!hasChanges}
-          style={({ pressed }) => [
-            styles.locationButton,
-            { backgroundColor: theme.backgroundElement },
-            pressed && styles.optionPressed,
-            !hasChanges && styles.locationButtonDisabled,
-          ]}>
-          <ThemedText type="link" themeColor="text">
-            {t('settings.location.save')}
-          </ThemedText>
-        </Pressable>
-        <Pressable
-          accessibilityRole="button"
-          onPress={() => {
-            clearSavedLocation();
-            setDraft(null);
-          }}
-          disabled={!savedLocation}
-          style={({ pressed }) => [
-            styles.locationButton,
-            pressed && styles.optionPressed,
-            !savedLocation && styles.locationButtonDisabled,
-          ]}>
-          <ThemedText type="link" themeColor="textSecondary">
-            {t('settings.location.clear')}
-          </ThemedText>
-        </Pressable>
+  return (
+    <>
+      <View style={styles.sectionHeading}>
+        <ThemedText type="smallBold">{t('settings.theme.title')}</ThemedText>
+        <ThemedText type="small" themeColor="textSecondary">
+          {t('settings.theme.description')}
+        </ThemedText>
       </View>
+
+      <ThemedView type="backgroundElement" style={styles.optionList}>
+        {THEME_MODES.map(({ mode, labelKey }, index) => {
+          const selected = mode === themeMode;
+          return (
+            <Pressable
+              key={mode}
+              accessibilityRole="button"
+              onPress={() => setThemeMode(mode)}
+              style={({ pressed }) => [
+                styles.option,
+                index > 0 && styles.optionBorder,
+                { borderColor: theme.background },
+                pressed && styles.optionPressed,
+              ]}>
+              <ThemedText type="default" themeColor={selected ? 'text' : 'textSecondary'}>
+                {t(labelKey)}
+              </ThemedText>
+              {selected && (
+                <SymbolView
+                  name={{ ios: 'checkmark', android: 'check', web: 'check' }}
+                  size={18}
+                  tintColor={theme.text}
+                />
+              )}
+            </Pressable>
+          );
+        })}
+      </ThemedView>
     </>
   );
 }
@@ -112,6 +208,96 @@ function DarkScoringSection() {
   );
 }
 
+function DefaultLocationSection() {
+  const { t } = useI18n();
+  const { savedLocation, setSavedLocation, clearSavedLocation } = useLocation();
+
+  return (
+    <>
+      <View style={styles.sectionHeading}>
+        <ThemedText type="smallBold">{t('settings.location.title')}</ThemedText>
+        <ThemedText type="small" themeColor="textSecondary">
+          {t('settings.location.description')}
+        </ThemedText>
+      </View>
+
+      <LocationPicker value={savedLocation} onChange={setSavedLocation} />
+
+      <ThemedText type="small" themeColor="textSecondary">
+        {savedLocation
+          ? t('settings.location.savedLabel', { coords: formatCoords(savedLocation) })
+          : t('settings.location.notSet')}
+      </ThemedText>
+
+      <View style={styles.locationActions}>
+        <Pressable
+          accessibilityRole="button"
+          disabled={!savedLocation}
+          onPress={clearSavedLocation}
+          style={({ pressed }) => [styles.locationButton, pressed && styles.optionPressed]}>
+          <ThemedText type="link" themeColor="textSecondary">
+            {t('settings.location.clear')}
+          </ThemedText>
+        </Pressable>
+      </View>
+    </>
+  );
+}
+
+function DistanceRangeSection() {
+  const { t } = useI18n();
+  const theme = useTheme();
+  const { maxDistanceKm, setMaxDistanceKm } = useDistanceFilter();
+  const [liveKm, setLiveKm] = useState(maxDistanceKm);
+  // Tracks the last value derived from context so the label can be
+  // re-synced (adjusting state during render, per React's guidance) if the
+  // saved value loads asynchronously after mount, without fighting live drags.
+  const [lastKnownKm, setLastKnownKm] = useState(maxDistanceKm);
+  if (lastKnownKm !== maxDistanceKm) {
+    setLastKnownKm(maxDistanceKm);
+    setLiveKm(maxDistanceKm);
+  }
+
+  return (
+    <>
+      <View style={styles.sectionHeading}>
+        <ThemedText type="smallBold">{t('distance.title')}</ThemedText>
+        <ThemedText type="small" themeColor="textSecondary">
+          {t('distance.description')}
+        </ThemedText>
+      </View>
+
+      <ThemedView type="backgroundElement" style={styles.distanceCard}>
+        <ThemedText type="smallBold" style={styles.valueLabel}>
+          {t('distance.label').replace('{km}', String(liveKm))}
+        </ThemedText>
+
+        <Slider
+          style={styles.slider}
+          minimumValue={MIN_DISTANCE_KM}
+          maximumValue={MAX_DISTANCE_KM}
+          step={DISTANCE_STEP_KM}
+          value={maxDistanceKm}
+          onValueChange={setLiveKm}
+          onSlidingComplete={setMaxDistanceKm}
+          minimumTrackTintColor={theme.text}
+          maximumTrackTintColor={theme.textSecondary}
+          thumbTintColor={theme.text}
+        />
+
+        <View style={styles.rangeRow}>
+          <ThemedText type="small" themeColor="textSecondary">
+            {MIN_DISTANCE_KM} km
+          </ThemedText>
+          <ThemedText type="small" themeColor="textSecondary">
+            {MAX_DISTANCE_KM} km
+          </ThemedText>
+        </View>
+      </ThemedView>
+    </>
+  );
+}
+
 function BackButton() {
   const router = useRouter();
   const theme = useTheme();
@@ -121,7 +307,13 @@ function BackButton() {
       accessibilityRole="button"
       accessibilityLabel="Back"
       hitSlop={Spacing.two}
-      onPress={() => router.dismissTo('/courses')}
+      onPress={() => {
+        if (router.canGoBack()) {
+          router.back();
+        } else {
+          router.replace('/courses');
+        }
+      }}
       style={({ pressed }) => [styles.backButton, pressed && styles.backButtonPressed]}>
       <SymbolView
         name={{ ios: 'chevron.left', android: 'arrow_back', web: 'arrow_back' }}
@@ -133,10 +325,8 @@ function BackButton() {
 }
 
 export default function SettingsScreen() {
-  const { t, language, setLanguage } = useI18n();
-  const theme = useTheme();
-  const { loading: locationLoading, source: locationSource } = useLocation();
-  const showLocationSection = !locationLoading && locationSource !== 'device';
+  const { t } = useI18n();
+  const [tab, setTab] = useState<SettingsTab>('user');
 
   return (
     <ThemedView style={styles.container}>
@@ -150,46 +340,20 @@ export default function SettingsScreen() {
         }}
       />
       <SafeAreaView style={styles.safeArea} edges={['bottom']}>
+        <SettingsTabControl value={tab} onChange={setTab} />
         <ScrollView contentContainerStyle={styles.content}>
-          <View style={styles.sectionHeading}>
-            <ThemedText type="smallBold">{t('settings.language')}</ThemedText>
-            <ThemedText type="small" themeColor="textSecondary">
-              {t('settings.languageDescription')}
-            </ThemedText>
-          </View>
-
-          <ThemedView type="backgroundElement" style={styles.optionList}>
-            {LANGUAGES.map(({ code, labelKey }, index) => {
-              const selected = code === language;
-              return (
-                <Pressable
-                  key={code}
-                  accessibilityRole="button"
-                  onPress={() => setLanguage(code)}
-                  style={({ pressed }) => [
-                    styles.option,
-                    index > 0 && styles.optionBorder,
-                    { borderColor: theme.background },
-                    pressed && styles.optionPressed,
-                  ]}>
-                  <ThemedText type="default" themeColor={selected ? 'text' : 'textSecondary'}>
-                    {t(labelKey)}
-                  </ThemedText>
-                  {selected && (
-                    <SymbolView
-                      name={{ ios: 'checkmark', android: 'check', web: 'check' }}
-                      size={18}
-                      tintColor={theme.text}
-                    />
-                  )}
-                </Pressable>
-              );
-            })}
-          </ThemedView>
-
-          <DarkScoringSection />
-
-          {showLocationSection && <LocationSection />}
+          {tab === 'user' ? (
+            <>
+              <LanguageSection />
+              <ThemeSection />
+            </>
+          ) : (
+            <>
+              <DarkScoringSection />
+              <DefaultLocationSection />
+              <DistanceRangeSection />
+            </>
+          )}
         </ScrollView>
       </SafeAreaView>
     </ThemedView>
@@ -230,18 +394,6 @@ const styles = StyleSheet.create({
   optionPressed: {
     opacity: 0.7,
   },
-  locationActions: {
-    flexDirection: 'row',
-    gap: Spacing.four,
-  },
-  locationButton: {
-    borderRadius: Spacing.two,
-    paddingVertical: Spacing.one,
-    paddingHorizontal: Spacing.two,
-  },
-  locationButtonDisabled: {
-    opacity: 0.4,
-  },
   backButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -252,5 +404,46 @@ const styles = StyleSheet.create({
   },
   headerSideContainer: {
     paddingHorizontal: Spacing.three,
+  },
+  tabBar: {
+    width: '100%',
+    borderBottomWidth: 1,
+  },
+  tabBarInner: {
+    flexDirection: 'row',
+    maxWidth: MaxContentWidth,
+    alignSelf: 'center',
+    width: '100%',
+  },
+  tabItem: {
+    flex: 1,
+    alignItems: 'center',
+    paddingVertical: Spacing.three,
+    borderBottomWidth: 2,
+    marginBottom: -1,
+  },
+  locationActions: {
+    flexDirection: 'row',
+    gap: Spacing.four,
+  },
+  locationButton: {
+    paddingVertical: Spacing.one,
+  },
+  distanceCard: {
+    borderRadius: Spacing.three,
+    padding: Spacing.three,
+    gap: Spacing.one,
+  },
+  valueLabel: {
+    textAlign: 'center',
+  },
+  slider: {
+    width: '100%',
+    height: 40,
+  },
+  rangeRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: -Spacing.two,
   },
 });

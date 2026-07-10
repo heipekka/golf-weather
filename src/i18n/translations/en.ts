@@ -20,6 +20,7 @@ export const en: TranslationDictionary = {
     locationSaved: "Showing courses near your saved default location.",
     openSettings: "Open settings",
     refreshOrder: "Refresh order",
+    locationMoved: "Location changed — refresh",
   },
   courseDetail: {
     backToCourses: "Back to courses",
@@ -74,6 +75,20 @@ export const en: TranslationDictionary = {
     today: "Today",
     done: "Done",
   },
+  locationButton: {
+    open: "Choose location",
+    title: "Choose location",
+    done: "Done",
+    loading: "Loading…",
+    myLocation: "My location",
+  },
+  distance: {
+    open: "Choose distance range",
+    title: "Distance range",
+    description: "Show courses within this distance.",
+    done: "Done",
+    label: "{km} km",
+  },
   playability: {
     trend: "{early} now, {late} later",
     labels: {
@@ -109,6 +124,23 @@ export const en: TranslationDictionary = {
     languageDescription: "Choose the app language.",
     finnish: "Suomi",
     english: "English",
+    swedish: "Svenska",
+    norwegian: "Norsk",
+    estonian: "Eesti",
+    lithuanian: "Lietuvių",
+    latvian: "Latviešu",
+    danish: "Dansk",
+    tabs: {
+      user: "User",
+      search: "Search",
+    },
+    theme: {
+      title: "Theme",
+      description: "Choose the app's appearance.",
+      system: "System",
+      light: "Light",
+      dark: "Dark",
+    },
     darkScoring: {
       title: "Dark scoring",
       description:

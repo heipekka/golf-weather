@@ -74,10 +74,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: Spacing.one,
     width: '100%',
-    // The parent header's `gap` spaces every child uniformly; pull this one
-    // closer to the sort tabs directly below it without affecting spacing
-    // to the sibling above.
-    marginBottom: -Spacing.two,
   },
   openButton: {
     flex: 1,

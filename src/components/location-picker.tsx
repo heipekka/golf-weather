@@ -14,7 +14,7 @@ export type LocationPickerProps = {
 // useful even before a location is picked.
 const DEFAULT_CENTER: Coordinates = { lat: 64.5, lon: 26 };
 const DEFAULT_ZOOM = 5;
-const SELECTED_ZOOM = 9;
+const SELECTED_ZOOM = 6;
 const MAP_HEIGHT = 260;
 
 // No native map SDK is bundled, so this renders a Leaflet/OpenStreetMap page
