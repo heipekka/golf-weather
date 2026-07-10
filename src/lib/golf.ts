@@ -82,11 +82,11 @@ const HOT_TEMPERATURE_C = 30;
 
 const BAD_PRECIPITATION_MM = 2;
 const BAD_TEMPERATURE_C = 3;
-const BAD_WIND_MS = 14;
+const BAD_WIND_MS = 13;
 
 const POOR_PRECIPITATION_MM = 1;
 const POOR_TEMPERATURE_C = 6;
-const POOR_WIND_MS = 11;
+const POOR_WIND_MS = 10;
 
 const FAIR_PRECIPITATION_MM = 0.25;
 const FAIR_TEMPERATURE_C = 10;
@@ -94,7 +94,11 @@ const FAIR_WIND_MS = 8;
 
 const GOOD_PRECIPITATION_MM = 0.1;
 const GOOD_TEMPERATURE_C = 16;
-const GOOD_WIND_MS = 5;
+const GOOD_WIND_MS = 6;
+
+/** Wind range where a breeze offsets a hot temperature into `Excellent` instead of `Hot`. */
+const HOT_BREEZE_MIN_MS = 4;
+const HOT_BREEZE_MAX_MS = 6;
 
 /**
  * Rounds each condition to the same precision shown in the UI (whole degrees
@@ -120,6 +124,29 @@ function roundToDisplay(
         ? null
         : Number(conditions.precipitation.toFixed(1)),
   };
+}
+
+/**
+ * Resolves the tier for a hot hour (temperature > `HOT_TEMPERATURE_C`) based
+ * on wind: a light breeze (`HOT_BREEZE_MIN_MS`-`HOT_BREEZE_MAX_MS`) offsets
+ * the heat and reads as `Excellent`; calm air (below that range, or unknown)
+ * keeps the hour `Hot`; anything windier than the breeze range falls through
+ * to the wind-driven tier that was already computed, so a hot-and-windy hour
+ * isn't relabeled `Hot` on top of being downgraded for wind.
+ */
+function hotPleasant(
+  windSpeed: number | null,
+  base: PlayabilityLabel,
+): PlayabilityLabel {
+  if (
+    windSpeed !== null &&
+    windSpeed >= HOT_BREEZE_MIN_MS &&
+    windSpeed <= HOT_BREEZE_MAX_MS
+  ) {
+    return "Excellent";
+  }
+  if (windSpeed === null || windSpeed < HOT_BREEZE_MIN_MS) return "Hot";
+  return base;
 }
 
 /**
@@ -166,12 +193,12 @@ export function classifyHour(
   if (
     (precipitation !== null && precipitation > GOOD_PRECIPITATION_MM) ||
     (temperature !== null && temperature < GOOD_TEMPERATURE_C) ||
-    (windSpeed !== null && windSpeed > GOOD_WIND_MS)
+    (windSpeed !== null && windSpeed >= GOOD_WIND_MS)
   ) {
-    return isHot ? "Hot" : "Good";
+    return isHot ? hotPleasant(windSpeed, "Good") : "Good";
   }
 
-  return isHot ? "Hot" : "Excellent";
+  return isHot ? hotPleasant(windSpeed, "Excellent") : "Excellent";
 }
 
 function reasonsFor(label: PlayabilityLabel): PlayabilityReasonCode[] {
@@ -308,8 +335,7 @@ export function scoreWindow(hours: PlayabilityConditions[]): Playability {
     .filter((hour) => hour.isDark).length;
 
   const hotHours = rounded.filter(
-    ({ temperature }) =>
-      temperature !== null && temperature > HOT_TEMPERATURE_C,
+    (hour) => classifyHour(hour) === "Hot",
   ).length;
   if (
     hotHours >= threshold &&
