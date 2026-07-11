@@ -71,7 +71,7 @@ export function LocationPickerDialog({
         >
           <ThemedText type="smallBold">{t('locationButton.title')}</ThemedText>
 
-          <LocationPicker value={draft} onChange={setDraft} />
+          <LocationPicker value={draft} onChange={setDraft} height={420} />
 
           <View style={styles.footer}>
             {showUseDeviceLocation ? (

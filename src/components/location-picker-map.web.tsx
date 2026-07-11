@@ -23,6 +23,7 @@ const pinIcon = L.divIcon({
 export type LocationPickerMapProps = {
   value: Coordinates | null;
   onChange: (coords: Coordinates) => void;
+  height?: number;
 };
 
 function ClickHandler({ onChange }: { onChange: (coords: Coordinates) => void }) {
@@ -37,14 +38,14 @@ function ClickHandler({ onChange }: { onChange: (coords: Coordinates) => void })
 // This module (and its Leaflet imports) is only ever loaded lazily on the
 // client from location-picker.web.tsx, so it's safe for it to reference
 // `window` at import time.
-export default function LocationPickerMap({ value, onChange }: LocationPickerMapProps) {
+export default function LocationPickerMap({ value, onChange, height = MAP_HEIGHT }: LocationPickerMapProps) {
   const center = value ?? DEFAULT_CENTER;
 
   return (
     <MapContainer
       center={[center.lat, center.lon]}
       zoom={value ? SELECTED_ZOOM : DEFAULT_ZOOM}
-      style={{ height: MAP_HEIGHT, width: '100%' }}
+      style={{ height, width: '100%' }}
       attributionControl>
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

@@ -34,6 +34,7 @@ import { useLocation } from '@/hooks/use-location';
 import { useSortedCourseOrder } from '@/hooks/use-sorted-course-order';
 import { resolveNow, useStartTime } from '@/hooks/use-start-time';
 import { useTheme } from '@/hooks/use-theme';
+import { useWebPullToRefresh } from '@/hooks/use-web-pull-to-refresh';
 import { useI18n } from '@/i18n';
 import { WINDOW_HOURS, currentPlayability } from '@/lib/course-sort';
 import { sortByDistance, type GolfCourseWithDistance } from '@/lib/geo';
@@ -129,6 +130,11 @@ export default function CoursesScreen() {
   const hasMoreCourses = visibleCount < filteredCourses.length;
 
   const listRef = useRef<FlatList>(null);
+  const { indicator: pullToRefreshIndicator } = useWebPullToRefresh({
+    scrollRef: listRef,
+    onRefresh: onPullRefresh,
+    refreshing: weatherRefreshing || locationLoading,
+  });
   const [showScrollTop, setShowScrollTop] = useState(false);
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const { contentOffset, contentSize, layoutMeasurement } = event.nativeEvent;
@@ -166,6 +172,7 @@ export default function CoursesScreen() {
         }}
       />
       <SafeAreaView style={styles.safeArea}>
+        {pullToRefreshIndicator}
         <FlatList
           ref={listRef}
           data={visibleCourses}

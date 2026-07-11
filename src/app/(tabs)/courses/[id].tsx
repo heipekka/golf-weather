@@ -1,6 +1,6 @@
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { SymbolView } from "expo-symbols";
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 import {
     Pressable,
     RefreshControl,
@@ -27,6 +27,7 @@ import { useDarkScoring } from "@/hooks/use-dark-scoring";
 import { useLocation } from "@/hooks/use-location";
 import { resolveNow, useStartTime } from "@/hooks/use-start-time";
 import { useTheme } from "@/hooks/use-theme";
+import { useWebPullToRefresh } from "@/hooks/use-web-pull-to-refresh";
 import { useI18n } from "@/i18n";
 import { formatDistance } from "@/lib/format";
 import { haversineKm } from "@/lib/geo";
@@ -85,6 +86,12 @@ export default function CourseDetailScreen() {
     course?.lon ?? 0,
     hourTick,
   );
+  const scrollRef = useRef<ScrollView>(null);
+  const { indicator: pullToRefreshIndicator } = useWebPullToRefresh({
+    scrollRef,
+    onRefresh: refresh,
+    refreshing: loading,
+  });
 
   const distanceKm = course ? haversineKm(coords, course) : null;
   const sun = course && hasHydrated ? getSunTimes(course.lat, course.lon) : null;
@@ -154,7 +161,9 @@ export default function CourseDetailScreen() {
           headerRightContainerStyle: styles.headerSideContainer,
         }}
       />
+      {pullToRefreshIndicator}
       <ScrollView
+        ref={scrollRef}
         contentContainerStyle={styles.content}
         refreshControl={
           <RefreshControl refreshing={loading} onRefresh={refresh} />

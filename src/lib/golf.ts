@@ -254,8 +254,12 @@ export function scorePlayability(
   return { score: TIER_SCORE[label], label, reasons: reasonsFor(label) };
 }
 
-/** Minimum number of hours (out of the window) needed for a tier/spell to "count". */
-const WINDOW_MAJORITY_HOURS = 4;
+/**
+ * Minimum number of hot (or sweltering) light hours needed for heat to
+ * override an otherwise pleasant (Excellent/Good) main label. Kept above 1
+ * so a single stray hot hour doesn't flip a mostly-Excellent window.
+ */
+const HEAT_DOMINANCE_MIN_HOURS = 3;
 
 /** Minimum raw-average tier-rank gap between the early and late half to show a divided badge. */
 const SPLIT_AVG_DELTA = 1;
@@ -268,12 +272,6 @@ const SPLIT_HALF_HOURS = 4;
 
 /** Minimum number of dark hours within a split half for that half's main-label tier to read `Dark`. */
 const DARK_HALF_HOURS = 3;
-
-function majorityThreshold(windowLength: number): number {
-  return windowLength >= WINDOW_MAJORITY_HOURS + 3
-    ? WINDOW_MAJORITY_HOURS
-    : Math.ceil((windowLength + 1) / 2);
-}
 
 /**
  * Raw average of the given hours' tier ranks. Used to summarize a half of
@@ -322,8 +320,6 @@ function halfTier(
  * right at its start.
  *
  * Each remaining (light) hour is classified independently, then:
- * - A `Hot` spell (enough hot hours) overrides everything else, unless a
- *   split half is dark-heavy enough to itself read as `Dark` (see below).
  * - The first and last `SPLIT_HALF_HOURS` hours are each averaged into a
  *   representative tier via `halfTier` — rounded down so a mixed half reads
  *   as its lower tier rather than being flattered by its best hours, unless
@@ -334,10 +330,17 @@ function halfTier(
  *   checked for darkness: a half with `DARK_HALF_HOURS` or more dark hours
  *   is treated as `Dark` for the main label, even though the trend badge
  *   above still shows its light-based tier for that half.
- * - The main label (used when not divided, and for sorting) is always the
- *   worse of the two half-tiers (dark-aware), since a spell of bad weather
- *   or darkness anywhere in the window shouldn't be masked by a good spell
- *   elsewhere.
+ * - The base main label (used when not divided, and for sorting) is always
+ *   the worse of the two half-tiers (dark-aware), since a spell of bad
+ *   weather or darkness anywhere in the window shouldn't be masked by a good
+ *   spell elsewhere.
+ * - Finally, when that base label is otherwise pleasant (`Excellent` or
+ *   `Good`), a heat override can still take precedence: enough hot or
+ *   sweltering hours (`HEAT_DOMINANCE_MIN_HOURS`) mean heat is the dominant
+ *   trait of the window and the label reads `Hot`/`Sweltering` even though
+ *   Excellent/Good hours are individually more numerous. This override never
+ *   fires when the base label is worse than Good (Fair/Poor/Bad) or `Dark`,
+ *   so a genuine bad spell or dark-heavy half is never masked by heat.
  */
 export function scoreWindow(hours: PlayabilityConditions[]): Playability {
   if (hours.length === 0) {
@@ -349,7 +352,6 @@ export function scoreWindow(hours: PlayabilityConditions[]): Playability {
     return { score: TIER_SCORE.Dark, label: "Dark", reasons: [] };
   }
 
-  const threshold = majorityThreshold(lightHours.length);
   const rounded = lightHours.map(roundToDisplay);
 
   const earlyDark = hours
@@ -358,32 +360,6 @@ export function scoreWindow(hours: PlayabilityConditions[]): Playability {
   const lateDark = hours
     .slice(-SPLIT_HALF_HOURS)
     .filter((hour) => hour.isDark).length;
-
-  const swelteringHours = rounded.filter(
-    (hour) => classifyHour(hour) === "Sweltering",
-  ).length;
-  if (
-    swelteringHours >= threshold &&
-    earlyDark < DARK_HALF_HOURS &&
-    lateDark < DARK_HALF_HOURS
-  ) {
-    return {
-      score: TIER_SCORE.Sweltering,
-      label: "Sweltering",
-      reasons: ["swelteringSpell"],
-    };
-  }
-
-  const hotHours = rounded.filter(
-    (hour) => classifyHour(hour) === "Hot",
-  ).length;
-  if (
-    hotHours >= threshold &&
-    earlyDark < DARK_HALF_HOURS &&
-    lateDark < DARK_HALF_HOURS
-  ) {
-    return { score: TIER_SCORE.Hot, label: "Hot", reasons: ["hotSpell"] };
-  }
 
   const earlyHours = rounded.slice(0, SPLIT_HALF_HOURS);
   const lateHours = rounded.slice(-SPLIT_HALF_HOURS);
@@ -406,6 +382,26 @@ export function scoreWindow(hours: PlayabilityConditions[]): Playability {
     Math.abs(earlyAvg - lateAvg) >= SPLIT_AVG_DELTA
       ? { early, late }
       : undefined;
+
+  if (label === "Excellent" || label === "Good") {
+    const swelteringHours = rounded.filter(
+      (hour) => classifyHour(hour) === "Sweltering",
+    ).length;
+    if (swelteringHours >= HEAT_DOMINANCE_MIN_HOURS) {
+      return {
+        score: TIER_SCORE.Sweltering,
+        label: "Sweltering",
+        reasons: ["swelteringSpell"],
+      };
+    }
+
+    const hotHours = rounded.filter(
+      (hour) => classifyHour(hour) === "Hot",
+    ).length;
+    if (hotHours + swelteringHours >= HEAT_DOMINANCE_MIN_HOURS) {
+      return { score: TIER_SCORE.Hot, label: "Hot", reasons: ["hotSpell"] };
+    }
+  }
 
   return { score: TIER_SCORE[label], label, reasons: reasonsFor(label), trend };
 }

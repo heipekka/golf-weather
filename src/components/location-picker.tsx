@@ -8,6 +8,8 @@ import type { Coordinates } from '@/lib/geo';
 export type LocationPickerProps = {
   value: Coordinates | null;
   onChange: (coords: Coordinates) => void;
+  /** Map height in pixels. Defaults to 260. */
+  height?: number;
 };
 
 // Finland-centered default view, matching the web picker, so the map is
@@ -88,7 +90,7 @@ function coordsEqual(a: Coordinates | null, b: Coordinates | null): boolean {
   return a.lat === b.lat && a.lon === b.lon;
 }
 
-export function LocationPicker({ value, onChange }: LocationPickerProps) {
+export function LocationPicker({ value, onChange, height = MAP_HEIGHT }: LocationPickerProps) {
   const webViewRef = useRef<WebView>(null);
   const lastEmittedRef = useRef<Coordinates | null>(value);
   const [html] = useState(() => buildMapHtml(value));
@@ -122,7 +124,7 @@ export function LocationPicker({ value, onChange }: LocationPickerProps) {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { height }]}>
       <WebView
         ref={webViewRef}
         originWhitelist={['*']}
@@ -136,7 +138,6 @@ export function LocationPicker({ value, onChange }: LocationPickerProps) {
 
 const styles = StyleSheet.create({
   container: {
-    height: MAP_HEIGHT,
     width: '100%',
     borderRadius: Spacing.three,
     overflow: 'hidden',

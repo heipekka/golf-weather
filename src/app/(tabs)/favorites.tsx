@@ -1,10 +1,11 @@
 import { SymbolView } from 'expo-symbols';
-import { useCallback, useMemo } from 'react';
-import { FlatList, Pressable, RefreshControl, StyleSheet } from 'react-native';
+import { useCallback, useMemo, useRef } from 'react';
+import { FlatList, Pressable, RefreshControl, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { CourseCard } from '@/components/course-card';
 import { CreatedByBanner } from '@/components/created-by-banner';
+import { LocationButton } from '@/components/location-button';
 import { SortControl } from '@/components/sort-control';
 import { StartTimeButton } from '@/components/start-time-button';
 import { ThemedText } from '@/components/themed-text';
@@ -21,6 +22,7 @@ import { useLocation } from '@/hooks/use-location';
 import { useSortedCourseOrder } from '@/hooks/use-sorted-course-order';
 import { resolveNow, useStartTime } from '@/hooks/use-start-time';
 import { useTheme } from '@/hooks/use-theme';
+import { useWebPullToRefresh } from '@/hooks/use-web-pull-to-refresh';
 import { useI18n } from '@/i18n';
 import { WINDOW_HOURS, currentPlayability } from '@/lib/course-sort';
 import { sortByDistance, type GolfCourseWithDistance } from '@/lib/geo';
@@ -59,6 +61,12 @@ export default function FavoritesScreen() {
     refreshWeather();
     refresh();
   }, [refreshWeather, refresh]);
+  const listRef = useRef<FlatList>(null);
+  const { indicator: pullToRefreshIndicator } = useWebPullToRefresh({
+    scrollRef: listRef,
+    onRefresh: onPullRefresh,
+    refreshing: weatherRefreshing || locationLoading,
+  });
   const { sortedCourses, orderIsStale, refreshOrder } = useSortedCourseOrder(
     coursesByDistance,
     weatherByCourse,
@@ -74,7 +82,9 @@ export default function FavoritesScreen() {
   return (
     <ThemedView style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
+        {pullToRefreshIndicator}
         <FlatList
+          ref={listRef}
           data={sortedCourses}
           keyExtractor={(item) => item.id}
           extraData={listExtraData}
@@ -89,7 +99,12 @@ export default function FavoritesScreen() {
           ListHeaderComponent={
             <ThemedView style={styles.headerBlock}>
               <CreatedByBanner />
-              <StartTimeButton />
+              <View style={styles.buttonRow}>
+                <LocationButton />
+                <View style={styles.startTimeSlot}>
+                  <StartTimeButton />
+                </View>
+              </View>
               <SortControl value={sortMode} onChange={setSortMode} />
               {(deviceMovedFar || orderIsStale) && (
                 <Pressable
@@ -186,5 +201,13 @@ const styles = StyleSheet.create({
   },
   refreshOrderButtonPressed: {
     opacity: 0.6,
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.one,
+  },
+  startTimeSlot: {
+    flex: 1,
   },
 });

@@ -16,19 +16,21 @@ const LocationPickerMap = lazy(() => import('./location-picker-map'));
 export type LocationPickerProps = {
   value: Coordinates | null;
   onChange: (coords: Coordinates) => void;
+  /** Map height in pixels. Defaults to 260. */
+  height?: number;
 };
 
-export function LocationPicker({ value, onChange }: LocationPickerProps) {
+export function LocationPicker({ value, onChange, height = MAP_HEIGHT }: LocationPickerProps) {
   const hasHydrated = useHasHydrated();
 
   if (!hasHydrated) {
-    return <View style={styles.container} />;
+    return <View style={[styles.container, { height }]} />;
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { height }]}>
       <Suspense fallback={null}>
-        <LocationPickerMap value={value} onChange={onChange} />
+        <LocationPickerMap value={value} onChange={onChange} height={height} />
       </Suspense>
     </View>
   );
@@ -36,7 +38,6 @@ export function LocationPicker({ value, onChange }: LocationPickerProps) {
 
 const styles = StyleSheet.create({
   container: {
-    height: MAP_HEIGHT,
     width: '100%',
     borderRadius: Spacing.three,
     overflow: 'hidden',
