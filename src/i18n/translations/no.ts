@@ -21,6 +21,10 @@ export const no: TranslationDictionary = {
     openSettings: 'Åpne innstillinger',
     refreshOrder: 'Oppdater rekkefølge',
     locationMoved: 'Posisjonen er endret — oppdater',
+    scrollToTop: 'Bla til toppen',
+    emptyDistance:
+      'Fant ingen baner innenfor {km} km. Prøv å øke avstandsgrensen.',
+    emptySearch: 'Ingen baner samsvarer med søket.',
   },
   courseDetail: {
     backToCourses: 'Tilbake til baner',

@@ -21,6 +21,10 @@ export const sv: TranslationDictionary = {
     openSettings: 'Öppna inställningar',
     refreshOrder: 'Uppdatera ordning',
     locationMoved: 'Platsen har ändrats — uppdatera',
+    scrollToTop: 'Rulla till toppen',
+    emptyDistance:
+      'Inga banor hittades inom {km} km. Prova att öka avståndsgränsen.',
+    emptySearch: 'Inga banor matchar din sökning.',
   },
   courseDetail: {
     backToCourses: 'Tillbaka till banor',

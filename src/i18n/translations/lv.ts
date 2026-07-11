@@ -21,6 +21,10 @@ export const lv: TranslationDictionary = {
     openSettings: 'Atvērt iestatījumus',
     refreshOrder: 'Atjaunināt kārtību',
     locationMoved: 'Atrašanās vieta ir mainījusies — atjaunināt',
+    scrollToTop: 'Ritināt uz sākumu',
+    emptyDistance:
+      'Netika atrasts neviens laukums {km} km attālumā. Pamēģiniet palielināt attāluma ierobežojumu.',
+    emptySearch: 'Meklēšanai neatbilst neviens laukums.',
   },
   courseDetail: {
     backToCourses: 'Atpakaļ uz laukumiem',

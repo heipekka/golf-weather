@@ -51,6 +51,11 @@ export function formatDistance(km: number): string {
   return `${Math.round(km)} km`;
 }
 
+/** Formats coordinates as a compact "lat, lon" string, ~100m precision. */
+export function formatCoordinates(coords: { lat: number; lon: number }): string {
+  return `${coords.lat.toFixed(3)}, ${coords.lon.toFixed(3)}`;
+}
+
 export function formatHour(iso: string, locale: Locale = 'fi-FI'): string {
   return new Date(iso).toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' });
 }

@@ -37,10 +37,10 @@ import { findCurrentPoint } from "@/lib/weather";
 
 const HOURS_SHOWN = 12;
 
-// Always return to the courses list. Using dismissTo (instead of the default
-// header back button) guarantees a working back action even when the screen is
-// opened directly via a deep link, a web refresh, or as the initial route,
-// where there is no navigation history to pop.
+// Returns to the actual previous screen when there is navigation history
+// (e.g. Favorites -> course detail), falling back to the courses list when
+// there isn't one, such as when the screen is opened directly via a deep
+// link, a web refresh, or as the restored initial route.
 function CoursesBackButton() {
   const router = useRouter();
   const theme = useTheme();
@@ -51,7 +51,7 @@ function CoursesBackButton() {
       accessibilityRole="button"
       accessibilityLabel={t('courseDetail.backToCourses')}
       hitSlop={Spacing.two}
-      onPress={() => router.dismissTo("/courses")}
+      onPress={() => (router.canGoBack() ? router.back() : router.dismissTo("/courses"))}
       style={({ pressed }) => [
         styles.backButton,
         pressed && styles.backButtonPressed,

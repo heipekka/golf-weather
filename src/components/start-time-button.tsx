@@ -37,6 +37,8 @@ export function StartTimeButton({ children }: StartTimeButtonProps) {
   return (
     <>
       <View style={styles.row}>
+        {children && <View style={styles.childrenSlot}>{children}</View>}
+
         <Pressable
           accessibilityRole="button"
           accessibilityLabel={t('startTime.open')}
@@ -53,8 +55,6 @@ export function StartTimeButton({ children }: StartTimeButtonProps) {
             </ThemedText>
           </ThemedView>
         </Pressable>
-
-        {children && <View style={styles.childrenSlot}>{children}</View>}
       </View>
 
       <StartTimePicker

@@ -20,6 +20,10 @@ export const fi = {
     openSettings: "Avaa asetukset",
     refreshOrder: "Päivitä järjestys",
     locationMoved: "Sijainti muuttunut — päivitä",
+    scrollToTop: "Siirry alkuun",
+    emptyDistance:
+      "Kenttiä ei löytynyt {km} km säteeltä. Kokeile suurentaa etäisyysrajaa.",
+    emptySearch: "Hakuehdoilla ei löytynyt kenttiä.",
   },
   courseDetail: {
     backToCourses: "Takaisin kentille",

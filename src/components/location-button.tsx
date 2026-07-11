@@ -10,6 +10,7 @@ import { Spacing } from '@/constants/theme';
 import { useLocation } from '@/hooks/use-location';
 import { useTheme } from '@/hooks/use-theme';
 import { useI18n } from '@/i18n';
+import { formatCoordinates } from '@/lib/format';
 import type { Coordinates } from '@/lib/geo';
 import { reverseGeocode } from '@/lib/geocode';
 
@@ -24,6 +25,7 @@ export function LocationButton() {
   const { coords, source, savedLocation, deviceAvailable, setSavedLocation, clearSavedLocation } = useLocation();
   const [dialogVisible, setDialogVisible] = useState(false);
   const [name, setName] = useState<string | null>(null);
+  const [geocoded, setGeocoded] = useState(false);
 
   const usingDevice = source === 'device';
 
@@ -31,25 +33,26 @@ export function LocationButton() {
     if (usingDevice) return;
     let cancelled = false;
     setName(null);
+    setGeocoded(false);
     reverseGeocode(coords, locale)
       .then((result) => {
         if (!cancelled) setName(result);
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => {
+        if (!cancelled) setGeocoded(true);
+      });
     return () => {
       cancelled = true;
     };
   }, [coords.lat, coords.lon, locale, usingDevice]);
 
-  const label = usingDevice ? t('locationButton.myLocation') : name ?? t('locationButton.loading');
+  const label = usingDevice
+    ? t('locationButton.myLocation')
+    : name ?? (geocoded ? formatCoordinates(coords) : t('locationButton.loading'));
 
   function handleSelect(picked: Coordinates) {
     setSavedLocation(picked);
-    // Re-geocode immediately so button name updates without waiting for
-    // the next effect run.
-    reverseGeocode(picked, locale)
-      .then((result) => setName(result))
-      .catch(() => {});
   }
 
   return (

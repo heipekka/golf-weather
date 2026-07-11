@@ -1,9 +1,11 @@
 import { Link, Stack } from 'expo-router';
 import { SymbolView } from 'expo-symbols';
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
+  type NativeScrollEvent,
+  type NativeSyntheticEvent,
   Pressable,
   RefreshControl,
   StyleSheet,
@@ -118,6 +120,19 @@ export default function CoursesScreen() {
   );
   const hasMoreCourses = visibleCount < filteredCourses.length;
 
+  const listRef = useRef<FlatList>(null);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const { contentOffset, contentSize, layoutMeasurement } = event.nativeEvent;
+    const isScrollable = contentSize.height > layoutMeasurement.height + Spacing.four;
+    const atBottom =
+      contentSize.height - contentOffset.y - layoutMeasurement.height < Spacing.four;
+    setShowScrollTop(isScrollable && atBottom);
+  };
+  const scrollToTop = () => {
+    listRef.current?.scrollToOffset({ offset: 0, animated: true });
+  };
+
   return (
     <ThemedView style={styles.container}>
       <Stack.Screen
@@ -144,20 +159,31 @@ export default function CoursesScreen() {
       />
       <SafeAreaView style={styles.safeArea}>
         <FlatList
+          ref={listRef}
           data={visibleCourses}
           keyExtractor={(item) => item.id}
           extraData={listExtraData}
           style={[styles.list, { backgroundColor: theme.background }]}
           contentContainerStyle={styles.listContent}
           refreshControl={<RefreshControl refreshing={locationLoading} onRefresh={refresh} />}
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
           onEndReachedThreshold={0.6}
           onEndReached={() => {
             setVisibleCount((count) => Math.min(count + PAGE_SIZE, filteredCourses.length));
           }}
           ListFooterComponent={
             hasMoreCourses ? (
-              <View style={styles.listFooter}>
+              <View style={styles.listLoadingFooter}>
                 <ActivityIndicator color={theme.textSecondary} />
+              </View>
+            ) : filteredCourses.length > 0 ? (
+              <View style={styles.listFooter}>
+                <View style={[styles.listFooterLine, { borderTopColor: theme.textSecondary }]} />
+                <ThemedText type="small" themeColor="textSecondary" style={styles.listFooterText}>
+                  {t('distance.label').replace('{km}', String(maxDistanceKm))}
+                </ThemedText>
+                <View style={[styles.listFooterLine, { borderTopColor: theme.textSecondary }]} />
               </View>
             ) : null
           }
@@ -190,6 +216,13 @@ export default function CoursesScreen() {
               )}
             </ThemedView>
           }
+          ListEmptyComponent={
+            <ThemedText type="small" themeColor="textSecondary" style={styles.empty}>
+              {coursesInRange.length === 0
+                ? t('courses.emptyDistance').replace('{km}', String(maxDistanceKm))
+                : t('courses.emptySearch')}
+            </ThemedText>
+          }
           renderItem={({ item }: { item: GolfCourseWithDistance }) => {
             const entry = weatherByCourse[item.id];
             const aggregated = entry?.weather?.aggregated ?? [];
@@ -219,6 +252,23 @@ export default function CoursesScreen() {
             );
           }}
         />
+        {showScrollTop && (
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={t('courses.scrollToTop')}
+            onPress={scrollToTop}
+            style={({ pressed }) => [
+              styles.scrollTopButton,
+              { backgroundColor: theme.backgroundElement },
+              pressed && styles.settingsButtonPressed,
+            ]}>
+            <SymbolView
+              name={{ ios: 'arrow.up', android: 'arrow_upward', web: 'arrow_upward' }}
+              size={22}
+              tintColor={theme.text}
+            />
+          </Pressable>
+        )}
       </SafeAreaView>
     </ThemedView>
   );
@@ -240,11 +290,16 @@ const styles = StyleSheet.create({
     maxWidth: MaxContentWidth,
     alignSelf: 'center',
     width: '100%',
+    flexGrow: 1,
     rowGap: Spacing.two,
   },
   headerBlock: {
     gap: Spacing.two,
     paddingBottom: Spacing.two,
+  },
+  empty: {
+    textAlign: 'center',
+    paddingTop: Spacing.four,
   },
   settingsButton: {
     padding: Spacing.one,
@@ -262,13 +317,41 @@ const styles = StyleSheet.create({
     gap: Spacing.one,
     paddingVertical: Spacing.one,
   },
-  listFooter: {
+  listLoadingFooter: {
     paddingVertical: Spacing.four,
     alignItems: 'center',
+  },
+  listFooter: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.two,
+  },
+  listFooterLine: {
+    flex: 1,
+    borderTopWidth: 1,
+    borderStyle: 'dotted',
+  },
+  listFooterText: {
+    textAlign: 'center',
   },
   buttonRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.one,
+  },
+  scrollTopButton: {
+    position: 'absolute',
+    right: Spacing.three,
+    bottom: BottomTabInset + Spacing.three,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    elevation: 4,
   },
 });

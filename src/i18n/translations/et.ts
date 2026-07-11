@@ -21,6 +21,10 @@ export const et: TranslationDictionary = {
     openSettings: 'Ava seaded',
     refreshOrder: 'Värskenda järjestust',
     locationMoved: 'Asukoht muutus — värskenda',
+    scrollToTop: 'Keri algusesse',
+    emptyDistance:
+      'Väljakuid ei leitud {km} km raadiuses. Proovige suurendada kauguse piirangut.',
+    emptySearch: 'Otsingule ei leitud väljakuid.',
   },
   courseDetail: {
     backToCourses: 'Tagasi väljakute juurde',

@@ -21,6 +21,10 @@ export const en: TranslationDictionary = {
     openSettings: "Open settings",
     refreshOrder: "Refresh order",
     locationMoved: "Location changed — refresh",
+    scrollToTop: "Scroll to top",
+    emptyDistance:
+      "No courses found within {km} km. Try increasing the distance range.",
+    emptySearch: "No courses match your search.",
   },
   courseDetail: {
     backToCourses: "Back to courses",

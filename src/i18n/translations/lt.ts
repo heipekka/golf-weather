@@ -21,6 +21,10 @@ export const lt: TranslationDictionary = {
     openSettings: 'Atidaryti nustatymus',
     refreshOrder: 'Atnaujinti tvarką',
     locationMoved: 'Vieta pasikeitė — atnaujinti',
+    scrollToTop: 'Slinkti į viršų',
+    emptyDistance:
+      'Nerasta aikštynų per {km} km atstumą. Pabandykite padidinti atstumo ribą.',
+    emptySearch: 'Pagal paiešką aikštynų nerasta.',
   },
   courseDetail: {
     backToCourses: 'Atgal į aikštynus',
