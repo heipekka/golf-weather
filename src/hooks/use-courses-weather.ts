@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useI18n } from '@/i18n';
 import type { GolfCourseWithDistance } from '@/lib/geo';
@@ -21,10 +21,16 @@ export type CourseWeatherState = {
   error: string | null;
 };
 
+export type UseCoursesWeatherResult = {
+  weatherByCourse: Record<string, CourseWeatherState>;
+  refresh: () => void;
+  refreshing: boolean;
+};
+
 export function useCoursesWeather(
   courses: GolfCourseWithDistance[],
   reloadToken?: number
-): Record<string, CourseWeatherState> {
+): UseCoursesWeatherResult {
   const { t } = useI18n();
   const [state, setState] = useState<Record<string, CourseWeatherState>>({});
   const requestedRef = useRef(new Set<string>());
@@ -64,6 +70,17 @@ export function useCoursesWeather(
     setReloadGeneration((g) => g + 1);
   }, [reloadToken]);
 
+  // Manual pull-to-refresh: forces every currently-listed course to re-fetch,
+  // same as an hourly rollover, and tracks completion via `refreshing` so
+  // callers can drive a `RefreshControl` off the weather fetch itself rather
+  // than an unrelated loading state (e.g. GPS).
+  const [refreshing, setRefreshing] = useState(false);
+  const refresh = useCallback(() => {
+    requestedRef.current.clear();
+    setRefreshing(true);
+    setReloadGeneration((g) => g + 1);
+  }, []);
+
   const lastGenerationRef = useRef(reloadGeneration);
 
   useEffect(() => {
@@ -71,7 +88,10 @@ export function useCoursesWeather(
     const isReloadRun = reloadGeneration !== lastGenerationRef.current;
     lastGenerationRef.current = reloadGeneration;
     const pending = courses.filter((course) => !requestedRef.current.has(course.id));
-    if (pending.length === 0) return;
+    if (pending.length === 0) {
+      if (isReloadRun) setRefreshing(false);
+      return;
+    }
 
     pending.forEach((course) => requestedRef.current.add(course.id));
     setState((prev) => {
@@ -116,8 +136,15 @@ export function useCoursesWeather(
     }
 
     const workerCount = Math.min(CONCURRENCY, pending.length);
+    const workers: Promise<void>[] = [];
     for (let i = 0; i < workerCount; i++) {
-      worker();
+      workers.push(worker());
+    }
+
+    if (isReloadRun) {
+      Promise.all(workers).then(() => {
+        if (!cancelled) setRefreshing(false);
+      });
     }
 
     return () => {
@@ -139,5 +166,5 @@ export function useCoursesWeather(
     };
   }, [courses, reloadGeneration]);
 
-  return state;
+  return { weatherByCourse: state, refresh, refreshing };
 }

@@ -1,6 +1,6 @@
 import { Link, Stack } from 'expo-router';
 import { SymbolView } from 'expo-symbols';
-import { useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -71,7 +71,15 @@ export default function CoursesScreen() {
     () => coursesByDistance.filter((c) => c.distanceKm <= maxDistanceKm),
     [coursesByDistance, maxDistanceKm]
   );
-  const weatherByCourse = useCoursesWeather(coursesInRange, hourTick);
+  const {
+    weatherByCourse,
+    refresh: refreshWeather,
+    refreshing: weatherRefreshing,
+  } = useCoursesWeather(coursesInRange, hourTick);
+  const onPullRefresh = useCallback(() => {
+    refreshWeather();
+    refresh();
+  }, [refreshWeather, refresh]);
   const { sortedCourses, orderIsStale, refreshOrder } = useSortedCourseOrder(
     coursesInRange,
     weatherByCourse,
@@ -165,7 +173,12 @@ export default function CoursesScreen() {
           extraData={listExtraData}
           style={[styles.list, { backgroundColor: theme.background }]}
           contentContainerStyle={styles.listContent}
-          refreshControl={<RefreshControl refreshing={locationLoading} onRefresh={refresh} />}
+          refreshControl={
+            <RefreshControl
+              refreshing={weatherRefreshing || locationLoading}
+              onRefresh={onPullRefresh}
+            />
+          }
           onScroll={handleScroll}
           scrollEventThrottle={16}
           onEndReachedThreshold={0.6}

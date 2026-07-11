@@ -1,5 +1,5 @@
 import { SymbolView } from 'expo-symbols';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { FlatList, Pressable, RefreshControl, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -50,7 +50,15 @@ export default function FavoritesScreen() {
     () => sortByDistance(favoriteCourses, { lat: coords.lat, lon: coords.lon }),
     [favoriteCourses, coords.lat, coords.lon]
   );
-  const weatherByCourse = useCoursesWeather(coursesByDistance, hourTick);
+  const {
+    weatherByCourse,
+    refresh: refreshWeather,
+    refreshing: weatherRefreshing,
+  } = useCoursesWeather(coursesByDistance, hourTick);
+  const onPullRefresh = useCallback(() => {
+    refreshWeather();
+    refresh();
+  }, [refreshWeather, refresh]);
   const { sortedCourses, orderIsStale, refreshOrder } = useSortedCourseOrder(
     coursesByDistance,
     weatherByCourse,
@@ -72,7 +80,12 @@ export default function FavoritesScreen() {
           extraData={listExtraData}
           style={styles.list}
           contentContainerStyle={styles.listContent}
-          refreshControl={<RefreshControl refreshing={locationLoading} onRefresh={refresh} />}
+          refreshControl={
+            <RefreshControl
+              refreshing={weatherRefreshing || locationLoading}
+              onRefresh={onPullRefresh}
+            />
+          }
           ListHeaderComponent={
             <ThemedView style={styles.headerBlock}>
               <CreatedByBanner />
