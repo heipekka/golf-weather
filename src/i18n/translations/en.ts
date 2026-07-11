@@ -31,9 +31,11 @@ export const en: TranslationDictionary = {
     courseNotFound: "Course not found",
     courseNotFoundBody: "We couldn't find that golf course.",
     away: "away",
-    nextHours: "Next hours (combined average)",
+    nextHours: "Combined average",
     noForecastData: "No forecast data available.",
-    bySource: "By source (next hours)",
+    bySource: "By source",
+    hourlyUnavailable:
+      "Hourly forecast isn't available for this time — showing the summary only.",
     attribution:
       "Weather data from FMI (Ilmatieteen laitos), YR.no (MET Norway) and Open-Meteo.",
   },
@@ -42,6 +44,7 @@ export const en: TranslationDictionary = {
     hourlyForecast: "Hourly forecast",
     hideHourlyForecast: "Hide hourly forecast",
     showHourlyForecast: "Show hourly forecast",
+    hourlyUnavailable: "No hourly forecast",
   },
   sourceToggle: {
     combined: "Combined",
@@ -64,6 +67,7 @@ export const en: TranslationDictionary = {
   weatherSummary: {
     loadingForecast: "Loading forecast…",
     windAndPrecipitation: "{wind} wind · {precipitation}",
+    feelsLike: "Feels like {temp}",
   },
   sort: {
     location: "Location",
@@ -100,6 +104,7 @@ export const en: TranslationDictionary = {
       Good: "Good",
       Fair: "Fair",
       Hot: "Hot",
+      Sweltering: "Sweltering",
       Poor: "Poor",
       Bad: "Bad",
       Dark: "Dark",
@@ -110,6 +115,8 @@ export const en: TranslationDictionary = {
       fairConditions: "light rain, cool, or breezy",
       hot: "hot",
       hotSpell: "hot spell expected",
+      sweltering: "very hot and sunny",
+      swelteringSpell: "sweltering spell expected",
     },
   },
   format: {

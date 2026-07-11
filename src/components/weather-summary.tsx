@@ -8,6 +8,7 @@ import { formatPrecipitation, formatTemperature, formatWind } from '@/lib/format
 
 export type WeatherSummaryProps = WeatherConditionInput & {
   temperature: number | null;
+  apparentTemperature?: number | null;
   windSpeed: number | null;
   precipitation: number | null;
   size?: 'compact' | 'large';
@@ -16,6 +17,7 @@ export type WeatherSummaryProps = WeatherConditionInput & {
 
 export function WeatherSummary({
   temperature,
+  apparentTemperature,
   windSpeed,
   precipitation,
   weatherCode,
@@ -25,6 +27,12 @@ export function WeatherSummary({
 }: WeatherSummaryProps) {
   const { t } = useI18n();
   const isLarge = size === 'large';
+  const showFeelsLike =
+    !loading &&
+    apparentTemperature !== null &&
+    apparentTemperature !== undefined &&
+    temperature !== null &&
+    Math.round(apparentTemperature) !== Math.round(temperature);
 
   return (
     <View style={styles.row}>
@@ -46,6 +54,11 @@ export function WeatherSummary({
                 precipitation: formatPrecipitation(precipitation),
               })}
         </ThemedText>
+        {showFeelsLike && (
+          <ThemedText type="small" themeColor="textSecondary">
+            {t('weatherSummary.feelsLike', { temp: formatTemperature(apparentTemperature) })}
+          </ThemedText>
+        )}
       </View>
     </View>
   );

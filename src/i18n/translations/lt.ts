@@ -34,6 +34,8 @@ export const lt: TranslationDictionary = {
     nextHours: 'Artimiausios valandos (bendras vidurkis)',
     noForecastData: 'Prognozės duomenų nėra.',
     bySource: 'Pagal šaltinį (artimiausios valandos)',
+    hourlyUnavailable:
+      'Valandinė prognozė šiam laikui nepasiekiama — rodoma tik santrauka.',
     attribution:
       'Orų duomenys iš FMI (Ilmatieteen laitos), YR.no (MET Norway) ir Open-Meteo.',
   },
@@ -42,6 +44,7 @@ export const lt: TranslationDictionary = {
     hourlyForecast: 'Valandinė prognozė',
     hideHourlyForecast: 'Slėpti valandinę prognozę',
     showHourlyForecast: 'Rodyti valandinę prognozę',
+    hourlyUnavailable: 'Valandinė prognozė nepasiekiama',
   },
   sourceToggle: {
     combined: 'Bendra',
@@ -64,6 +67,7 @@ export const lt: TranslationDictionary = {
   weatherSummary: {
     loadingForecast: 'Kraunama prognozė…',
     windAndPrecipitation: '{wind} vėjas · {precipitation}',
+    feelsLike: 'Jaučiama kaip {temp}',
   },
   sort: {
     location: 'Vieta',
@@ -100,6 +104,7 @@ export const lt: TranslationDictionary = {
       Good: 'Geros',
       Fair: 'Vidutiniškos',
       Hot: 'Karšta',
+      Sweltering: 'Tvanku',
       Poor: 'Prastos',
       Bad: 'Blogos',
       Dark: 'Tamsu',
@@ -110,6 +115,8 @@ export const lt: TranslationDictionary = {
       fairConditions: 'silpnas lietus, vėsu arba vėjuota',
       hot: 'karšta',
       hotSpell: 'tikimasi karščio bangos',
+      sweltering: 'labai karšta ir saulėta',
+      swelteringSpell: 'laukiama tvankaus laikotarpio',
     },
   },
   format: {

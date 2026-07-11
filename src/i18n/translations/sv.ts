@@ -34,6 +34,8 @@ export const sv: TranslationDictionary = {
     nextHours: 'Kommande timmar (kombinerat medelvärde)',
     noForecastData: 'Ingen prognosdata tillgänglig.',
     bySource: 'Per källa (kommande timmar)',
+    hourlyUnavailable:
+      'Timprognos är inte tillgänglig för denna tidpunkt — visar endast sammanfattningen.',
     attribution:
       'Väderdata från FMI (Ilmatieteen laitos), YR.no (MET Norway) och Open-Meteo.',
   },
@@ -42,6 +44,7 @@ export const sv: TranslationDictionary = {
     hourlyForecast: 'Timprognos',
     hideHourlyForecast: 'Dölj timprognos',
     showHourlyForecast: 'Visa timprognos',
+    hourlyUnavailable: 'Ingen timprognos',
   },
   sourceToggle: {
     combined: 'Kombinerat',
@@ -64,6 +67,7 @@ export const sv: TranslationDictionary = {
   weatherSummary: {
     loadingForecast: 'Laddar prognos…',
     windAndPrecipitation: '{wind} vind · {precipitation}',
+    feelsLike: 'Känns som {temp}',
   },
   sort: {
     location: 'Plats',
@@ -100,6 +104,7 @@ export const sv: TranslationDictionary = {
       Good: 'Bra',
       Fair: 'Godtagbar',
       Hot: 'Varmt',
+      Sweltering: 'Tryckande',
       Poor: 'Dåligt',
       Bad: 'Uselt',
       Dark: 'Mörkt',
@@ -110,6 +115,8 @@ export const sv: TranslationDictionary = {
       fairConditions: 'lätt regn, svalt eller blåsigt',
       hot: 'varmt',
       hotSpell: 'värmebölja väntas',
+      sweltering: 'mycket varmt och soligt',
+      swelteringSpell: 'tryckande värmebölja väntas',
     },
   },
   format: {

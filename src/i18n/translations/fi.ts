@@ -33,6 +33,8 @@ export const fi = {
     nextHours: "Seuraavat tunnit (yhdistetty keskiarvo)",
     noForecastData: "Ennustetietoja ei saatavilla.",
     bySource: "Lähteittäin (seuraavat tunnit)",
+    hourlyUnavailable:
+      "Tunneittaista ennustetta ei ole saatavilla tälle ajankohdalle — näytetään vain yhteenveto.",
     attribution:
       "Säätiedot: FMI (Ilmatieteen laitos), YR.no (MET Norway) ja Open-Meteo.",
   },
@@ -41,6 +43,7 @@ export const fi = {
     hourlyForecast: "Tuntiennuste",
     hideHourlyForecast: "Piilota tuntiennuste",
     showHourlyForecast: "Näytä tuntiennuste",
+    hourlyUnavailable: "Ei tuntiennustetta",
   },
   sourceToggle: {
     combined: "Yhdistetty",
@@ -63,6 +66,7 @@ export const fi = {
   weatherSummary: {
     loadingForecast: "Ladataan ennustetta…",
     windAndPrecipitation: "{wind} tuuli · {precipitation}",
+    feelsLike: "Tuntuu kuin {temp}",
   },
   sort: {
     location: "Sijainti",
@@ -99,6 +103,7 @@ export const fi = {
       Good: "Hyvä",
       Fair: "Kohtalainen",
       Hot: "Kuuma",
+      Sweltering: "Helle",
       Poor: "Huono",
       Bad: "Surkea",
       Dark: "Pimeä",
@@ -109,6 +114,8 @@ export const fi = {
       fairConditions: "kevyttä sadetta, viileää tai tuulenvireistä",
       hot: "kuumaa",
       hotSpell: "kuuma jakso odotettavissa",
+      sweltering: "kuuma ja aurinkoista",
+      swelteringSpell: "helteinen jakso odotettavissa",
     },
   },
   format: {

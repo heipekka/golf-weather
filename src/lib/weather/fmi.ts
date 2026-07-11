@@ -1,5 +1,6 @@
 import { XMLParser } from 'fast-xml-parser';
 
+import { computeApparentTemperature } from './feels-like';
 import type { ForecastPoint, SourceForecast } from './types';
 
 const FMI_WFS_URL = 'https://opendata.fmi.fi/wfs';
@@ -101,6 +102,7 @@ export async function fetchFmi(lat: number, lon: number, signal?: AbortSignal): 
     .map((point) => ({
       time: point.time,
       temperature: point.temperature ?? null,
+      apparentTemperature: computeApparentTemperature(point.temperature ?? null, point.windSpeed ?? null),
       windSpeed: point.windSpeed ?? null,
       windGust: point.windGust ?? null,
       windDirection: point.windDirection ?? null,

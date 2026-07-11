@@ -34,6 +34,8 @@ export const lv: TranslationDictionary = {
     nextHours: 'Nākamās stundas (kombinētais vidējais)',
     noForecastData: 'Prognozes dati nav pieejami.',
     bySource: 'Pēc avota (nākamās stundas)',
+    hourlyUnavailable:
+      'Stundu prognoze šim laikam nav pieejama — tiek rādīts tikai kopsavilkums.',
     attribution:
       'Laika apstākļu dati no FMI (Ilmatieteen laitos), YR.no (MET Norway) un Open-Meteo.',
   },
@@ -42,6 +44,7 @@ export const lv: TranslationDictionary = {
     hourlyForecast: 'Stundu prognoze',
     hideHourlyForecast: 'Paslēpt stundu prognozi',
     showHourlyForecast: 'Rādīt stundu prognozi',
+    hourlyUnavailable: 'Stundu prognoze nav pieejama',
   },
   sourceToggle: {
     combined: 'Kombinēts',
@@ -64,6 +67,7 @@ export const lv: TranslationDictionary = {
   weatherSummary: {
     loadingForecast: 'Ielādē prognozi…',
     windAndPrecipitation: '{wind} vējš · {precipitation}',
+    feelsLike: 'Jūtas kā {temp}',
   },
   sort: {
     location: 'Atrašanās vieta',
@@ -100,6 +104,7 @@ export const lv: TranslationDictionary = {
       Good: 'Labi',
       Fair: 'Vidēji',
       Hot: 'Karsti',
+      Sweltering: 'Tveice',
       Poor: 'Slikti',
       Bad: 'Ļoti slikti',
       Dark: 'Tumsa',
@@ -110,6 +115,8 @@ export const lv: TranslationDictionary = {
       fairConditions: 'vieglas lietusgāzes, vēss vai vējains',
       hot: 'karsti',
       hotSpell: 'gaidāms karstuma periods',
+      sweltering: 'ļoti karsts un saulains',
+      swelteringSpell: 'gaidāms tveicīgs periods',
     },
   },
   format: {

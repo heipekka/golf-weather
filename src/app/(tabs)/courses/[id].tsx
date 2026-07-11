@@ -1,6 +1,6 @@
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { SymbolView } from "expo-symbols";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import {
     Pressable,
     RefreshControl,
@@ -10,10 +10,9 @@ import {
 } from "react-native";
 
 import { FavoriteButton } from "@/components/favorite-button";
-import { HourlyRow } from "@/components/hourly-row";
+import { HourlyStrip } from "@/components/hourly-strip";
 import { PlayabilityBadge } from "@/components/playability-badge";
 import { SourceComparisonTable } from "@/components/source-comparison-table";
-import { SourceToggle, type ViewMode } from "@/components/source-toggle";
 import { StartTimeButton } from "@/components/start-time-button";
 import { SunTimes } from "@/components/sun-times";
 import { ThemedText } from "@/components/themed-text";
@@ -33,7 +32,7 @@ import { formatDistance } from "@/lib/format";
 import { haversineKm } from "@/lib/geo";
 import { scorePlayability } from "@/lib/golf";
 import { getSunTimes, isNight } from "@/lib/sun";
-import { findCurrentPoint } from "@/lib/weather";
+import { findCurrentPoint, hasHourlyData } from "@/lib/weather";
 
 const HOURS_SHOWN = 12;
 
@@ -70,9 +69,9 @@ export default function CourseDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const course = getCourseById(id);
   const { coords } = useLocation();
-  const [viewMode, setViewMode] = useState<ViewMode>("combined");
   const { darkScoringEnabled } = useDarkScoring();
   const { t } = useI18n();
+  const theme = useTheme();
   const hourTick = useCurrentHour();
   const hasHydrated = useHasHydrated();
   const { startTime } = useStartTime();
@@ -100,6 +99,7 @@ export default function CourseDetailScreen() {
         windGust: currentPoint.windGust,
         precipitation: currentPoint.precipitation,
         precipitationProbability: currentPoint.precipitationProbability,
+        cloudCover: currentPoint.cloudCover,
         isDark: darkScoringEnabled && !!course && isNight(currentPoint.time, course.lat, course.lon),
       })
     : null;
@@ -114,6 +114,14 @@ export default function CourseDetailScreen() {
       Math.max(startIndex, 0) + HOURS_SHOWN,
     );
   }, [weather, currentPoint]);
+
+  const dailyOnly = useMemo(
+    () =>
+      !!weather &&
+      weather.aggregated.length > 0 &&
+      !hasHourlyData(weather.sources),
+    [weather],
+  );
 
   if (!course) {
     return (
@@ -163,6 +171,7 @@ export default function CourseDetailScreen() {
           <View style={styles.summaryRow}>
             <WeatherSummary
               temperature={currentPoint?.temperature ?? null}
+              apparentTemperature={currentPoint?.apparentTemperature ?? null}
               windSpeed={currentPoint?.windSpeed ?? null}
               precipitation={currentPoint?.precipitation ?? null}
               cloudCover={currentPoint?.cloudCover ?? null}
@@ -189,42 +198,52 @@ export default function CourseDetailScreen() {
 
         <StartTimeButton />
 
-        <SourceToggle value={viewMode} onChange={setViewMode} />
-
-        {viewMode === "combined" ? (
+        {dailyOnly ? (
           <ThemedView type="backgroundElement" style={styles.card}>
-            <ThemedText type="smallBold" style={styles.cardTitle}>
-              {t('courseDetail.nextHours')}
-            </ThemedText>
-            {upcoming.length === 0 && !loading && (
-              <ThemedText type="small" themeColor="textSecondary">
-                {t('courseDetail.noForecastData')}
-              </ThemedText>
-            )}
-            {upcoming.map((point) => (
-              <HourlyRow
-                key={point.time}
-                time={point.time}
-                temperature={point.temperature}
-                windSpeed={point.windSpeed}
-                precipitation={point.precipitation}
-                cloudCover={point.cloudCover}
-                isNight={isNight(point.time, course.lat, course.lon)}
+            <View style={styles.infoRow}>
+              <SymbolView
+                name={{ ios: "info.circle", android: "info", web: "info" }}
+                size={18}
+                tintColor={theme.textSecondary}
               />
-            ))}
+              <ThemedText
+                type="small"
+                themeColor="textSecondary"
+                style={styles.infoText}
+              >
+                {t('courseDetail.hourlyUnavailable')}
+              </ThemedText>
+            </View>
           </ThemedView>
         ) : (
-          <ThemedView type="backgroundElement" style={styles.card}>
-            <ThemedText type="smallBold" style={styles.cardTitle}>
-              {t('courseDetail.bySource')}
-            </ThemedText>
-            <SourceComparisonTable
-              sources={weather?.sources ?? []}
-              hours={upcoming.map((point) => point.time)}
-              lat={course.lat}
-              lon={course.lon}
-            />
-          </ThemedView>
+          <>
+            <ThemedView type="backgroundElement" style={styles.card}>
+              <ThemedText type="smallBold" style={styles.cardTitle}>
+                {t('courseDetail.nextHours')}
+              </ThemedText>
+              {upcoming.length === 0 && !loading ? (
+                <ThemedText type="small" themeColor="textSecondary">
+                  {t('courseDetail.noForecastData')}
+                </ThemedText>
+              ) : (
+                <View style={styles.hourlyBleed}>
+                  <HourlyStrip points={upcoming} lat={course.lat} lon={course.lon} />
+                </View>
+              )}
+            </ThemedView>
+
+            <ThemedView type="backgroundElement" style={styles.card}>
+              <ThemedText type="smallBold" style={styles.cardTitle}>
+                {t('courseDetail.bySource')}
+              </ThemedText>
+              <SourceComparisonTable
+                sources={weather?.sources ?? []}
+                hours={upcoming.map((point) => point.time)}
+                lat={course.lat}
+                lon={course.lon}
+              />
+            </ThemedView>
+          </>
         )}
 
         <ThemedText
@@ -265,6 +284,17 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     marginBottom: Spacing.half,
+  },
+  hourlyBleed: {
+    marginHorizontal: -Spacing.three,
+  },
+  infoRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.two,
+  },
+  infoText: {
+    flex: 1,
   },
   attribution: {
     textAlign: "center",

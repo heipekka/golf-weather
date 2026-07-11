@@ -4,6 +4,7 @@ export type ForecastPoint = {
   /** ISO 8601 UTC timestamp. */
   time: string;
   temperature: number | null;
+  apparentTemperature: number | null;
   windSpeed: number | null;
   windGust: number | null;
   windDirection: number | null;
@@ -25,6 +26,7 @@ export type SourceForecast = {
 export type AggregatedPoint = {
   time: string;
   temperature: number | null;
+  apparentTemperature: number | null;
   windSpeed: number | null;
   windGust: number | null;
   windDirection: number | null;

@@ -1,5 +1,15 @@
 import type { AggregatedPoint, ForecastPoint, SourceForecast } from './types';
 
+/**
+ * Reports whether at least one provider returned more than a single data
+ * point. A provider returning just one point means it fell back to daily
+ * (not hourly) resolution for the requested location/time, which the UI
+ * treats as "no hourly forecast available".
+ */
+export function hasHourlyData(sources: SourceForecast[]): boolean {
+  return sources.some((source) => !source.error && source.hourly.length > 1);
+}
+
 function average(values: (number | null)[]): number | null {
   const valid = values.filter((v): v is number => v !== null && Number.isFinite(v));
   if (valid.length === 0) return null;
@@ -29,6 +39,7 @@ export function aggregateForecasts(sources: SourceForecast[]): AggregatedPoint[]
     .map(([time, points]) => ({
       time,
       temperature: average(points.map((p) => p.temperature)),
+      apparentTemperature: average(points.map((p) => p.apparentTemperature)),
       windSpeed: average(points.map((p) => p.windSpeed)),
       windGust: average(points.map((p) => p.windGust)),
       windDirection: average(points.map((p) => p.windDirection)),

@@ -25,7 +25,7 @@ import { useI18n } from '@/i18n';
 import { WINDOW_HOURS, currentPlayability } from '@/lib/course-sort';
 import { sortByDistance, type GolfCourseWithDistance } from '@/lib/geo';
 import { EMPTY_SUN_TIMES, getSunTimes } from '@/lib/sun';
-import { findCurrentPoint } from '@/lib/weather';
+import { findCurrentPoint, hasHourlyData } from '@/lib/weather';
 
 const NEXT_HOURS_SHOWN = WINDOW_HOURS;
 
@@ -112,6 +112,7 @@ export default function FavoritesScreen() {
             );
             const playability = currentPlayability(entry, item.lat, item.lon, now, darkScoringEnabled);
             const sun = hasHydrated ? getSunTimes(item.lat, item.lon) : EMPTY_SUN_TIMES;
+            const dailyOnly = !!entry?.weather && !hasHourlyData(entry.weather.sources);
 
             return (
               <CourseCard
@@ -126,6 +127,7 @@ export default function FavoritesScreen() {
                 playability={playability}
                 sun={sun}
                 loading={!entry || entry.loading}
+                dailyOnly={dailyOnly}
               />
             );
           }}

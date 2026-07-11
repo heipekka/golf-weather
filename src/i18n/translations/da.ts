@@ -34,6 +34,8 @@ export const da: TranslationDictionary = {
     nextHours: 'Kommende timer (kombineret gennemsnit)',
     noForecastData: 'Ingen prognosedata tilgængelig.',
     bySource: 'Per kilde (kommende timer)',
+    hourlyUnavailable:
+      'Timeprognose er ikke tilgængelig for dette tidspunkt — viser kun resuméet.',
     attribution:
       'Vejrdata fra FMI (Ilmatieteen laitos), YR.no (MET Norway) og Open-Meteo.',
   },
@@ -42,6 +44,7 @@ export const da: TranslationDictionary = {
     hourlyForecast: 'Timeprognose',
     hideHourlyForecast: 'Skjul timeprognose',
     showHourlyForecast: 'Vis timeprognose',
+    hourlyUnavailable: 'Ingen timeprognose',
   },
   sourceToggle: {
     combined: 'Kombineret',
@@ -64,6 +67,7 @@ export const da: TranslationDictionary = {
   weatherSummary: {
     loadingForecast: 'Indlæser prognose…',
     windAndPrecipitation: '{wind} vind · {precipitation}',
+    feelsLike: 'Føles som {temp}',
   },
   sort: {
     location: 'Placering',
@@ -100,6 +104,7 @@ export const da: TranslationDictionary = {
       Good: 'God',
       Fair: 'Middel',
       Hot: 'Varmt',
+      Sweltering: 'Trykkende',
       Poor: 'Dårlig',
       Bad: 'Elendig',
       Dark: 'Mørkt',
@@ -110,6 +115,8 @@ export const da: TranslationDictionary = {
       fairConditions: 'let regn, kølig eller blæsende',
       hot: 'varmt',
       hotSpell: 'hedebølge forventet',
+      sweltering: 'meget varmt og solrigt',
+      swelteringSpell: 'trykkende varmeperiode ventes',
     },
   },
   format: {

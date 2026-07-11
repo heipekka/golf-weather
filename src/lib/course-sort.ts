@@ -1,10 +1,6 @@
 import type { CourseWeatherState } from "@/hooks/use-courses-weather";
 import type { GolfCourseWithDistance } from "@/lib/geo";
-import {
-  scoreWindow,
-  type Playability,
-  type PlayabilityLabel,
-} from "@/lib/golf";
+import { scoreWindow, type Playability } from "@/lib/golf";
 import { isNight } from "@/lib/sun";
 import { findCurrentPoint } from "@/lib/weather";
 
@@ -27,22 +23,6 @@ const MAX_SCORED_DISTANCE_KM = 500;
 /** Weights for `combined` mode: distance dominates, weather only breaks ties among similarly-close courses. */
 const COMBINED_DISTANCE_WEIGHT = 0.65;
 const COMBINED_WEATHER_WEIGHT = 0.35;
-
-/**
- * Weather score used only by `combined` mode. Deliberately compresses the
- * top of the scale so Excellent and Good are nearly interchangeable —
- * otherwise a marginally nicer forecast far away could still outrank a
- * merely-good course nearby.
- */
-const COMBINED_WEATHER_SCORE: Record<PlayabilityLabel, number> = {
-  Excellent: 100,
-  Hot: 90,
-  Good: 80,
-  Fair: 55,
-  Poor: 25,
-  Bad: 5,
-  Dark: 0,
-};
 
 /** Small combined-mode nudge (max ~a few points) so sunnier courses edge ahead among near-ties. */
 const COMBINED_SUNSHINE_WEIGHT = 0.05;
@@ -72,6 +52,7 @@ export function currentPlayability(
       windGust: point.windGust,
       precipitation: point.precipitation,
       precipitationProbability: point.precipitationProbability,
+      cloudCover: point.cloudCover,
       isDark: includeDark && isNight(point.time, lat, lon),
     })),
   );
@@ -151,7 +132,7 @@ export function sortCourses(
 
     return (
       COMBINED_DISTANCE_WEIGHT * distanceScore(course.distanceKm) +
-      COMBINED_WEATHER_WEIGHT * COMBINED_WEATHER_SCORE[playability.label] +
+      COMBINED_WEATHER_WEIGHT * playability.score +
       sunTerm
     );
   };

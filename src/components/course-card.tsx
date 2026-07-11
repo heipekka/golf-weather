@@ -36,6 +36,8 @@ export type CourseCardProps = {
   playability: Playability | null;
   sun: SunTimesData;
   loading?: boolean;
+  /** True when the sources only returned daily (not hourly) data. */
+  dailyOnly?: boolean;
 };
 
 export function CourseCard({
@@ -50,11 +52,13 @@ export function CourseCard({
   playability,
   sun,
   loading,
+  dailyOnly,
 }: CourseCardProps) {
   const [showHourly, setShowHourly] = useState(false);
   const theme = useTheme();
   const { t } = useI18n();
-  const canShowHourly = !loading && hourly.length > 0;
+  const canShowHourly = !loading && hourly.length > 0 && !dailyOnly;
+  const showDailyOnlyNotice = !loading && dailyOnly;
 
   return (
     <ThemedView type="backgroundElement" style={styles.card}>
@@ -174,6 +178,17 @@ export function CourseCard({
               {t('courseCard.hourlyForecast')}
             </ThemedText>
           </Pressable>
+        ) : showDailyOnlyNotice ? (
+          <View style={styles.dailyOnlyNotice}>
+            <SymbolView
+              name={{ ios: "info.circle", android: "info", web: "info" }}
+              size={12}
+              tintColor={theme.textSecondary}
+            />
+            <ThemedText type="small" themeColor="textSecondary">
+              {t('courseCard.hourlyUnavailable')}
+            </ThemedText>
+          </View>
         ) : (
           <View />
         )}
@@ -256,6 +271,11 @@ const styles = StyleSheet.create({
     marginTop: Spacing.two,
   },
   toggle: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.one,
+  },
+  dailyOnlyNotice: {
     flexDirection: "row",
     alignItems: "center",
     gap: Spacing.one,

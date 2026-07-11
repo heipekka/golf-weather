@@ -3,6 +3,7 @@ export type PlayabilityLabel =
   | "Good"
   | "Fair"
   | "Hot"
+  | "Sweltering"
   | "Poor"
   | "Bad"
   | "Dark";
@@ -13,6 +14,7 @@ export type PlayabilityConditions = {
   windGust: number | null;
   precipitation: number | null;
   precipitationProbability: number | null;
+  cloudCover?: number | null;
   /** True when there is no playable light (sun below civil twilight); overrides weather-based classification. */
   isDark?: boolean;
 };
@@ -23,7 +25,9 @@ export type PlayabilityReasonCode =
   | "poorConditions"
   | "fairConditions"
   | "hot"
-  | "hotSpell";
+  | "hotSpell"
+  | "sweltering"
+  | "swelteringSpell";
 
 export type Playability = {
   score: number;
@@ -38,6 +42,7 @@ export const PlayabilityColors: Record<PlayabilityLabel, string> = {
   Good: "#3C87F7",
   Fair: "#D98C1F",
   Hot: "#E0662B",
+  Sweltering: "#C2410C",
   Poor: "#D9483C",
   Bad: "#B3261E",
   Dark: "#5B6178",
@@ -54,6 +59,7 @@ const TIER_RANK: Record<PlayabilityLabel, number> = {
   Bad: 0,
   Poor: 1,
   Fair: 2,
+  Sweltering: 2,
   Good: 3,
   Hot: 3,
   Excellent: 4,
@@ -67,18 +73,21 @@ const RANK_TIER: PlayabilityLabel[] = [
   "Excellent",
 ];
 
-/** Representative score for each tier, used for the `weather`/`combined` sort ranking. */
+/** Representative score for each tier, used for both the `weather` and `combined` sort ranking. */
 const TIER_SCORE: Record<PlayabilityLabel, number> = {
-  Excellent: 95,
-  Good: 75,
-  Hot: 55,
-  Fair: 45,
+  Excellent: 100,
+  Hot: 95,
+  Good: 80,
+  Sweltering: 70,
+  Fair: 55,
   Poor: 25,
   Bad: 8,
   Dark: 0,
 };
 
-const HOT_TEMPERATURE_C = 30;
+const HOT_TEMPERATURE_C = 27;
+const SWELTERING_TEMPERATURE_C = 30;
+const SUNNY_CLOUD_COVER_MAX = 30;
 
 const BAD_PRECIPITATION_MM = 2;
 const BAD_TEMPERATURE_C = 3;
@@ -162,6 +171,12 @@ export function classifyHour(
 
   const { temperature, windSpeed, precipitation } = roundToDisplay(conditions);
   const isHot = temperature !== null && temperature > HOT_TEMPERATURE_C;
+  const isSweltering =
+    temperature !== null &&
+    temperature > SWELTERING_TEMPERATURE_C &&
+    conditions.cloudCover !== null &&
+    conditions.cloudCover !== undefined &&
+    conditions.cloudCover <= SUNNY_CLOUD_COVER_MAX;
 
   if (
     (precipitation !== null && precipitation > BAD_PRECIPITATION_MM) ||
@@ -195,10 +210,18 @@ export function classifyHour(
     (temperature !== null && temperature < GOOD_TEMPERATURE_C) ||
     (windSpeed !== null && windSpeed >= GOOD_WIND_MS)
   ) {
-    return isHot ? hotPleasant(windSpeed, "Good") : "Good";
+    return isSweltering
+      ? "Sweltering"
+      : isHot
+        ? hotPleasant(windSpeed, "Good")
+        : "Good";
   }
 
-  return isHot ? hotPleasant(windSpeed, "Excellent") : "Excellent";
+  return isSweltering
+    ? "Sweltering"
+    : isHot
+      ? hotPleasant(windSpeed, "Excellent")
+      : "Excellent";
 }
 
 function reasonsFor(label: PlayabilityLabel): PlayabilityReasonCode[] {
@@ -211,6 +234,8 @@ function reasonsFor(label: PlayabilityLabel): PlayabilityReasonCode[] {
       return ["fairConditions"];
     case "Hot":
       return ["hot"];
+    case "Sweltering":
+      return ["sweltering"];
     default:
       return [];
   }
@@ -333,6 +358,21 @@ export function scoreWindow(hours: PlayabilityConditions[]): Playability {
   const lateDark = hours
     .slice(-SPLIT_HALF_HOURS)
     .filter((hour) => hour.isDark).length;
+
+  const swelteringHours = rounded.filter(
+    (hour) => classifyHour(hour) === "Sweltering",
+  ).length;
+  if (
+    swelteringHours >= threshold &&
+    earlyDark < DARK_HALF_HOURS &&
+    lateDark < DARK_HALF_HOURS
+  ) {
+    return {
+      score: TIER_SCORE.Sweltering,
+      label: "Sweltering",
+      reasons: ["swelteringSpell"],
+    };
+  }
 
   const hotHours = rounded.filter(
     (hour) => classifyHour(hour) === "Hot",

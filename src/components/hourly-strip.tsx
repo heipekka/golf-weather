@@ -43,6 +43,7 @@ export function HourlyStrip({ points, lat, lon }: HourlyStripProps) {
           windGust: point.windGust,
           precipitation: point.precipitation,
           precipitationProbability: point.precipitationProbability,
+          cloudCover: point.cloudCover,
           isDark: darkScoringEnabled && isNight(point.time, lat, lon),
         });
 

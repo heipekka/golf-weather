@@ -4,6 +4,7 @@ const OPEN_METEO_URL = 'https://api.open-meteo.com/v1/forecast';
 
 const HOURLY_PARAMS = [
   'temperature_2m',
+  'apparent_temperature',
   'precipitation',
   'precipitation_probability',
   'wind_speed_10m',
@@ -16,6 +17,7 @@ const HOURLY_PARAMS = [
 type OpenMeteoHourly = {
   time: string[];
   temperature_2m: (number | null)[];
+  apparent_temperature: (number | null)[];
   precipitation: (number | null)[];
   precipitation_probability: (number | null)[];
   wind_speed_10m: (number | null)[];
@@ -55,6 +57,7 @@ export async function fetchOpenMeteo(
     // Open-Meteo returns UTC local time without a trailing "Z" when timezone=UTC.
     time: `${time}:00Z`,
     temperature: h.temperature_2m[i] ?? null,
+    apparentTemperature: h.apparent_temperature[i] ?? null,
     windSpeed: h.wind_speed_10m[i] ?? null,
     windGust: h.wind_gusts_10m[i] ?? null,
     windDirection: h.wind_direction_10m[i] ?? null,

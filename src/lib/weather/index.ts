@@ -123,6 +123,7 @@ export async function fetchAllSources(
 export {
   aggregateForecasts,
   findCurrentPoint,
+  hasHourlyData,
   HOUR_ROLLOVER_MINUTE,
   indexByHour
 } from "./aggregate";

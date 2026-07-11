@@ -34,6 +34,8 @@ export const et: TranslationDictionary = {
     nextHours: 'Järgmised tunnid (koondkeskmine)',
     noForecastData: 'Prognoosiandmed ei ole saadaval.',
     bySource: 'Allikate kaupa (järgmised tunnid)',
+    hourlyUnavailable:
+      'Tunniprognoos ei ole selle ajahetke jaoks saadaval — kuvatakse ainult kokkuvõte.',
     attribution:
       'Ilmaandmed pärinevad FMI-lt (Ilmatieteen laitos), YR.no-lt (MET Norway) ja Open-Meteolt.',
   },
@@ -42,6 +44,7 @@ export const et: TranslationDictionary = {
     hourlyForecast: 'Tunniprognoos',
     hideHourlyForecast: 'Peida tunniprognoos',
     showHourlyForecast: 'Näita tunniprognoosi',
+    hourlyUnavailable: 'Tunniprognoos puudub',
   },
   sourceToggle: {
     combined: 'Koondatud',
@@ -64,6 +67,7 @@ export const et: TranslationDictionary = {
   weatherSummary: {
     loadingForecast: 'Prognoosi laadimine…',
     windAndPrecipitation: '{wind} tuul · {precipitation}',
+    feelsLike: 'Tundub nagu {temp}',
   },
   sort: {
     location: 'Asukoht',
@@ -100,6 +104,7 @@ export const et: TranslationDictionary = {
       Good: 'Hea',
       Fair: 'Rahuldav',
       Hot: 'Palav',
+      Sweltering: 'Lämbe',
       Poor: 'Halb',
       Bad: 'Kehv',
       Dark: 'Pime',
@@ -110,6 +115,8 @@ export const et: TranslationDictionary = {
       fairConditions: 'kerge vihm, jahe või tuuline',
       hot: 'palav',
       hotSpell: 'oodata on palavat perioodi',
+      sweltering: 'väga kuum ja päikeseline',
+      swelteringSpell: 'lämbe periood on oodata',
     },
   },
   format: {

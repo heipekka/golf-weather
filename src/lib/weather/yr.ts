@@ -1,3 +1,4 @@
+import { computeApparentTemperature } from './feels-like';
 import type { ForecastPoint, SourceForecast } from './types';
 
 const YR_URL = 'https://api.met.no/weatherapi/locationforecast/2.0/compact';
@@ -55,6 +56,10 @@ export async function fetchYr(lat: number, lon: number, signal?: AbortSignal): P
     return {
       time: entry.time,
       temperature: instant.air_temperature ?? null,
+      apparentTemperature: computeApparentTemperature(
+        instant.air_temperature ?? null,
+        instant.wind_speed ?? null
+      ),
       windSpeed: instant.wind_speed ?? null,
       windGust: null,
       windDirection: instant.wind_from_direction ?? null,
