@@ -1,12 +1,17 @@
-import { Stack, useLocalSearchParams, usePathname, useRouter } from "expo-router";
+import {
+  Stack,
+  useLocalSearchParams,
+  usePathname,
+  useRouter,
+} from "expo-router";
 import { SymbolView } from "expo-symbols";
 import { useMemo, useRef } from "react";
 import {
-    Pressable,
-    RefreshControl,
-    ScrollView,
-    StyleSheet,
-    View,
+  Pressable,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  View,
 } from "react-native";
 
 import { FavoriteButton } from "@/components/favorite-button";
@@ -54,7 +59,7 @@ function CoursesBackButton() {
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={t('courseDetail.backToCourses')}
+      accessibilityLabel={t("courseDetail.backToCourses")}
       hitSlop={Spacing.two}
       onPress={() => {
         const isSessionEntry = getSessionEntryPath() === pathname;
@@ -103,7 +108,8 @@ export default function CourseDetailScreen() {
   });
 
   const distanceKm = course ? haversineKm(coords, course) : null;
-  const sun = course && hasHydrated ? getSunTimes(course.lat, course.lon) : null;
+  const sun =
+    course && hasHydrated ? getSunTimes(course.lat, course.lon) : null;
   const currentPoint = useMemo(
     () => (weather ? findCurrentPoint(weather.aggregated, now) : null),
     [weather, now],
@@ -140,7 +146,7 @@ export default function CourseDetailScreen() {
       <ThemedView style={styles.container}>
         <Stack.Screen
           options={{
-            title: t('courseDetail.courseNotFound'),
+            title: t("courseDetail.courseNotFound"),
             headerTitleAlign: "center",
             headerLeft: () => <CoursesBackButton />,
             headerLeftContainerStyle: styles.headerSideContainer,
@@ -148,7 +154,7 @@ export default function CourseDetailScreen() {
           }}
         />
         <ThemedText type="default" style={styles.notFound}>
-          {t('courseDetail.courseNotFoundBody')}
+          {t("courseDetail.courseNotFoundBody")}
         </ThemedText>
       </ThemedView>
     );
@@ -182,7 +188,7 @@ export default function CourseDetailScreen() {
               <ThemedText type="small" themeColor="textSecondary">
                 {course.city}
                 {distanceKm !== null
-                  ? ` · ${formatDistance(distanceKm)} ${t('courseDetail.away')}`
+                  ? ` · ${formatDistance(distanceKm)} ${t("courseDetail.away")}`
                   : ""}
               </ThemedText>
 
@@ -212,7 +218,9 @@ export default function CourseDetailScreen() {
                     themeColor="textSecondary"
                     style={styles.forecastRangeText}
                   >
-                    {t('courseDetail.forecastRange', { count: upcoming.length })}
+                    {t("courseDetail.forecastRange", {
+                      count: upcoming.length,
+                    })}
                   </ThemedText>
                 </View>
               )}
@@ -224,7 +232,9 @@ export default function CourseDetailScreen() {
 
           {playability && playability.reasons.length > 0 && (
             <ThemedText type="small" themeColor="textSecondary">
-              {playability.reasons.map((reason) => t(`playability.reasons.${reason}`)).join(", ")}
+              {playability.reasons
+                .map((reason) => t(`playability.reasons.${reason}`))
+                .join(", ")}
             </ThemedText>
           )}
 
@@ -250,7 +260,7 @@ export default function CourseDetailScreen() {
                 themeColor="textSecondary"
                 style={styles.infoText}
               >
-                {t('courseDetail.hourlyUnavailable')}
+                {t("courseDetail.hourlyUnavailable")}
               </ThemedText>
             </View>
           </ThemedView>
@@ -258,22 +268,26 @@ export default function CourseDetailScreen() {
           <>
             <ThemedView type="backgroundElement" style={styles.card}>
               <ThemedText type="smallBold" style={styles.cardTitle}>
-                {t('courseDetail.nextHours')}
+                {t("courseDetail.nextHours")}
               </ThemedText>
               {upcoming.length === 0 && !loading ? (
                 <ThemedText type="small" themeColor="textSecondary">
-                  {t('courseDetail.noForecastData')}
+                  {t("courseDetail.noForecastData")}
                 </ThemedText>
               ) : (
                 <View style={styles.hourlyBleed}>
-                  <HourlyStrip points={upcoming} lat={course.lat} lon={course.lon} />
+                  <HourlyStrip
+                    points={upcoming}
+                    lat={course.lat}
+                    lon={course.lon}
+                  />
                 </View>
               )}
             </ThemedView>
 
             <ThemedView type="backgroundElement" style={styles.card}>
               <ThemedText type="smallBold" style={styles.cardTitle}>
-                {t('courseDetail.bySource')}
+                {t("courseDetail.bySource")}
               </ThemedText>
               <SourceComparisonTable
                 sources={weather?.sources ?? []}
@@ -290,7 +304,7 @@ export default function CourseDetailScreen() {
           themeColor="textSecondary"
           style={styles.attribution}
         >
-          {t('courseDetail.attribution')}
+          {t("courseDetail.attribution")}
         </ThemedText>
       </ScrollView>
     </ThemedView>

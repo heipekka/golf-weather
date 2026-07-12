@@ -69,8 +69,8 @@ export function CourseCard({
   const [showHourly, setShowHourly] = useState(false);
   const theme = useTheme();
   const { t, locale } = useI18n();
-  const canShowHourly = !loading && hourly.length > 0 && !dailyOnly;
-  const showDailyOnlyNotice = !loading && dailyOnly;
+  const canShowHourly = !loading && !dailyOnly && hourly.length > 1;
+  const showDailyOnlyNotice = !loading && !canShowHourly && hourly.length > 0;
 
   return (
     <ThemedView type="backgroundElement" style={styles.card}>
