@@ -1,4 +1,4 @@
-import { Stack, useLocalSearchParams, useRouter } from "expo-router";
+import { Stack, useLocalSearchParams, usePathname, useRouter } from "expo-router";
 import { SymbolView } from "expo-symbols";
 import { useMemo, useRef } from "react";
 import {
@@ -24,6 +24,7 @@ import { useHasHydrated } from "@/hooks/use-color-scheme";
 import { useCourseWeather } from "@/hooks/use-course-weather";
 import { useCurrentHour } from "@/hooks/use-current-hour";
 import { useDarkScoring } from "@/hooks/use-dark-scoring";
+import { getSessionEntryPath } from "@/hooks/use-last-route";
 import { useLocation } from "@/hooks/use-location";
 import { resolveNow, useStartTime } from "@/hooks/use-start-time";
 import { useTheme } from "@/hooks/use-theme";
@@ -37,12 +38,16 @@ import { findCurrentPoint, hasHourlyData } from "@/lib/weather";
 
 const HOURS_SHOWN = 12;
 
-// Returns to the actual previous screen when there is navigation history
-// (e.g. Favorites -> course detail), falling back to the courses list when
-// there isn't one, such as when the screen is opened directly via a deep
-// link, a web refresh, or as the restored initial route.
+// Returns to the actual previous screen when this course page was reached
+// by navigating in-app (e.g. Favorites -> course detail). Goes to the
+// courses list only when this course page was the first page of the
+// session (opened directly via a deep link, a web refresh, or as the
+// restored initial route) — `router.canGoBack()` alone isn't a reliable
+// signal for that, since the `/` redirect to a stored route can leave a
+// history entry that makes it `true` with nothing meaningful behind it.
 function CoursesBackButton() {
   const router = useRouter();
+  const pathname = usePathname();
   const theme = useTheme();
   const { t } = useI18n();
 
@@ -51,7 +56,11 @@ function CoursesBackButton() {
       accessibilityRole="button"
       accessibilityLabel={t('courseDetail.backToCourses')}
       hitSlop={Spacing.two}
-      onPress={() => (router.canGoBack() ? router.back() : router.dismissTo("/courses"))}
+      onPress={() => {
+        const isSessionEntry = getSessionEntryPath() === pathname;
+        if (!isSessionEntry && router.canGoBack()) router.back();
+        else router.dismissTo("/courses");
+      }}
       style={({ pressed }) => [
         styles.backButton,
         pressed && styles.backButtonPressed,

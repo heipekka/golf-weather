@@ -103,8 +103,8 @@ export const fi = {
       Excellent: "Erinomainen",
       Good: "Hyvä",
       Fair: "Kohtalainen",
-      Hot: "Kuuma",
-      Sweltering: "Helle",
+      Hot: "Helle",
+      Sweltering: "Läkähdyttävä",
       Poor: "Huono",
       Bad: "Surkea",
       Dark: "Pimeä",
@@ -182,7 +182,8 @@ export const fi = {
   },
   bookmarks: {
     title: "Muistilista",
-    empty: "Ei muistilistan kenttiä vielä. Lisää kenttä ja ajankohta listalle merkkikuvakkeesta.",
+    empty:
+      "Ei muistilistan kenttiä vielä. Lisää kenttä ja ajankohta listalle merkkikuvakkeesta.",
     add: "Lisää muistilistalle",
     remove: "Poista muistilistalta",
     removeMessage: "Poistetaanko tämä muistilistalta?",
