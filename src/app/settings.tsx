@@ -1,10 +1,11 @@
 import Slider from '@react-native-community/slider';
-import { Stack, useRouter } from 'expo-router';
+import { Stack } from 'expo-router';
 import { SymbolView } from 'expo-symbols';
 import { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Switch, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { BackButton } from '@/components/back-button';
 import { LocationPicker } from '@/components/location-picker';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -298,32 +299,6 @@ function DistanceRangeSection() {
   );
 }
 
-function BackButton() {
-  const router = useRouter();
-  const theme = useTheme();
-
-  return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityLabel="Back"
-      hitSlop={Spacing.two}
-      onPress={() => {
-        if (router.canGoBack()) {
-          router.back();
-        } else {
-          router.replace('/courses');
-        }
-      }}
-      style={({ pressed }) => [styles.backButton, pressed && styles.backButtonPressed]}>
-      <SymbolView
-        name={{ ios: 'chevron.left', android: 'arrow_back', web: 'arrow_back' }}
-        size={22}
-        tintColor={theme.text}
-      />
-    </Pressable>
-  );
-}
-
 export default function SettingsScreen() {
   const { t } = useI18n();
   const [tab, setTab] = useState<SettingsTab>('user');
@@ -334,7 +309,7 @@ export default function SettingsScreen() {
         options={{
           title: t('settings.title'),
           headerTitleAlign: 'center',
-          headerLeft: () => <BackButton />,
+          headerLeft: () => <BackButton accessibilityLabel="Back" fallbackHref="/courses" />,
           headerLeftContainerStyle: styles.headerSideContainer,
           headerRightContainerStyle: styles.headerSideContainer,
         }}
@@ -393,14 +368,6 @@ const styles = StyleSheet.create({
   },
   optionPressed: {
     opacity: 0.7,
-  },
-  backButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.half,
-  },
-  backButtonPressed: {
-    opacity: 0.6,
   },
   headerSideContainer: {
     paddingHorizontal: Spacing.three,

@@ -1,9 +1,9 @@
-import { Redirect, Stack, useRouter } from 'expo-router';
-import { SymbolView } from 'expo-symbols';
+import { Redirect, Stack } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
 import { Platform, Pressable, ScrollView, Share, StyleSheet, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { BackButton } from '@/components/back-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
@@ -12,26 +12,6 @@ import { useI18n } from '@/i18n';
 import { formatDateTime } from '@/lib/format';
 import { isUsageUnlocked, setUsageUnlocked, verifyUsagePassword } from '@/lib/usage-auth';
 import { clearUsageLog, readUsageLog, summarizeUsage, type UsageLog, type UsageSummary } from '@/lib/usage-log';
-
-function BackButton() {
-  const router = useRouter();
-  const theme = useTheme();
-
-  return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityLabel="Back"
-      hitSlop={Spacing.two}
-      onPress={() => router.back()}
-      style={({ pressed }) => [styles.backButton, pressed && styles.backButtonPressed]}>
-      <SymbolView
-        name={{ ios: 'chevron.left', android: 'arrow_back', web: 'arrow_back' }}
-        size={22}
-        tintColor={theme.text}
-      />
-    </Pressable>
-  );
-}
 
 function PasswordGate({ onUnlock }: { onUnlock: () => void }) {
   const { t } = useI18n();
@@ -225,7 +205,7 @@ export default function UsageScreen() {
         options={{
           title: t('usage.title'),
           headerTitleAlign: 'center',
-          headerLeft: () => <BackButton />,
+          headerLeft: () => <BackButton accessibilityLabel="Back" fallbackHref="/courses" />,
           headerLeftContainerStyle: styles.headerSideContainer,
           headerRightContainerStyle: styles.headerSideContainer,
         }}
@@ -255,14 +235,6 @@ const styles = StyleSheet.create({
   },
   sectionHeading: {
     gap: Spacing.half,
-  },
-  backButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.half,
-  },
-  backButtonPressed: {
-    opacity: 0.6,
   },
   headerSideContainer: {
     paddingHorizontal: Spacing.three,

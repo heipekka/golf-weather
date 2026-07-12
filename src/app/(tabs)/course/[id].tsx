@@ -1,19 +1,9 @@
-import {
-  Stack,
-  useLocalSearchParams,
-  usePathname,
-  useRouter,
-} from "expo-router";
+import { Stack, useLocalSearchParams } from "expo-router";
 import { SymbolView } from "expo-symbols";
 import { useMemo, useRef } from "react";
-import {
-  Pressable,
-  RefreshControl,
-  ScrollView,
-  StyleSheet,
-  View,
-} from "react-native";
+import { RefreshControl, ScrollView, StyleSheet, View } from "react-native";
 
+import { BackButton } from "@/components/back-button";
 import { FavoriteButton } from "@/components/favorite-button";
 import { HourlyStrip } from "@/components/hourly-strip";
 import { PlayabilityBadge } from "@/components/playability-badge";
@@ -29,7 +19,6 @@ import { useHasHydrated } from "@/hooks/use-color-scheme";
 import { useCourseWeather } from "@/hooks/use-course-weather";
 import { useCurrentHour } from "@/hooks/use-current-hour";
 import { useDarkScoring } from "@/hooks/use-dark-scoring";
-import { getSessionEntryPath } from "@/hooks/use-last-route";
 import { useLocation } from "@/hooks/use-location";
 import { resolveNow, useStartTime } from "@/hooks/use-start-time";
 import { useTheme } from "@/hooks/use-theme";
@@ -42,43 +31,6 @@ import { getSunTimes } from "@/lib/sun";
 import { findCurrentPoint, hasHourlyData } from "@/lib/weather";
 
 const HOURS_SHOWN = 12;
-
-// Returns to the actual previous screen when this course page was reached
-// by navigating in-app (e.g. Favorites -> course detail). Goes to the
-// courses list only when this course page was the first page of the
-// session (opened directly via a deep link, a web refresh, or as the
-// restored initial route) — `router.canGoBack()` alone isn't a reliable
-// signal for that, since the `/` redirect to a stored route can leave a
-// history entry that makes it `true` with nothing meaningful behind it.
-function CoursesBackButton() {
-  const router = useRouter();
-  const pathname = usePathname();
-  const theme = useTheme();
-  const { t } = useI18n();
-
-  return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={t("courseDetail.backToCourses")}
-      hitSlop={Spacing.two}
-      onPress={() => {
-        const isSessionEntry = getSessionEntryPath() === pathname;
-        if (!isSessionEntry && router.canGoBack()) router.back();
-        else router.dismissTo("/courses");
-      }}
-      style={({ pressed }) => [
-        styles.backButton,
-        pressed && styles.backButtonPressed,
-      ]}
-    >
-      <SymbolView
-        name={{ ios: "chevron.left", android: "arrow_back", web: "arrow_back" }}
-        size={22}
-        tintColor={theme.text}
-      />
-    </Pressable>
-  );
-}
 
 export default function CourseDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -148,7 +100,12 @@ export default function CourseDetailScreen() {
           options={{
             title: t("courseDetail.courseNotFound"),
             headerTitleAlign: "center",
-            headerLeft: () => <CoursesBackButton />,
+            headerLeft: () => (
+              <BackButton
+                accessibilityLabel={t("courseDetail.backToCourses")}
+                fallbackHref="/courses"
+              />
+            ),
             headerLeftContainerStyle: styles.headerSideContainer,
             headerRightContainerStyle: styles.headerSideContainer,
           }}
@@ -166,7 +123,12 @@ export default function CourseDetailScreen() {
         options={{
           title: course.name,
           headerTitleAlign: "center",
-          headerLeft: () => <CoursesBackButton />,
+          headerLeft: () => (
+            <BackButton
+              accessibilityLabel={t("courseDetail.backToCourses")}
+              fallbackHref="/courses"
+            />
+          ),
           headerRight: () => <FavoriteButton courseId={course.id} />,
           headerLeftContainerStyle: styles.headerSideContainer,
           headerRightContainerStyle: styles.headerSideContainer,
@@ -378,14 +340,6 @@ const styles = StyleSheet.create({
   notFound: {
     padding: Spacing.four,
     textAlign: "center",
-  },
-  backButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: Spacing.half,
-  },
-  backButtonPressed: {
-    opacity: 0.6,
   },
   headerSideContainer: {
     paddingHorizontal: Spacing.three,

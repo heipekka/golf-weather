@@ -8,7 +8,6 @@ import { SortModeProvider } from '@/hooks/use-course-sort';
 import { DarkScoringProvider } from '@/hooks/use-dark-scoring';
 import { DistanceFilterProvider } from '@/hooks/use-distance-filter';
 import { FavoritesProvider } from '@/hooks/use-favorites';
-import { useTrackLastRoute } from '@/hooks/use-last-route';
 import { LocationProvider } from '@/hooks/use-location';
 import { StartTimeProvider } from '@/hooks/use-start-time';
 import { ThemeModeProvider, useResolvedColorScheme } from '@/hooks/use-theme-mode';
@@ -21,7 +20,6 @@ SplashScreen.preventAutoHideAsync();
 // expo-router's own ThemeProvider. Must render inside ThemeModeProvider.
 function ThemedApp() {
   const resolvedScheme = useResolvedColorScheme();
-  useTrackLastRoute();
 
   return (
     <ThemeProvider value={resolvedScheme === 'dark' ? DarkTheme : DefaultTheme}>
