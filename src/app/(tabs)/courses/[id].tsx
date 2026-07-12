@@ -29,10 +29,10 @@ import { resolveNow, useStartTime } from "@/hooks/use-start-time";
 import { useTheme } from "@/hooks/use-theme";
 import { useWebPullToRefresh } from "@/hooks/use-web-pull-to-refresh";
 import { useI18n } from "@/i18n";
+import { currentPlayability } from "@/lib/course-sort";
 import { formatDistance } from "@/lib/format";
 import { haversineKm } from "@/lib/geo";
-import { scorePlayability } from "@/lib/golf";
-import { getSunTimes, isNight } from "@/lib/sun";
+import { getSunTimes } from "@/lib/sun";
 import { findCurrentPoint, hasHourlyData } from "@/lib/weather";
 
 const HOURS_SHOWN = 12;
@@ -99,17 +99,13 @@ export default function CourseDetailScreen() {
     () => (weather ? findCurrentPoint(weather.aggregated, now) : null),
     [weather, now],
   );
-  const playability = currentPoint
-    ? scorePlayability({
-        temperature: currentPoint.temperature,
-        windSpeed: currentPoint.windSpeed,
-        windGust: currentPoint.windGust,
-        precipitation: currentPoint.precipitation,
-        precipitationProbability: currentPoint.precipitationProbability,
-        cloudCover: currentPoint.cloudCover,
-        isDark: darkScoringEnabled && !!course && isNight(currentPoint.time, course.lat, course.lon),
-      })
-    : null;
+  const playability = currentPlayability(
+    { weather, loading, error },
+    course?.lat ?? 0,
+    course?.lon ?? 0,
+    now,
+    darkScoringEnabled,
+  );
 
   const upcoming = useMemo(() => {
     if (!weather) return [];
@@ -169,13 +165,23 @@ export default function CourseDetailScreen() {
           <RefreshControl refreshing={loading} onRefresh={refresh} />
         }
       >
+        <StartTimeButton />
+
         <View style={styles.headerBlock}>
-          <ThemedText type="small" themeColor="textSecondary">
-            {course.city}
-            {distanceKm !== null
-              ? ` · ${formatDistance(distanceKm)} ${t('courseDetail.away')}`
-              : ""}
-          </ThemedText>
+          <View style={styles.cityRow}>
+            <ThemedText type="small" themeColor="textSecondary">
+              {course.city}
+              {distanceKm !== null
+                ? ` · ${formatDistance(distanceKm)} ${t('courseDetail.away')}`
+                : ""}
+            </ThemedText>
+
+            {!dailyOnly && upcoming.length > 0 && (
+              <ThemedText type="small" themeColor="textSecondary">
+                {t('courseDetail.forecastRange', { count: upcoming.length })}
+              </ThemedText>
+            )}
+          </View>
 
           <View style={styles.summaryRow}>
             <WeatherSummary
@@ -204,8 +210,6 @@ export default function CourseDetailScreen() {
         </View>
 
         {sun && <SunTimes {...sun} variant="detailed" />}
-
-        <StartTimeButton />
 
         {dailyOnly ? (
           <ThemedView type="backgroundElement" style={styles.card}>
@@ -279,6 +283,12 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   headerBlock: {
+    gap: Spacing.two,
+  },
+  cityRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     gap: Spacing.two,
   },
   summaryRow: {

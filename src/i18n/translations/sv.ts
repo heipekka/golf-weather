@@ -31,6 +31,7 @@ export const sv: TranslationDictionary = {
     courseNotFound: 'Banan hittades inte',
     courseNotFoundBody: 'Vi kunde inte hitta den golfbanan.',
     away: 'bort',
+    forecastRange: 'Nästa {count} timmar',
     nextHours: 'Kommande timmar (kombinerat medelvärde)',
     noForecastData: 'Ingen prognosdata tillgänglig.',
     bySource: 'Per källa (kommande timmar)',

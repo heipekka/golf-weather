@@ -31,6 +31,7 @@ export const et: TranslationDictionary = {
     courseNotFound: 'Väljakut ei leitud',
     courseNotFoundBody: 'Me ei leidnud seda golfiväljakut.',
     away: 'kaugusel',
+    forecastRange: 'Järgmised {count} tundi',
     nextHours: 'Järgmised tunnid (koondkeskmine)',
     noForecastData: 'Prognoosiandmed ei ole saadaval.',
     bySource: 'Allikate kaupa (järgmised tunnid)',

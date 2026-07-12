@@ -31,6 +31,7 @@ export const no: TranslationDictionary = {
     courseNotFound: 'Banen ble ikke funnet',
     courseNotFoundBody: 'Vi fant ikke den golfbanen.',
     away: 'unna',
+    forecastRange: 'Neste {count} timer',
     nextHours: 'Neste timer (kombinert gjennomsnitt)',
     noForecastData: 'Ingen prognosedata tilgjengelig.',
     bySource: 'Per kilde (neste timer)',

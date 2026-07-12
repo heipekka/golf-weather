@@ -6,7 +6,7 @@ import { useDarkScoring } from "@/hooks/use-dark-scoring";
 import { useTheme } from "@/hooks/use-theme";
 import { useI18n } from "@/i18n";
 import {
-  formatHour,
+  formatHourShort,
   formatPrecipitation,
   formatTemperature,
   formatWind,
@@ -98,7 +98,7 @@ export function SourceComparisonTable({
           >
             <View style={[styles.cell, styles.timeColumn]}>
               <ThemedText type="smallBold" style={styles.timeText}>
-                {formatHour(hour, locale)}
+                {formatHourShort(hour, locale)}
               </ThemedText>
             </View>
             {indexed.map(({ source, byHour }) => {

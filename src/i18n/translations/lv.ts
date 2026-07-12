@@ -31,6 +31,7 @@ export const lv: TranslationDictionary = {
     courseNotFound: 'Laukums netika atrasts',
     courseNotFoundBody: 'Mēs neatradām šo golfa laukumu.',
     away: 'attālumā',
+    forecastRange: 'Nākamās {count} stundas',
     nextHours: 'Nākamās stundas (kombinētais vidējais)',
     noForecastData: 'Prognozes dati nav pieejami.',
     bySource: 'Pēc avota (nākamās stundas)',

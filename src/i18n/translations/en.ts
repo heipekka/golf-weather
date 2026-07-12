@@ -31,6 +31,7 @@ export const en: TranslationDictionary = {
     courseNotFound: "Course not found",
     courseNotFoundBody: "We couldn't find that golf course.",
     away: "away",
+    forecastRange: "Next {count} hours",
     nextHours: "Combined average",
     noForecastData: "No forecast data available.",
     bySource: "By source",

@@ -31,6 +31,7 @@ export const da: TranslationDictionary = {
     courseNotFound: 'Banen blev ikke fundet',
     courseNotFoundBody: 'Vi kunne ikke finde den golfbane.',
     away: 'væk',
+    forecastRange: 'Næste {count} timer',
     nextHours: 'Kommende timer (kombineret gennemsnit)',
     noForecastData: 'Ingen prognosedata tilgængelig.',
     bySource: 'Per kilde (kommende timer)',

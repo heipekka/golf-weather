@@ -30,6 +30,7 @@ export const fi = {
     courseNotFound: "Kenttää ei löytynut",
     courseNotFoundBody: "Emme löytäneet kyseistä golfkenttää.",
     away: "päässä",
+    forecastRange: "Seuraavat {count} tuntia",
     nextHours: "Seuraavat tunnit (yhdistetty keskiarvo)",
     noForecastData: "Ennustetietoja ei saatavilla.",
     bySource: "Lähteittäin (seuraavat tunnit)",

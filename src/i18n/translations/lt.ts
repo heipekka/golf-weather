@@ -31,6 +31,7 @@ export const lt: TranslationDictionary = {
     courseNotFound: 'Aikštynas nerastas',
     courseNotFoundBody: 'Nepavyko rasti šio golfo aikštyno.',
     away: 'atstumu',
+    forecastRange: 'Kitos {count} val.',
     nextHours: 'Artimiausios valandos (bendras vidurkis)',
     noForecastData: 'Prognozės duomenų nėra.',
     bySource: 'Pagal šaltinį (artimiausios valandos)',
