@@ -12,6 +12,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
 import { golfCourses } from '@/data/golf-courses';
+import { floorToHour } from '@/hooks/use-bookmarks';
 import { useHasHydrated } from '@/hooks/use-color-scheme';
 import { useCourseSort } from '@/hooks/use-course-sort';
 import { useCoursesWeather } from '@/hooks/use-courses-weather';
@@ -156,6 +157,7 @@ export default function FavoritesScreen() {
                 sun={sun}
                 loading={!entry || entry.loading}
                 dailyOnly={dailyOnly}
+                bookmarkDateTime={floorToHour(now)}
               />
             );
           }}

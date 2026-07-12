@@ -173,12 +173,22 @@ export const en: TranslationDictionary = {
   tabs: {
     courses: "Courses",
     favorites: "Favorites",
+    bookmarks: "Bookmarks",
   },
   favorites: {
     title: "Favorites",
     empty: "No favorites yet. Add courses to your favorites with the star.",
     addFavorite: "Add to favorites",
     removeFavorite: "Remove from favorites",
+  },
+  bookmarks: {
+    title: "Bookmarks",
+    empty: "No bookmarks yet. Add a course and time to your bookmarks with the bookmark icon.",
+    add: "Add bookmark",
+    remove: "Remove bookmark",
+    removeMessage: "Remove this bookmark?",
+    confirmRemove: "Remove",
+    cancel: "Cancel",
   },
   createdBy: {
     credit: "Created by Pekka Heikkinen",

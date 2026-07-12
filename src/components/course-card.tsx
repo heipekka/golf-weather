@@ -8,7 +8,9 @@ import { Spacing } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
 import { useI18n } from "@/i18n";
 import {
+  formatDayLabel,
   formatDistance,
+  formatHour,
   formatPrecipitationRange,
   formatTemperatureAverage,
   formatWindRange,
@@ -16,6 +18,7 @@ import {
 import type { Playability } from "@/lib/golf";
 import type { SunTimes as SunTimesData } from "@/lib/sun";
 import type { AggregatedPoint } from "@/lib/weather";
+import { BookmarkButton } from "./bookmark-button";
 import { FavoriteButton } from "./favorite-button";
 import { HourlyStrip } from "./hourly-strip";
 import { PlayabilityBadge } from "./playability-badge";
@@ -38,6 +41,12 @@ export type CourseCardProps = {
   loading?: boolean;
   /** True when the sources only returned daily (not hourly) data. */
   dailyOnly?: boolean;
+  /** When set, shows a bookmark button that adds/removes a bookmark for this course at this datetime. */
+  bookmarkDateTime?: Date;
+  /** When true, shows `bookmarkDateTime` under the course name (used on the bookmarks list). */
+  showBookmarkDateTime?: boolean;
+  /** When set, the footer shows only a remove button (calling this) instead of the favorite/bookmark buttons — used on the bookmarks list. */
+  onRemoveBookmark?: () => void;
 };
 
 export function CourseCard({
@@ -53,19 +62,32 @@ export function CourseCard({
   sun,
   loading,
   dailyOnly,
+  bookmarkDateTime,
+  showBookmarkDateTime,
+  onRemoveBookmark,
 }: CourseCardProps) {
   const [showHourly, setShowHourly] = useState(false);
   const theme = useTheme();
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const canShowHourly = !loading && hourly.length > 0 && !dailyOnly;
   const showDailyOnlyNotice = !loading && dailyOnly;
 
   return (
     <ThemedView type="backgroundElement" style={styles.card}>
-      <Link href={`/courses/${id}`} asChild>
+      <Link href={`/course/${id}`} asChild>
         <Pressable style={({ pressed }) => pressed && styles.pressed}>
+          {showBookmarkDateTime && bookmarkDateTime && (
+            <ThemedText type="smallBold" style={styles.bookmarkHeading} numberOfLines={1}>
+              {formatDayLabel(bookmarkDateTime.toISOString(), locale)} {formatHour(bookmarkDateTime.toISOString(), locale)}
+            </ThemedText>
+          )}
+
           <View style={styles.nameRow}>
-            <ThemedText type="smallBold" style={styles.name} numberOfLines={1}>
+            <ThemedText
+              type={showBookmarkDateTime && bookmarkDateTime ? "small" : "smallBold"}
+              style={styles.name}
+              numberOfLines={1}
+            >
               {name}
             </ThemedText>
             <ThemedText
@@ -192,7 +214,28 @@ export function CourseCard({
         ) : (
           <View />
         )}
-        <FavoriteButton courseId={id} />
+        <View style={styles.footerButtons}>
+          {onRemoveBookmark ? (
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={t('bookmarks.remove')}
+              hitSlop={Spacing.two}
+              onPress={onRemoveBookmark}
+              style={({ pressed }) => [styles.removeButton, pressed && styles.pressed]}
+            >
+              <SymbolView
+                name={{ ios: "trash", android: "delete", web: "delete" }}
+                size={20}
+                tintColor={theme.textSecondary}
+              />
+            </Pressable>
+          ) : (
+            <>
+              <FavoriteButton courseId={id} />
+              {bookmarkDateTime && <BookmarkButton courseId={id} datetime={bookmarkDateTime} />}
+            </>
+          )}
+        </View>
       </View>
 
       {canShowHourly && showHourly && (
@@ -224,6 +267,9 @@ const styles = StyleSheet.create({
   },
   name: {
     flexShrink: 1,
+  },
+  bookmarkHeading: {
+    marginBottom: Spacing.one,
   },
   header: {
     flexDirection: "row",
@@ -279,6 +325,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: Spacing.one,
+  },
+  footerButtons: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.two,
+  },
+  removeButton: {
+    alignItems: "center",
+    justifyContent: "center",
   },
   hourlyBleed: {
     marginHorizontal: -Spacing.three,

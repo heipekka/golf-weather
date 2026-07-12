@@ -173,12 +173,22 @@ export const lv: TranslationDictionary = {
   tabs: {
     courses: 'Laukumi',
     favorites: 'Izlase',
+    bookmarks: 'Grāmatzīmes',
   },
   favorites: {
     title: 'Izlase',
     empty: 'Izlasē vēl nav laukumu. Pievienojiet laukumus izlasei ar zvaigznīti.',
     addFavorite: 'Pievienot izlasei',
     removeFavorite: 'Noņemt no izlases',
+  },
+  bookmarks: {
+    title: 'Grāmatzīmes',
+    empty: 'Grāmatzīmju vēl nav. Pievienojiet laukumu un laiku ar grāmatzīmes ikonu.',
+    add: 'Pievienot grāmatzīmi',
+    remove: 'Noņemt grāmatzīmi',
+    removeMessage: 'Noņemt šo grāmatzīmi?',
+    confirmRemove: 'Noņemt',
+    cancel: 'Atcelt',
   },
   createdBy: {
     credit: 'Izveidojis Pekka Heikkinen',

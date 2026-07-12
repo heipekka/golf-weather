@@ -173,12 +173,22 @@ export const sv: TranslationDictionary = {
   tabs: {
     courses: 'Banor',
     favorites: 'Favoriter',
+    bookmarks: 'Bokmärken',
   },
   favorites: {
     title: 'Favoriter',
     empty: 'Inga favoriter än. Lägg till banor som favoriter med stjärnan.',
     addFavorite: 'Lägg till som favorit',
     removeFavorite: 'Ta bort från favoriter',
+  },
+  bookmarks: {
+    title: 'Bokmärken',
+    empty: 'Inga bokmärken än. Lägg till en bana och tid med bokmärkesikonen.',
+    add: 'Lägg till bokmärke',
+    remove: 'Ta bort bokmärke',
+    removeMessage: 'Ta bort detta bokmärke?',
+    confirmRemove: 'Ta bort',
+    cancel: 'Avbryt',
   },
   createdBy: {
     credit: 'Skapad av Pekka Heikkinen',

@@ -43,8 +43,9 @@ Finnish golf course weather app. Lists ~99 static golf courses, fetches forecast
 ```
 /                    -> redirect to /courses
 /courses             -> course list (tab)
-/courses/[id]        -> course detail (stack)
+/course/[id]         -> course detail (hidden tab, keeps bottom nav visible)
 /favorites           -> favorites list (tab)
+/bookmarks           -> bookmarks list (tab)
 /settings            -> settings (root stack)
 ```
 

@@ -30,7 +30,7 @@ import { useTheme } from "@/hooks/use-theme";
 import { useWebPullToRefresh } from "@/hooks/use-web-pull-to-refresh";
 import { useI18n } from "@/i18n";
 import { currentPlayability } from "@/lib/course-sort";
-import { formatDistance } from "@/lib/format";
+import { formatDate, formatDistance, formatHour } from "@/lib/format";
 import { haversineKm } from "@/lib/geo";
 import { getSunTimes } from "@/lib/sun";
 import { findCurrentPoint, hasHourlyData } from "@/lib/weather";
@@ -71,7 +71,7 @@ export default function CourseDetailScreen() {
   const course = getCourseById(id);
   const { coords } = useLocation();
   const { darkScoringEnabled } = useDarkScoring();
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const theme = useTheme();
   const hourTick = useCurrentHour();
   const hasHydrated = useHasHydrated();
@@ -168,32 +168,49 @@ export default function CourseDetailScreen() {
         <StartTimeButton />
 
         <View style={styles.headerBlock}>
-          <View style={styles.cityRow}>
-            <ThemedText type="small" themeColor="textSecondary">
-              {course.city}
-              {distanceKm !== null
-                ? ` · ${formatDistance(distanceKm)} ${t('courseDetail.away')}`
-                : ""}
-            </ThemedText>
-
-            {!dailyOnly && upcoming.length > 0 && (
+          <View style={styles.headerColumns}>
+            <View style={styles.headerColumnLeft}>
               <ThemedText type="small" themeColor="textSecondary">
-                {t('courseDetail.forecastRange', { count: upcoming.length })}
+                {course.city}
+                {distanceKm !== null
+                  ? ` · ${formatDistance(distanceKm)} ${t('courseDetail.away')}`
+                  : ""}
               </ThemedText>
-            )}
-          </View>
 
-          <View style={styles.summaryRow}>
-            <WeatherSummary
-              temperature={currentPoint?.temperature ?? null}
-              apparentTemperature={currentPoint?.apparentTemperature ?? null}
-              windSpeed={currentPoint?.windSpeed ?? null}
-              precipitation={currentPoint?.precipitation ?? null}
-              cloudCover={currentPoint?.cloudCover ?? null}
-              size="large"
-              loading={loading && !weather}
-            />
-            {playability && <PlayabilityBadge playability={playability} />}
+              <WeatherSummary
+                temperature={currentPoint?.temperature ?? null}
+                apparentTemperature={currentPoint?.apparentTemperature ?? null}
+                windSpeed={currentPoint?.windSpeed ?? null}
+                precipitation={currentPoint?.precipitation ?? null}
+                cloudCover={currentPoint?.cloudCover ?? null}
+                size="large"
+                loading={loading && !weather}
+              />
+            </View>
+
+            <View style={styles.headerColumnRight}>
+              {!dailyOnly && upcoming.length > 0 && (
+                <View style={styles.forecastRangeBlock}>
+                  <ThemedText
+                    type="small"
+                    themeColor="textSecondary"
+                    style={styles.forecastRangeText}
+                  >
+                    {`${formatDate(upcoming[0].time, locale)} ${formatHour(upcoming[0].time, locale)}`}
+                  </ThemedText>
+                  <ThemedText
+                    type="small"
+                    themeColor="textSecondary"
+                    style={styles.forecastRangeText}
+                  >
+                    {t('courseDetail.forecastRange', { count: upcoming.length })}
+                  </ThemedText>
+                </View>
+              )}
+              <View style={styles.badgeCenter}>
+                {playability && <PlayabilityBadge playability={playability} />}
+              </View>
+            </View>
           </View>
 
           {playability && playability.reasons.length > 0 && (
@@ -285,16 +302,32 @@ const styles = StyleSheet.create({
   headerBlock: {
     gap: Spacing.two,
   },
-  cityRow: {
+  headerColumns: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
+    alignItems: "stretch",
     gap: Spacing.two,
   },
-  summaryRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+  headerColumnLeft: {
+    flex: 1,
+    gap: Spacing.one,
+  },
+  headerColumnRight: {
+    flexShrink: 0,
+    alignItems: "flex-end",
+  },
+  forecastRangeBlock: {
+    flexShrink: 0,
+    alignItems: "flex-end",
+  },
+  badgeCenter: {
+    flex: 1,
+    alignSelf: "stretch",
+    justifyContent: "center",
+    alignItems: "flex-end",
+  },
+  forecastRangeText: {
+    textAlign: "right",
   },
   card: {
     borderRadius: Spacing.three,

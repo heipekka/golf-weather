@@ -26,7 +26,7 @@ export function PlayabilityBadge({ playability }: { playability: Playability }) 
 
   const color = PlayabilityColors[playability.label];
   return (
-    <View style={[styles.badge, { backgroundColor: `${color}26` }]}>
+    <View style={[styles.badge, { backgroundColor: `${color}40` }]}>
       <ThemedText type="smallBold" style={{ color }}>
         {t(`playability.labels.${playability.label}`)}
       </ThemedText>
@@ -46,7 +46,7 @@ function BadgeHalf({
   const color = PlayabilityColors[label];
 
   return (
-    <View style={[styles.half, style, { backgroundColor: `${color}26` }]}>
+    <View style={[styles.half, style, { backgroundColor: `${color}40` }]}>
       <ThemedText type="smallBold" style={{ color }}>
         {text}
       </ThemedText>

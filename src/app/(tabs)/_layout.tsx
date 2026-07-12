@@ -12,6 +12,7 @@ export default function TabsLayout() {
 
   return (
     <Tabs
+      backBehavior="history"
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: theme.text,
@@ -37,6 +38,25 @@ export default function TabsLayout() {
               tintColor={color}
             />
           ),
+          headerShown: true,
+          headerTitle: t("app.title"),
+          headerTitleAlign: "center",
+          headerRight: () => (
+            <Link href="/settings" asChild>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={t("courses.openSettings")}
+                hitSlop={Spacing.two}
+                style={({ pressed }) => [styles.settingsButton, pressed && styles.settingsButtonPressed]}>
+                <SymbolView
+                  name={{ ios: "gearshape", android: "settings", web: "settings" }}
+                  size={24}
+                  tintColor={theme.textSecondary}
+                />
+              </Pressable>
+            </Link>
+          ),
+          headerRightContainerStyle: styles.headerSideContainer,
         }}
       />
       <Tabs.Screen
@@ -75,6 +95,43 @@ export default function TabsLayout() {
           headerRightContainerStyle: styles.headerSideContainer,
         }}
       />
+      <Tabs.Screen
+        name="bookmarks"
+        options={{
+          title: t("tabs.bookmarks"),
+          tabBarIcon: ({ color, focused }) => (
+            <SymbolView
+              name={{
+                ios: focused ? "bookmark.fill" : "bookmark",
+                android: "bookmark",
+                web: "bookmark",
+              }}
+              size={22}
+              tintColor={color}
+            />
+          ),
+          headerShown: true,
+          headerTitle: t("bookmarks.title"),
+          headerTitleAlign: "center",
+          headerRight: () => (
+            <Link href="/settings" asChild>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={t("courses.openSettings")}
+                hitSlop={Spacing.two}
+                style={({ pressed }) => [styles.settingsButton, pressed && styles.settingsButtonPressed]}>
+                <SymbolView
+                  name={{ ios: "gearshape", android: "settings", web: "settings" }}
+                  size={24}
+                  tintColor={theme.textSecondary}
+                />
+              </Pressable>
+            </Link>
+          ),
+          headerRightContainerStyle: styles.headerSideContainer,
+        }}
+      />
+      <Tabs.Screen name="course" options={{ href: null }} />
     </Tabs>
   );
 }

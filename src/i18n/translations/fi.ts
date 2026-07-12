@@ -172,12 +172,22 @@ export const fi = {
   tabs: {
     courses: "Kentät",
     favorites: "Suosikit",
+    bookmarks: "Muistilista",
   },
   favorites: {
     title: "Suosikit",
     empty: "Ei suosikkeja vielä. Lisää kenttiä suosikeiksi tähdellä.",
     addFavorite: "Lisää suosikkeihin",
     removeFavorite: "Poista suosikeista",
+  },
+  bookmarks: {
+    title: "Muistilista",
+    empty: "Ei muistilistan kenttiä vielä. Lisää kenttä ja ajankohta listalle merkkikuvakkeesta.",
+    add: "Lisää muistilistalle",
+    remove: "Poista muistilistalta",
+    removeMessage: "Poistetaanko tämä muistilistalta?",
+    confirmRemove: "Poista",
+    cancel: "Peruuta",
   },
   createdBy: {
     credit: "Tehnyt Pekka Heikkinen",

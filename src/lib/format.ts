@@ -60,6 +60,11 @@ export function formatHour(iso: string, locale: Locale = 'fi-FI'): string {
   return new Date(iso).toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' });
 }
 
+/** Formats an ISO timestamp as a locale-numeric date, e.g. "12.7.2026". */
+export function formatDate(iso: string, locale: Locale = 'fi-FI'): string {
+  return new Date(iso).toLocaleDateString(locale);
+}
+
 /** Just the hour, e.g. "14", for compact strips/columns. */
 export function formatHourShort(iso: string, locale: Locale = 'fi-FI'): string {
   return new Date(iso).toLocaleTimeString(locale, { hour: '2-digit' }).replace(/\D/g, '');

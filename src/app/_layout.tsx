@@ -3,6 +3,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 
 import { AnimatedSplashOverlay } from '@/components/animated-icon';
+import { BookmarksProvider } from '@/hooks/use-bookmarks';
 import { SortModeProvider } from '@/hooks/use-course-sort';
 import { DarkScoringProvider } from '@/hooks/use-dark-scoring';
 import { DistanceFilterProvider } from '@/hooks/use-distance-filter';
@@ -44,17 +45,19 @@ export default function RootLayout() {
     <LanguageProvider>
       <LocationProvider>
         <FavoritesProvider>
-          <SortModeProvider>
-            <DarkScoringProvider>
-              <StartTimeProvider>
-                <DistanceFilterProvider>
-                  <ThemeModeProvider>
-                    <ThemedApp />
-                  </ThemeModeProvider>
-                </DistanceFilterProvider>
-              </StartTimeProvider>
-            </DarkScoringProvider>
-          </SortModeProvider>
+          <BookmarksProvider>
+            <SortModeProvider>
+              <DarkScoringProvider>
+                <StartTimeProvider>
+                  <DistanceFilterProvider>
+                    <ThemeModeProvider>
+                      <ThemedApp />
+                    </ThemeModeProvider>
+                  </DistanceFilterProvider>
+                </StartTimeProvider>
+              </DarkScoringProvider>
+            </SortModeProvider>
+          </BookmarksProvider>
         </FavoritesProvider>
       </LocationProvider>
     </LanguageProvider>

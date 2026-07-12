@@ -1,4 +1,3 @@
-import { Link, Stack } from 'expo-router';
 import { SymbolView } from 'expo-symbols';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import {
@@ -24,6 +23,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
 import { golfCourses } from '@/data/golf-courses';
+import { floorToHour } from '@/hooks/use-bookmarks';
 import { useHasHydrated } from '@/hooks/use-color-scheme';
 import { useCourseSort, useSortModeUrlSync } from '@/hooks/use-course-sort';
 import { useCoursesWeather } from '@/hooks/use-courses-weather';
@@ -149,28 +149,6 @@ export default function CoursesScreen() {
 
   return (
     <ThemedView style={styles.container}>
-      <Stack.Screen
-        options={{
-          title: t('app.title'),
-          headerTitleAlign: 'center',
-          headerRight: () => (
-            <Link href="/settings" asChild>
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel={t('courses.openSettings')}
-                hitSlop={Spacing.two}
-                style={({ pressed }) => [styles.settingsButton, pressed && styles.settingsButtonPressed]}>
-                <SymbolView
-                  name={{ ios: 'gearshape', android: 'settings', web: 'settings' }}
-                  size={24}
-                  tintColor={theme.textSecondary}
-                />
-              </Pressable>
-            </Link>
-          ),
-          headerRightContainerStyle: styles.headerSideContainer,
-        }}
-      />
       <SafeAreaView style={styles.safeArea}>
         {pullToRefreshIndicator}
         <FlatList
@@ -222,7 +200,7 @@ export default function CoursesScreen() {
                 <Pressable
                   accessibilityRole="button"
                   accessibilityLabel={deviceMovedFar ? t('courses.locationMoved') : t('courses.refreshOrder')}
-                  style={({ pressed }) => [styles.refreshOrderButton, pressed && styles.settingsButtonPressed]}
+                  style={({ pressed }) => [styles.refreshOrderButton, pressed && styles.pressed]}
                   onPress={deviceMovedFar ? refresh : refreshOrder}>
                   <SymbolView
                     name={{ ios: 'arrow.clockwise', android: 'refresh', web: 'refresh' }}
@@ -270,6 +248,7 @@ export default function CoursesScreen() {
                 sun={sun}
                 loading={!entry || entry.loading}
                 dailyOnly={dailyOnly}
+                bookmarkDateTime={floorToHour(now)}
               />
             );
           }}
@@ -282,7 +261,7 @@ export default function CoursesScreen() {
             style={({ pressed }) => [
               styles.scrollTopButton,
               { backgroundColor: theme.backgroundElement },
-              pressed && styles.settingsButtonPressed,
+              pressed && styles.pressed,
             ]}>
             <SymbolView
               name={{ ios: 'arrow.up', android: 'arrow_upward', web: 'arrow_upward' }}
@@ -323,14 +302,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingTop: Spacing.four,
   },
-  settingsButton: {
-    padding: Spacing.one,
-  },
-  settingsButtonPressed: {
+  pressed: {
     opacity: 0.6,
-  },
-  headerSideContainer: {
-    paddingHorizontal: Spacing.three,
   },
   refreshOrderButton: {
     flexDirection: 'row',

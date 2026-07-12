@@ -173,12 +173,22 @@ export const lt: TranslationDictionary = {
   tabs: {
     courses: 'Aikštynai',
     favorites: 'Mėgstami',
+    bookmarks: 'Žymelės',
   },
   favorites: {
     title: 'Mėgstami',
     empty: 'Kol kas nėra mėgstamų. Pridėkite aikštynus prie mėgstamų su žvaigždute.',
     addFavorite: 'Pridėti prie mėgstamų',
     removeFavorite: 'Pašalinti iš mėgstamų',
+  },
+  bookmarks: {
+    title: 'Žymelės',
+    empty: 'Kol kas nėra žymelių. Pridėkite aikštyną ir laiką su žymelės ženkleliu.',
+    add: 'Pridėti žymelę',
+    remove: 'Pašalinti žymelę',
+    removeMessage: 'Pašalinti šią žymelę?',
+    confirmRemove: 'Pašalinti',
+    cancel: 'Atšaukti',
   },
   createdBy: {
     credit: 'Sukūrė Pekka Heikkinen',

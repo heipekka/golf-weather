@@ -173,12 +173,22 @@ export const et: TranslationDictionary = {
   tabs: {
     courses: 'Väljakud',
     favorites: 'Lemmikud',
+    bookmarks: 'Järjehoidjad',
   },
   favorites: {
     title: 'Lemmikud',
     empty: 'Lemmikuid veel ei ole. Lisa väljakuid lemmikutesse tähega.',
     addFavorite: 'Lisa lemmikutesse',
     removeFavorite: 'Eemalda lemmikutest',
+  },
+  bookmarks: {
+    title: 'Järjehoidjad',
+    empty: 'Järjehoidjaid veel ei ole. Lisa väljak ja aeg järjehoidjaikooniga.',
+    add: 'Lisa järjehoidja',
+    remove: 'Eemalda järjehoidja',
+    removeMessage: 'Eemaldada see järjehoidja?',
+    confirmRemove: 'Eemalda',
+    cancel: 'Tühista',
   },
   createdBy: {
     credit: 'Loonud Pekka Heikkinen',
