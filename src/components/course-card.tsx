@@ -45,6 +45,8 @@ export type CourseCardProps = {
   bookmarkDateTime?: Date;
   /** When true, shows `bookmarkDateTime` under the course name (used on the bookmarks list). */
   showBookmarkDateTime?: boolean;
+  /** When true, shows a "now" label instead of the formatted `bookmarkDateTime`. */
+  bookmarkIsNow?: boolean;
   /** When set, the footer shows only a remove button (calling this) instead of the favorite/bookmark buttons — used on the bookmarks list. */
   onRemoveBookmark?: () => void;
 };
@@ -64,6 +66,7 @@ export function CourseCard({
   dailyOnly,
   bookmarkDateTime,
   showBookmarkDateTime,
+  bookmarkIsNow,
   onRemoveBookmark,
 }: CourseCardProps) {
   const [showHourly, setShowHourly] = useState(false);
@@ -74,31 +77,41 @@ export function CourseCard({
 
   return (
     <ThemedView type="backgroundElement" style={styles.card}>
+      {!onRemoveBookmark && (
+        <View style={styles.favoriteCorner}>
+          <FavoriteButton courseId={id} />
+        </View>
+      )}
+
       <Link href={`/course/${id}`} asChild>
         <Pressable style={({ pressed }) => pressed && styles.pressed}>
           {showBookmarkDateTime && bookmarkDateTime && (
             <ThemedText type="smallBold" style={styles.bookmarkHeading} numberOfLines={1}>
-              {formatDayLabel(bookmarkDateTime.toISOString(), locale)} {formatHour(bookmarkDateTime.toISOString(), locale)}
+              {bookmarkIsNow
+                ? t("bookmarks.now")
+                : `${formatDayLabel(bookmarkDateTime.toISOString(), locale)} ${formatHour(bookmarkDateTime.toISOString(), locale)}`}
             </ThemedText>
           )}
 
           <View style={styles.nameRow}>
-            <ThemedText
-              type={showBookmarkDateTime && bookmarkDateTime ? "small" : "smallBold"}
-              style={styles.name}
-              numberOfLines={1}
-            >
-              {name}
-            </ThemedText>
-            <ThemedText
-              type="small"
-              themeColor="textSecondary"
-              style={[styles.statText, styles.noEllipsis]}
-              numberOfLines={1}
-              ellipsizeMode="clip"
-            >
-              {city} · {formatDistance(distanceKm)}
-            </ThemedText>
+            <View style={styles.nameCol}>
+              <ThemedText
+                type={showBookmarkDateTime && bookmarkDateTime ? "small" : "smallBold"}
+                style={styles.name}
+                numberOfLines={1}
+              >
+                {name}
+              </ThemedText>
+              <ThemedText
+                type="small"
+                themeColor="textSecondary"
+                style={[styles.statText, styles.noEllipsis]}
+                numberOfLines={1}
+                ellipsizeMode="clip"
+              >
+                {city} · {formatDistance(distanceKm)}
+              </ThemedText>
+            </View>
           </View>
 
           <View style={styles.header}>
@@ -218,11 +231,14 @@ export function CourseCard({
           {onRemoveBookmark ? (
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel={t('bookmarks.remove')}
+              accessibilityLabel={t('bookmarks.removeMyTee')}
               hitSlop={Spacing.two}
               onPress={onRemoveBookmark}
               style={({ pressed }) => [styles.removeButton, pressed && styles.pressed]}
             >
+              <ThemedText type="small" themeColor="textSecondary">
+                {t('bookmarks.removeMyTee')}
+              </ThemedText>
               <SymbolView
                 name={{ ios: "trash", android: "delete", web: "delete" }}
                 size={20}
@@ -230,10 +246,9 @@ export function CourseCard({
               />
             </Pressable>
           ) : (
-            <>
-              <FavoriteButton courseId={id} />
-              {bookmarkDateTime && <BookmarkButton courseId={id} datetime={bookmarkDateTime} />}
-            </>
+            bookmarkDateTime && (
+              <BookmarkButton courseId={id} datetime={bookmarkDateTime} showLabel />
+            )
           )}
         </View>
       </View>
@@ -258,18 +273,28 @@ const styles = StyleSheet.create({
   pressed: {
     opacity: 0.7,
   },
+  favoriteCorner: {
+    position: "absolute",
+    top: Spacing.three,
+    right: Spacing.three,
+    zIndex: 1,
+  },
   nameRow: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
     gap: Spacing.two,
     marginBottom: Spacing.two,
+    paddingRight: Spacing.five,
+  },
+  nameCol: {
+    flex: 1,
+    gap: Spacing.one,
   },
   name: {
     flexShrink: 1,
   },
   bookmarkHeading: {
     marginBottom: Spacing.one,
+    paddingRight: Spacing.five,
   },
   header: {
     flexDirection: "row",
@@ -332,8 +357,9 @@ const styles = StyleSheet.create({
     gap: Spacing.two,
   },
   removeButton: {
+    flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
+    gap: Spacing.one,
   },
   hourlyBleed: {
     marginHorizontal: -Spacing.three,

@@ -173,7 +173,7 @@ export const et: TranslationDictionary = {
   tabs: {
     courses: 'Väljakud',
     favorites: 'Lemmikud',
-    bookmarks: 'Järjehoidjad',
+    bookmarks: 'Minu stardiajad',
   },
   favorites: {
     title: 'Lemmikud',
@@ -182,13 +182,16 @@ export const et: TranslationDictionary = {
     removeFavorite: 'Eemalda lemmikutest',
   },
   bookmarks: {
-    title: 'Järjehoidjad',
-    empty: 'Järjehoidjaid veel ei ole. Lisa väljak ja aeg järjehoidjaikooniga.',
-    add: 'Lisa järjehoidja',
-    remove: 'Eemalda järjehoidja',
-    removeMessage: 'Eemaldada see järjehoidja?',
+    title: 'Minu stardiajad',
+    empty: 'Stardiaegu veel ei ole. Lisa väljak ja aeg stardiaja nupuga.',
+    add: 'Lisa stardiaeg',
+    remove: 'Eemalda stardiaeg',
+    removeMessage: 'Eemaldada see stardiaeg?',
     confirmRemove: 'Eemalda',
     cancel: 'Tühista',
+    now: 'Nüüd',
+    addMyTee: 'Lisa minu tee',
+    removeMyTee: 'Eemalda minu tee',
   },
   createdBy: {
     credit: 'Loonud Pekka Heikkinen',

@@ -172,7 +172,7 @@ export const fi = {
   tabs: {
     courses: "Kentät",
     favorites: "Suosikit",
-    bookmarks: "Muistilista",
+    bookmarks: "Omat lähtöajat",
   },
   favorites: {
     title: "Suosikit",
@@ -181,14 +181,17 @@ export const fi = {
     removeFavorite: "Poista suosikeista",
   },
   bookmarks: {
-    title: "Muistilista",
+    title: "Omat lähtöajat",
     empty:
-      "Ei muistilistan kenttiä vielä. Lisää kenttä ja ajankohta listalle merkkikuvakkeesta.",
-    add: "Lisää muistilistalle",
-    remove: "Poista muistilistalta",
-    removeMessage: "Poistetaanko tämä muistilistalta?",
+      "Ei lähtöaikoja vielä. Lisää kenttä ja ajankohta lähtöaikapainikkeesta.",
+    add: "Lisää lähtöaika",
+    remove: "Poista lähtöaika",
+    removeMessage: "Poistetaanko tämä lähtöaika?",
     confirmRemove: "Poista",
     cancel: "Peruuta",
+    now: "Nyt",
+    addMyTee: "Lisää lähtö",
+    removeMyTee: "Poista lähtö",
   },
   createdBy: {
     credit: "Tehnyt Pekka Heikkinen",

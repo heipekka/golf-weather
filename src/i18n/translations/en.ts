@@ -173,7 +173,7 @@ export const en: TranslationDictionary = {
   tabs: {
     courses: "Courses",
     favorites: "Favorites",
-    bookmarks: "Bookmarks",
+    bookmarks: "My tee times",
   },
   favorites: {
     title: "Favorites",
@@ -182,13 +182,16 @@ export const en: TranslationDictionary = {
     removeFavorite: "Remove from favorites",
   },
   bookmarks: {
-    title: "Bookmarks",
-    empty: "No bookmarks yet. Add a course and time to your bookmarks with the bookmark icon.",
-    add: "Add bookmark",
-    remove: "Remove bookmark",
-    removeMessage: "Remove this bookmark?",
+    title: "My tee times",
+    empty: "No tee times yet. Add a course and time with the tee time button.",
+    add: "Add tee time",
+    remove: "Remove tee time",
+    removeMessage: "Remove this tee time?",
     confirmRemove: "Remove",
     cancel: "Cancel",
+    now: "Now",
+    addMyTee: "Add my tee",
+    removeMyTee: "Remove my tee",
   },
   createdBy: {
     credit: "Created by Pekka Heikkinen",

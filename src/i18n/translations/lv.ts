@@ -173,7 +173,7 @@ export const lv: TranslationDictionary = {
   tabs: {
     courses: 'Laukumi',
     favorites: 'Izlase',
-    bookmarks: 'Grāmatzīmes',
+    bookmarks: 'Mani starta laiki',
   },
   favorites: {
     title: 'Izlase',
@@ -182,13 +182,16 @@ export const lv: TranslationDictionary = {
     removeFavorite: 'Noņemt no izlases',
   },
   bookmarks: {
-    title: 'Grāmatzīmes',
-    empty: 'Grāmatzīmju vēl nav. Pievienojiet laukumu un laiku ar grāmatzīmes ikonu.',
-    add: 'Pievienot grāmatzīmi',
-    remove: 'Noņemt grāmatzīmi',
-    removeMessage: 'Noņemt šo grāmatzīmi?',
+    title: 'Mani starta laiki',
+    empty: 'Starta laiku vēl nav. Pievienojiet laukumu un laiku ar starta laika pogu.',
+    add: 'Pievienot starta laiku',
+    remove: 'Noņemt starta laiku',
+    removeMessage: 'Noņemt šo starta laiku?',
     confirmRemove: 'Noņemt',
     cancel: 'Atcelt',
+    now: 'Tagad',
+    addMyTee: 'Pievienot manu tee',
+    removeMyTee: 'Noņemt manu tee',
   },
   createdBy: {
     credit: 'Izveidojis Pekka Heikkinen',

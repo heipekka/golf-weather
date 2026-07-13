@@ -1,46 +1,53 @@
-import { Ionicons } from '@expo/vector-icons';
+import { SymbolView } from 'expo-symbols';
 import { Pressable, StyleSheet } from 'react-native';
 
 import { Spacing } from '@/constants/theme';
-import { floorToHour, useBookmarks } from '@/hooks/use-bookmarks';
+import { useBookmarks } from '@/hooks/use-bookmarks';
 import { useTheme } from '@/hooks/use-theme';
 import { useI18n } from '@/i18n';
+
+import { ThemedText } from './themed-text';
 
 export type BookmarkButtonProps = {
   courseId: string;
   datetime: Date;
   size?: number;
+  /** When true, shows an "Add my tee" text label next to the icon. */
+  showLabel?: boolean;
 };
 
-export function BookmarkButton({ courseId, datetime, size = 20 }: BookmarkButtonProps) {
-  const { hasBookmark, addBookmark, removeBookmark, bookmarks } = useBookmarks();
+/** Adds this course/datetime to My tee times. Hidden once it's already there — remove from the My tee times list instead. */
+export function BookmarkButton({ courseId, datetime, size = 20, showLabel }: BookmarkButtonProps) {
+  const { hasBookmark, addBookmark } = useBookmarks();
   const theme = useTheme();
   const { t } = useI18n();
   const bookmarked = hasBookmark(courseId, datetime);
-  const color = bookmarked ? theme.text : theme.textSecondary;
+  const color = theme.textSecondary;
 
-  function handlePress() {
-    if (bookmarked) {
-      const flooredTime = floorToHour(datetime).getTime();
-      const existing = bookmarks.find(
-        (bookmark) =>
-          bookmark.courseId === courseId && new Date(bookmark.datetime).getTime() === flooredTime
-      );
-      if (existing) removeBookmark(existing.id);
-    } else {
-      addBookmark(courseId, datetime);
-    }
-  }
+  if (bookmarked) return null;
 
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={bookmarked ? t('bookmarks.remove') : t('bookmarks.add')}
+      accessibilityLabel={t('bookmarks.addMyTee')}
       hitSlop={Spacing.two}
-      onPress={handlePress}
-      style={({ pressed }) => [styles.button, pressed && styles.pressed]}
+      onPress={() => addBookmark(courseId, datetime)}
+      style={({ pressed }) => [
+        styles.button,
+        showLabel && styles.buttonWithLabel,
+        pressed && styles.pressed,
+      ]}
     >
-      <Ionicons name={bookmarked ? 'bookmark' : 'bookmark-outline'} size={size} color={color} />
+      {showLabel && (
+        <ThemedText type="small" style={{ color }}>
+          {t('bookmarks.addMyTee')}
+        </ThemedText>
+      )}
+      <SymbolView
+        name={{ ios: 'figure.golf.circle', android: 'sports_golf', web: 'sports_golf' }}
+        size={size}
+        tintColor={color}
+      />
     </Pressable>
   );
 }
@@ -49,6 +56,11 @@ const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  buttonWithLabel: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.one,
   },
   pressed: {
     opacity: 0.6,

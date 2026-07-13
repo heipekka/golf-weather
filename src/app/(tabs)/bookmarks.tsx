@@ -11,7 +11,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
 import { getCourseById } from '@/data/golf-courses';
-import { type Bookmark, useBookmarks } from '@/hooks/use-bookmarks';
+import { type Bookmark, floorToHour, useBookmarks } from '@/hooks/use-bookmarks';
 import { useHasHydrated } from '@/hooks/use-color-scheme';
 import { useCoursesWeather } from '@/hooks/use-courses-weather';
 import { useCurrentHour } from '@/hooks/use-current-hour';
@@ -91,9 +91,16 @@ export default function BookmarksScreen() {
       if (!course) continue;
       list.push({ bookmark, course });
     }
-    return list.sort(
-      (a, b) => new Date(a.bookmark.datetime).getTime() - new Date(b.bookmark.datetime).getTime()
-    );
+    return list.sort((a, b) => {
+      const aIsNow = a.bookmark.isNow ? 0 : 1;
+      const bIsNow = b.bookmark.isNow ? 0 : 1;
+      if (aIsNow !== bIsNow) return aIsNow - bIsNow;
+      if (a.bookmark.isNow) return a.course.distanceKm - b.course.distanceKm;
+      return (
+        new Date(a.bookmark.datetime ?? '').getTime() -
+        new Date(b.bookmark.datetime ?? '').getTime()
+      );
+    });
   }, [bookmarks, coursesById]);
 
   const normalizedQuery = searchQuery.trim().toLowerCase();
@@ -149,7 +156,9 @@ export default function BookmarksScreen() {
           }
           renderItem={({ item }: { item: BookmarkEntry }) => {
             const { bookmark, course } = item;
-            const bookmarkDateTime = new Date(bookmark.datetime);
+            const bookmarkDateTime = bookmark.isNow
+              ? floorToHour(new Date())
+              : new Date(bookmark.datetime ?? '');
             const entry = weatherByCourse[course.id];
             const aggregated = entry?.weather?.aggregated ?? [];
             const current = entry?.weather ? findCurrentPoint(aggregated, bookmarkDateTime) : null;
@@ -184,6 +193,7 @@ export default function BookmarksScreen() {
                 dailyOnly={dailyOnly}
                 bookmarkDateTime={bookmarkDateTime}
                 showBookmarkDateTime
+                bookmarkIsNow={bookmark.isNow}
                 onRemoveBookmark={() => setPendingRemoval(bookmark)}
               />
             );

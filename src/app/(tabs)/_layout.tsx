@@ -102,9 +102,9 @@ export default function TabsLayout() {
           tabBarIcon: ({ color, focused }) => (
             <SymbolView
               name={{
-                ios: focused ? "bookmark.fill" : "bookmark",
-                android: "bookmark",
-                web: "bookmark",
+                ios: focused ? "figure.golf.circle.fill" : "figure.golf.circle",
+                android: "sports_golf",
+                web: "sports_golf",
               }}
               size={22}
               tintColor={color}

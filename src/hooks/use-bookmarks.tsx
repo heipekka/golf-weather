@@ -14,8 +14,10 @@ const STORAGE_KEY = 'golf-weather.bookmarks';
 export type Bookmark = {
   id: string;
   courseId: string;
-  /** ISO timestamp, floored to the hour. */
-  datetime: string;
+  /** ISO timestamp, floored to the hour. Absent for "now" bookmarks. */
+  datetime?: string;
+  /** True when this bookmark always tracks the live current hour rather than a fixed datetime. */
+  isNow?: boolean;
 };
 
 function isBookmarkArray(value: unknown): value is Bookmark[] {
@@ -27,7 +29,7 @@ function isBookmarkArray(value: unknown): value is Bookmark[] {
         typeof entry === 'object' &&
         typeof (entry as Bookmark).id === 'string' &&
         typeof (entry as Bookmark).courseId === 'string' &&
-        typeof (entry as Bookmark).datetime === 'string'
+        ((entry as Bookmark).isNow === true || typeof (entry as Bookmark).datetime === 'string')
     )
   );
 }
@@ -39,12 +41,18 @@ export function floorToHour(date: Date): Date {
   return copy;
 }
 
-function bookmarkId(courseId: string, datetime: Date): string {
-  return `${courseId}-${floorToHour(datetime).toISOString()}`;
+/** True when `datetime` falls in the same hour as the real, live current time. */
+export function isNowDate(datetime: Date): boolean {
+  return floorToHour(datetime).getTime() === floorToHour(new Date()).getTime();
+}
+
+export function bookmarkId(courseId: string, datetime: Date): string {
+  return isNowDate(datetime) ? `${courseId}-now` : `${courseId}-${floorToHour(datetime).toISOString()}`;
 }
 
 function isExpired(bookmark: Bookmark, now: Date): boolean {
-  const time = new Date(bookmark.datetime).getTime();
+  if (bookmark.isNow) return false;
+  const time = new Date(bookmark.datetime ?? '').getTime();
   return Number.isNaN(time) || time < floorToHour(now).getTime();
 }
 
@@ -86,9 +94,15 @@ export function BookmarksProvider({ children }: { children: ReactNode }) {
   const addBookmark = useCallback(
     (courseId: string, datetime: Date) => {
       const id = bookmarkId(courseId, datetime);
+      const isNow = isNowDate(datetime);
       setBookmarks((prev) => {
         if (prev.some((bookmark) => bookmark.id === id)) return prev;
-        const next = [...prev, { id, courseId, datetime: floorToHour(datetime).toISOString() }];
+        const next: Bookmark[] = [
+          ...prev,
+          isNow
+            ? { id, courseId, isNow: true }
+            : { id, courseId, datetime: floorToHour(datetime).toISOString() },
+        ];
         AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(next)).catch(() => {});
         return next;
       });

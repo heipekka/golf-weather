@@ -173,7 +173,7 @@ export const lt: TranslationDictionary = {
   tabs: {
     courses: 'Aikštynai',
     favorites: 'Mėgstami',
-    bookmarks: 'Žymelės',
+    bookmarks: 'Mano starto laikai',
   },
   favorites: {
     title: 'Mėgstami',
@@ -182,13 +182,16 @@ export const lt: TranslationDictionary = {
     removeFavorite: 'Pašalinti iš mėgstamų',
   },
   bookmarks: {
-    title: 'Žymelės',
-    empty: 'Kol kas nėra žymelių. Pridėkite aikštyną ir laiką su žymelės ženkleliu.',
-    add: 'Pridėti žymelę',
-    remove: 'Pašalinti žymelę',
-    removeMessage: 'Pašalinti šią žymelę?',
+    title: 'Mano starto laikai',
+    empty: 'Kol kas nėra starto laikų. Pridėkite aikštyną ir laiką su starto laiko mygtuku.',
+    add: 'Pridėti starto laiką',
+    remove: 'Pašalinti starto laiką',
+    removeMessage: 'Pašalinti šį starto laiką?',
     confirmRemove: 'Pašalinti',
     cancel: 'Atšaukti',
+    now: 'Dabar',
+    addMyTee: 'Pridėti mano tee',
+    removeMyTee: 'Pašalinti mano tee',
   },
   createdBy: {
     credit: 'Sukūrė Pekka Heikkinen',
