@@ -5,6 +5,7 @@ import { Platform, Pressable, StyleSheet, View } from "react-native";
 import Animated, { FadeIn } from "react-native-reanimated";
 
 import { Spacing } from "@/constants/theme";
+import { useBookmarks } from "@/hooks/use-bookmarks";
 import { useTheme } from "@/hooks/use-theme";
 import { useI18n } from "@/i18n";
 import {
@@ -47,7 +48,7 @@ export type CourseCardProps = {
   showBookmarkDateTime?: boolean;
   /** When true, shows a "now" label instead of the formatted `bookmarkDateTime`. */
   bookmarkIsNow?: boolean;
-  /** When set, the footer shows only a remove button (calling this) instead of the favorite/bookmark buttons — used on the bookmarks list. */
+  /** When set, the corner shows only a remove button (calling this) instead of the favorite/bookmark buttons — used on the bookmarks list. */
   onRemoveBookmark?: () => void;
 };
 
@@ -72,16 +73,40 @@ export function CourseCard({
   const [showHourly, setShowHourly] = useState(false);
   const theme = useTheme();
   const { t, locale } = useI18n();
+  const { hasBookmark } = useBookmarks();
   const canShowHourly = !loading && !dailyOnly && hourly.length > 1;
   const showDailyOnlyNotice = !loading && !canShowHourly && hourly.length > 0;
+  const showBookmarkButton = !!bookmarkDateTime && !hasBookmark(id, bookmarkDateTime);
 
   return (
     <ThemedView type="backgroundElement" style={styles.card}>
-      {!onRemoveBookmark && (
-        <View style={styles.favoriteCorner}>
-          <FavoriteButton courseId={id} />
-        </View>
-      )}
+      <View style={styles.topRightCorner}>
+        {onRemoveBookmark ? (
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={t('bookmarks.removeMyTee')}
+            hitSlop={Spacing.two}
+            onPress={onRemoveBookmark}
+            style={({ pressed }) => [styles.removeButton, pressed && styles.pressed]}
+          >
+            <SymbolView
+              name={{ ios: "trash", android: "delete", web: "delete" }}
+              size={20}
+              tintColor={theme.textSecondary}
+            />
+          </Pressable>
+        ) : (
+          <>
+            {showBookmarkButton && bookmarkDateTime && (
+              <>
+                <BookmarkButton courseId={id} datetime={bookmarkDateTime} showLabel />
+                <ThemedText themeColor="textSecondary">·</ThemedText>
+              </>
+            )}
+            <FavoriteButton courseId={id} />
+          </>
+        )}
+      </View>
 
       <Link href={`/course/${id}`} asChild>
         <Pressable style={({ pressed }) => pressed && styles.pressed}>
@@ -181,77 +206,53 @@ export function CourseCard({
         </Pressable>
       </Link>
 
-      <View style={styles.footer}>
-        {canShowHourly ? (
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel={
-              showHourly ? t('courseCard.hideHourlyForecast') : t('courseCard.showHourlyForecast')
-            }
-            style={({ pressed }) => [styles.toggle, pressed && styles.pressed]}
-            onPress={() => setShowHourly((value) => !value)}
-          >
-            <SymbolView
-              name={
-                showHourly
-                  ? {
-                      ios: "chevron.up",
-                      android: "expand_less",
-                      web: "expand_less",
-                    }
-                  : {
-                      ios: "chevron.down",
-                      android: "expand_more",
-                      web: "expand_more",
-                    }
-              }
-              size={12}
-              weight="bold"
-              tintColor={theme.textSecondary}
-            />
-            <ThemedText type="small" themeColor="textSecondary">
-              {t('courseCard.hourlyForecast')}
-            </ThemedText>
-          </Pressable>
-        ) : showDailyOnlyNotice ? (
-          <View style={styles.dailyOnlyNotice}>
-            <SymbolView
-              name={{ ios: "info.circle", android: "info", web: "info" }}
-              size={12}
-              tintColor={theme.textSecondary}
-            />
-            <ThemedText type="small" themeColor="textSecondary">
-              {t('courseCard.hourlyUnavailable')}
-            </ThemedText>
-          </View>
-        ) : (
-          <View />
-        )}
-        <View style={styles.footerButtons}>
-          {onRemoveBookmark ? (
+      {(canShowHourly || showDailyOnlyNotice) && (
+        <View style={styles.footer}>
+          {canShowHourly ? (
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel={t('bookmarks.removeMyTee')}
-              hitSlop={Spacing.two}
-              onPress={onRemoveBookmark}
-              style={({ pressed }) => [styles.removeButton, pressed && styles.pressed]}
+              accessibilityLabel={
+                showHourly ? t('courseCard.hideHourlyForecast') : t('courseCard.showHourlyForecast')
+              }
+              style={({ pressed }) => [styles.toggle, pressed && styles.pressed]}
+              onPress={() => setShowHourly((value) => !value)}
             >
-              <ThemedText type="small" themeColor="textSecondary">
-                {t('bookmarks.removeMyTee')}
-              </ThemedText>
               <SymbolView
-                name={{ ios: "trash", android: "delete", web: "delete" }}
-                size={20}
+                name={
+                  showHourly
+                    ? {
+                        ios: "chevron.up",
+                        android: "expand_less",
+                        web: "expand_less",
+                      }
+                    : {
+                        ios: "chevron.down",
+                        android: "expand_more",
+                        web: "expand_more",
+                      }
+                }
+                size={12}
+                weight="bold"
                 tintColor={theme.textSecondary}
               />
+              <ThemedText type="small" themeColor="textSecondary">
+                {t('courseCard.hourlyForecast')}
+              </ThemedText>
             </Pressable>
           ) : (
-            bookmarkDateTime && (
-              <BookmarkButton courseId={id} datetime={bookmarkDateTime} showLabel />
-            )
+            <View style={styles.dailyOnlyNotice}>
+              <SymbolView
+                name={{ ios: "info.circle", android: "info", web: "info" }}
+                size={12}
+                tintColor={theme.textSecondary}
+              />
+              <ThemedText type="small" themeColor="textSecondary">
+                {t('courseCard.hourlyUnavailable')}
+              </ThemedText>
+            </View>
           )}
         </View>
-      </View>
+      )}
 
       {canShowHourly && showHourly && (
         <Animated.View
@@ -273,17 +274,22 @@ const styles = StyleSheet.create({
   pressed: {
     opacity: 0.7,
   },
-  favoriteCorner: {
+  topRightCorner: {
     position: "absolute",
     top: Spacing.three,
     right: Spacing.three,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.two,
     zIndex: 1,
   },
   nameRow: {
     flexDirection: "row",
     gap: Spacing.two,
     marginBottom: Spacing.two,
-    paddingRight: Spacing.five,
+    // Reserves room for the "My tee" label + separator + favorite star now
+    // shown in the top-right corner, wider than the old icon-only layout.
+    paddingRight: Spacing.six + Spacing.five,
   },
   nameCol: {
     flex: 1,
@@ -294,7 +300,7 @@ const styles = StyleSheet.create({
   },
   bookmarkHeading: {
     marginBottom: Spacing.one,
-    paddingRight: Spacing.five,
+    paddingRight: Spacing.six + Spacing.five,
   },
   header: {
     flexDirection: "row",
@@ -351,15 +357,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: Spacing.one,
   },
-  footerButtons: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: Spacing.two,
-  },
   removeButton: {
-    flexDirection: "row",
     alignItems: "center",
-    gap: Spacing.one,
+    justifyContent: "center",
   },
   hourlyBleed: {
     marginHorizontal: -Spacing.three,

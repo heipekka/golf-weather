@@ -190,7 +190,7 @@ export const en: TranslationDictionary = {
     confirmRemove: "Remove",
     cancel: "Cancel",
     now: "Now",
-    addMyTee: "Add my tee",
+    addMyTee: "My tee",
     removeMyTee: "Remove my tee",
   },
   createdBy: {
