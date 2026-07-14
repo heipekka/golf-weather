@@ -792,6 +792,14 @@
     "lon": 26.6265
   },
   {
+    "id": "pilkonpuisto-golf",
+    "name": "Pilkonpuisto Golf",
+    "city": "Joensuu",
+    "country": "Finland",
+    "lat": 62.62343,
+    "lon": 29.73372
+  },
+  {
     "id": "spain-la-cala-resort",
     "name": "La Cala Resort",
     "city": "Mijas",
