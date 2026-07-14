@@ -4,6 +4,10 @@ This document describes which of the app's three weather sources provide data fo
 each country represented in the golf course list, and how the app behaves when a
 source has no data for a given location.
 
+For the request params, raw response shapes, and field-mapping to the app's
+normalized types for each source, see
+[docs/weather-api-reference.md](weather-api-reference.md).
+
 ## Sources
 
 The app aggregates three weather sources, each queried by latitude/longitude in

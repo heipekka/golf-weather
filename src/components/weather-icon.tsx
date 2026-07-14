@@ -102,8 +102,9 @@ export function WeatherIcon({
   isNight = false,
 }: WeatherIconProps) {
   const theme = useTheme();
-  const icon =
-    ICONS[resolveCondition({ weatherCode, precipitation, cloudCover })];
+  const condition = resolveCondition({ weatherCode, precipitation, cloudCover });
+  if (condition === "unknown") return null;
+  const icon = ICONS[condition];
   const ios = isNight && icon.iosNight ? icon.iosNight : icon.ios;
   const material =
     isNight && icon.materialNight ? icon.materialNight : icon.material;

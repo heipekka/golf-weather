@@ -84,7 +84,7 @@ Sun times come from `suncalc` locally, no network call.
 ## Common task pointers
 
 - Add/edit golf courses -> [src/data/golf-courses.json](src/data/golf-courses.json)
-- Change weather fetching/aggregation -> [src/lib/weather/](src/lib/weather)
+- Change weather fetching/aggregation -> [src/lib/weather/](src/lib/weather) (API reference + sample responses: [docs/weather-api-reference.md](docs/weather-api-reference.md))
 - Change playability thresholds/labels -> [src/lib/golf.ts](src/lib/golf.ts)
 - Add/edit UI strings -> update **both** [src/i18n/translations/fi.ts](src/i18n/translations/fi.ts) and [src/i18n/translations/en.ts](src/i18n/translations/en.ts)
 

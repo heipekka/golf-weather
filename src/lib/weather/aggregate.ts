@@ -1,13 +1,23 @@
 import type { AggregatedPoint, ForecastPoint, SourceForecast } from './types';
 
 /**
- * Reports whether at least one provider returned more than a single data
- * point. A provider returning just one point means it fell back to daily
- * (not hourly) resolution for the requested location/time, which the UI
- * treats as "no hourly forecast available".
+ * Reports whether at least one provider returned points spaced about an
+ * hour apart. A provider returning only a handful of points spread further
+ * apart (e.g. one per day) means it fell back to daily (not hourly)
+ * resolution for the requested location/time, which the UI treats as "no
+ * hourly forecast available".
  */
 export function hasHourlyData(sources: SourceForecast[]): boolean {
-  return sources.some((source) => !source.error && source.hourly.length > 1);
+  return sources.some((source) => {
+    if (source.error || source.hourly.length < 2) return false;
+    return source.hourly.some((point, i) => {
+      if (i === 0) return false;
+      const gapMs =
+        new Date(point.time).getTime() -
+        new Date(source.hourly[i - 1].time).getTime();
+      return gapMs > 0 && gapMs <= 65 * 60 * 1000;
+    });
+  });
 }
 
 function average(values: (number | null)[]): number | null {

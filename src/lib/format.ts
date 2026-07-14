@@ -11,7 +11,7 @@ export function formatWind(value: number | null | undefined): string {
 }
 
 export function formatPrecipitation(value: number | null | undefined): string {
-  if (value === null || value === undefined || Number.isNaN(value)) return '-- mm';
+  if (value === null || value === undefined || Number.isNaN(value)) return '–';
   return `${value.toFixed(1)} mm`;
 }
 
