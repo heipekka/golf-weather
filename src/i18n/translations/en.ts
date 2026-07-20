@@ -103,11 +103,16 @@ export const en: TranslationDictionary = {
     labels: {
       Excellent: "Excellent",
       Good: "Good",
+      Windy: "Windy",
       Fair: "Fair",
+      Gusty: "Gusty",
       Hot: "Hot",
       Sweltering: "Sweltering",
       Poor: "Poor",
+      Blustery: "Blustery",
       Bad: "Bad",
+      Cold: "Cold",
+      Gale: "Gale",
       Dark: "Dark",
     },
     reasons: {
@@ -118,6 +123,11 @@ export const en: TranslationDictionary = {
       hotSpell: "hot spell expected",
       sweltering: "very hot and sunny",
       swelteringSpell: "sweltering spell expected",
+      cold: "cold",
+      windy: "windy",
+      gusty: "gusty",
+      blustery: "blustery",
+      gale: "gale-force wind",
     },
   },
   format: {

@@ -103,11 +103,16 @@ export const lv: TranslationDictionary = {
     labels: {
       Excellent: 'Izcili',
       Good: 'Labi',
+      Windy: 'Vējains',
       Fair: 'Vidēji',
+      Gusty: 'Brāzmains',
       Hot: 'Karsti',
       Sweltering: 'Tveice',
       Poor: 'Slikti',
+      Blustery: 'Stiprs vējš',
       Bad: 'Ļoti slikti',
+      Cold: 'Auksti',
+      Gale: 'Vētra',
       Dark: 'Tumsa',
     },
     reasons: {
@@ -118,6 +123,11 @@ export const lv: TranslationDictionary = {
       hotSpell: 'gaidāms karstuma periods',
       sweltering: 'ļoti karsts un saulains',
       swelteringSpell: 'gaidāms tveicīgs periods',
+      cold: 'auksts',
+      windy: 'vējains',
+      gusty: 'brāzmains vējš',
+      blustery: 'stiprs vējš',
+      gale: 'vētra',
     },
   },
   format: {

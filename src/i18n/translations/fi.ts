@@ -102,11 +102,16 @@ export const fi = {
     labels: {
       Excellent: "Erinomainen",
       Good: "Hyvä",
+      Windy: "Tuulinen",
       Fair: "Kohtalainen",
+      Gusty: "Puuskainen",
       Hot: "Helle",
       Sweltering: "Läkähdyttävä",
       Poor: "Huono",
+      Blustery: "Myrskyinen",
       Bad: "Surkea",
+      Cold: "Kylmä",
+      Gale: "Myrsky",
       Dark: "Pimeä",
     },
     reasons: {
@@ -117,6 +122,11 @@ export const fi = {
       hotSpell: "kuuma jakso odotettavissa",
       sweltering: "kuuma ja aurinkoista",
       swelteringSpell: "helteinen jakso odotettavissa",
+      cold: "kylmää",
+      windy: "tuulista",
+      gusty: "puuskaista tuulta",
+      blustery: "myrskyisää tuulta",
+      gale: "kovaa myrskyä",
     },
   },
   format: {

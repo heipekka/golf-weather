@@ -1,11 +1,16 @@
 export type PlayabilityLabel =
   | "Excellent"
   | "Good"
+  | "Windy"
   | "Fair"
+  | "Gusty"
   | "Hot"
   | "Sweltering"
   | "Poor"
+  | "Blustery"
   | "Bad"
+  | "Cold"
+  | "Gale"
   | "Dark";
 
 export type PlayabilityConditions = {
@@ -27,7 +32,12 @@ export type PlayabilityReasonCode =
   | "hot"
   | "hotSpell"
   | "sweltering"
-  | "swelteringSpell";
+  | "swelteringSpell"
+  | "cold"
+  | "windy"
+  | "gusty"
+  | "blustery"
+  | "gale";
 
 export type Playability = {
   score: number;
@@ -40,11 +50,16 @@ export type Playability = {
 export const PlayabilityColors: Record<PlayabilityLabel, string> = {
   Excellent: "#1F9254",
   Good: "#3C87F7",
+  Windy: "#3C87F7",
   Fair: "#D98C1F",
+  Gusty: "#D98C1F",
   Hot: "#E0662B",
   Sweltering: "#C2410C",
   Poor: "#D9483C",
+  Blustery: "#D9483C",
   Bad: "#B3261E",
+  Gale: "#B3261E",
+  Cold: "#4C7BA6",
   Dark: "#5B6178",
 };
 
@@ -57,11 +72,16 @@ export const PlayabilityColors: Record<PlayabilityLabel, string> = {
 const TIER_RANK: Record<PlayabilityLabel, number> = {
   Dark: -1,
   Bad: 0,
+  Cold: 0,
+  Gale: 0,
   Poor: 1,
+  Blustery: 1,
   Fair: 2,
   Sweltering: 2,
+  Gusty: 2,
   Good: 3,
   Hot: 3,
+  Windy: 3,
   Excellent: 4,
 };
 
@@ -78,16 +98,24 @@ const TIER_SCORE: Record<PlayabilityLabel, number> = {
   Excellent: 100,
   Hot: 95,
   Good: 80,
+  Windy: 80,
   Sweltering: 70,
   Fair: 55,
+  Gusty: 55,
   Poor: 25,
+  Blustery: 25,
   Bad: 8,
+  Cold: 8,
+  Gale: 8,
   Dark: 0,
 };
 
 const HOT_TEMPERATURE_C = 27;
 const SWELTERING_TEMPERATURE_C = 30;
 const SUNNY_CLOUD_COVER_MAX = 30;
+
+/** At or below this temperature, the hour reads `Cold` instead of just `Bad`. */
+const COLD_TEMPERATURE_C = 0;
 
 const BAD_PRECIPITATION_MM = 2;
 const BAD_TEMPERATURE_C = 3;
@@ -99,11 +127,14 @@ const POOR_WIND_MS = 10;
 
 const FAIR_PRECIPITATION_MM = 0.25;
 const FAIR_TEMPERATURE_C = 10;
-const FAIR_WIND_MS = 8;
+const FAIR_WIND_MS = 7;
 
 const GOOD_PRECIPITATION_MM = 0.1;
 const GOOD_TEMPERATURE_C = 16;
-const GOOD_WIND_MS = 6;
+const GOOD_WIND_MS = 5;
+
+/** Below this precipitation, an hour is considered dry enough for wind (rather than rain) to be the defining factor. */
+const DRY_PRECIPITATION_MM = FAIR_PRECIPITATION_MM;
 
 /** Wind range where a breeze offsets a hot temperature into `Excellent` instead of `Hot`. */
 const HOT_BREEZE_MIN_MS = 4;
@@ -177,12 +208,15 @@ export function classifyHour(
     conditions.cloudCover !== null &&
     conditions.cloudCover !== undefined &&
     conditions.cloudCover <= SUNNY_CLOUD_COVER_MAX;
+  const isDry = precipitation === null || precipitation < DRY_PRECIPITATION_MM;
 
   if (
     (precipitation !== null && precipitation > BAD_PRECIPITATION_MM) ||
     (temperature !== null && temperature < BAD_TEMPERATURE_C) ||
     (windSpeed !== null && windSpeed > BAD_WIND_MS)
   ) {
+    if (temperature !== null && temperature <= COLD_TEMPERATURE_C) return "Cold";
+    if (isDry && windSpeed !== null && windSpeed > BAD_WIND_MS) return "Gale";
     return "Bad";
   }
 
@@ -191,6 +225,7 @@ export function classifyHour(
     (temperature !== null && temperature < POOR_TEMPERATURE_C) ||
     (windSpeed !== null && windSpeed > POOR_WIND_MS)
   ) {
+    if (isDry && windSpeed !== null && windSpeed > POOR_WIND_MS) return "Blustery";
     return "Poor";
   }
 
@@ -199,6 +234,7 @@ export function classifyHour(
     (temperature !== null && temperature < FAIR_TEMPERATURE_C) ||
     (windSpeed !== null && windSpeed > FAIR_WIND_MS)
   ) {
+    if (isDry && windSpeed !== null && windSpeed > FAIR_WIND_MS) return "Gusty";
     return "Fair";
   }
 
@@ -210,11 +246,10 @@ export function classifyHour(
     (temperature !== null && temperature < GOOD_TEMPERATURE_C) ||
     (windSpeed !== null && windSpeed >= GOOD_WIND_MS)
   ) {
-    return isSweltering
-      ? "Sweltering"
-      : isHot
-        ? hotPleasant(windSpeed, "Good")
-        : "Good";
+    if (isSweltering) return "Sweltering";
+    if (isHot) return hotPleasant(windSpeed, "Good");
+    if (isDry && windSpeed !== null && windSpeed >= GOOD_WIND_MS) return "Windy";
+    return "Good";
   }
 
   return isSweltering
@@ -236,6 +271,16 @@ function reasonsFor(label: PlayabilityLabel): PlayabilityReasonCode[] {
       return ["hot"];
     case "Sweltering":
       return ["sweltering"];
+    case "Cold":
+      return ["cold"];
+    case "Windy":
+      return ["windy"];
+    case "Gusty":
+      return ["gusty"];
+    case "Blustery":
+      return ["blustery"];
+    case "Gale":
+      return ["gale"];
     default:
       return [];
   }
@@ -260,6 +305,13 @@ export function scorePlayability(
  * so a single stray hot hour doesn't flip a mostly-Excellent window.
  */
 const HEAT_DOMINANCE_MIN_HOURS = 3;
+
+/**
+ * Minimum number of light hours sharing a cold/wind flavor (`Cold`,
+ * `Windy`, `Gusty`, `Blustery`, `Gale`) needed for that flavor to override
+ * the base main label, mirroring `HEAT_DOMINANCE_MIN_HOURS`.
+ */
+const FLAVOR_DOMINANCE_MIN_HOURS = 3;
 
 /** Minimum raw-average tier-rank gap between the early and late half to show a divided badge. */
 const SPLIT_AVG_DELTA = 1;
@@ -341,6 +393,11 @@ function halfTier(
  *   Excellent/Good hours are individually more numerous. This override never
  *   fires when the base label is worse than Good (Fair/Poor/Bad) or `Dark`,
  *   so a genuine bad spell or dark-heavy half is never masked by heat.
+ * - Similarly, when the base label is `Good`, `Fair`, `Poor`, or `Bad`, a
+ *   dominant count of `Windy`/`Gusty`/`Blustery`/`Gale` (or `Cold`) hours
+ *   (`FLAVOR_DOMINANCE_MIN_HOURS`) refines that same tier into its
+ *   cold/windy flavor, so the badge conveys *why* the window is that tier
+ *   instead of just how good it is.
  */
 export function scoreWindow(hours: PlayabilityConditions[]): Playability {
   if (hours.length === 0) {
@@ -403,5 +460,48 @@ export function scoreWindow(hours: PlayabilityConditions[]): Playability {
     }
   }
 
+  const flavorOverride = flavorFor(label, rounded);
+  if (flavorOverride) {
+    return {
+      score: TIER_SCORE[flavorOverride],
+      label: flavorOverride,
+      reasons: reasonsFor(flavorOverride),
+    };
+  }
+
   return { score: TIER_SCORE[label], label, reasons: reasonsFor(label), trend };
+}
+
+/**
+ * Refines a base tier (`Bad`/`Poor`/`Fair`/`Good`) into its dominant
+ * cold/windy flavor when enough light hours share it
+ * (`FLAVOR_DOMINANCE_MIN_HOURS`), so the main label conveys the reason for
+ * the tier rather than just the tier itself. `Cold` takes priority over
+ * `Gale` within `Bad`, matching `classifyHour`'s own precedence. Returns
+ * `null` when the base tier has no flavor (`Excellent`, `Hot`,
+ * `Sweltering`, `Dark`) or no flavor is dominant.
+ */
+function flavorFor(
+  label: PlayabilityLabel,
+  rounded: PlayabilityConditions[],
+): PlayabilityLabel | null {
+  const countOf = (flavor: PlayabilityLabel) =>
+    rounded.filter((hour) => classifyHour(hour) === flavor).length;
+
+  switch (label) {
+    case "Bad":
+      if (countOf("Cold") >= FLAVOR_DOMINANCE_MIN_HOURS) return "Cold";
+      if (countOf("Gale") >= FLAVOR_DOMINANCE_MIN_HOURS) return "Gale";
+      return null;
+    case "Poor":
+      return countOf("Blustery") >= FLAVOR_DOMINANCE_MIN_HOURS
+        ? "Blustery"
+        : null;
+    case "Fair":
+      return countOf("Gusty") >= FLAVOR_DOMINANCE_MIN_HOURS ? "Gusty" : null;
+    case "Good":
+      return countOf("Windy") >= FLAVOR_DOMINANCE_MIN_HOURS ? "Windy" : null;
+    default:
+      return null;
+  }
 }

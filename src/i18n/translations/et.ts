@@ -103,11 +103,16 @@ export const et: TranslationDictionary = {
     labels: {
       Excellent: 'Suurepärane',
       Good: 'Hea',
+      Windy: 'Tuuline',
       Fair: 'Rahuldav',
+      Gusty: 'Puhanguline',
       Hot: 'Palav',
       Sweltering: 'Lämbe',
       Poor: 'Halb',
+      Blustery: 'Tormine',
       Bad: 'Kehv',
+      Cold: 'Külm',
+      Gale: 'Torm',
       Dark: 'Pime',
     },
     reasons: {
@@ -118,6 +123,11 @@ export const et: TranslationDictionary = {
       hotSpell: 'oodata on palavat perioodi',
       sweltering: 'väga kuum ja päikeseline',
       swelteringSpell: 'lämbe periood on oodata',
+      cold: 'külm',
+      windy: 'tuuline',
+      gusty: 'puhanguline tuul',
+      blustery: 'tormine tuul',
+      gale: 'tugev torm',
     },
   },
   format: {

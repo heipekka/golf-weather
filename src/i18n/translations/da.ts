@@ -103,11 +103,16 @@ export const da: TranslationDictionary = {
     labels: {
       Excellent: 'Fremragende',
       Good: 'God',
+      Windy: 'Blæsende',
       Fair: 'Middel',
+      Gusty: 'Kraftig vind',
       Hot: 'Varmt',
       Sweltering: 'Trykkende',
       Poor: 'Dårlig',
+      Blustery: 'Hård vind',
       Bad: 'Elendig',
+      Cold: 'Koldt',
+      Gale: 'Storm',
       Dark: 'Mørkt',
     },
     reasons: {
@@ -118,6 +123,11 @@ export const da: TranslationDictionary = {
       hotSpell: 'hedebølge forventet',
       sweltering: 'meget varmt og solrigt',
       swelteringSpell: 'trykkende varmeperiode ventes',
+      cold: 'koldt',
+      windy: 'blæsende',
+      gusty: 'kraftig vind',
+      blustery: 'hård vind',
+      gale: 'stormstyrke vind',
     },
   },
   format: {

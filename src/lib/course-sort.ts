@@ -2,7 +2,7 @@ import type { CourseWeatherState } from "@/hooks/use-courses-weather";
 import type { GolfCourseWithDistance } from "@/lib/geo";
 import { scoreWindow, type Playability } from "@/lib/golf";
 import { isNight } from "@/lib/sun";
-import { findCurrentPoint } from "@/lib/weather";
+import { findCurrentPoint, hasHourlyData } from "@/lib/weather";
 
 export type SortMode = "location" | "weather" | "combined";
 
@@ -45,6 +45,11 @@ export function currentPlayability(
   const startIndex = aggregated.indexOf(current);
   const window = aggregated.slice(startIndex, startIndex + WINDOW_HOURS);
 
+  // A daily-only (one point per day) forecast can have its single point's
+  // timestamp fall on a dark hour, which would otherwise falsely label an
+  // ordinary daytime day as `Dark`.
+  const hourly = !!entry?.weather && hasHourlyData(entry.weather.sources);
+
   return scoreWindow(
     window.map((point) => ({
       temperature: point.temperature,
@@ -53,7 +58,7 @@ export function currentPlayability(
       precipitation: point.precipitation,
       precipitationProbability: point.precipitationProbability,
       cloudCover: point.cloudCover,
-      isDark: includeDark && isNight(point.time, lat, lon),
+      isDark: includeDark && hourly && isNight(point.time, lat, lon),
     })),
   );
 }
