@@ -47,8 +47,13 @@ export function currentPlayability(
 
   // A daily-only (one point per day) forecast can have its single point's
   // timestamp fall on a dark hour, which would otherwise falsely label an
-  // ordinary daytime day as `Dark`.
+  // ordinary daytime day as `Dark`. The window can also collapse to a
+  // single point for an hourly source when `now` falls beyond its forecast
+  // horizon (e.g. a bookmark set further out than the ~3 days of hourly
+  // data), which is the same insufficient-context case even though
+  // `hasHourlyData` is true.
   const hourly = !!entry?.weather && hasHourlyData(entry.weather.sources);
+  const enoughContext = hourly && window.length > 1;
 
   return scoreWindow(
     window.map((point) => ({
@@ -58,7 +63,7 @@ export function currentPlayability(
       precipitation: point.precipitation,
       precipitationProbability: point.precipitationProbability,
       cloudCover: point.cloudCover,
-      isDark: includeDark && hourly && isNight(point.time, lat, lon),
+      isDark: includeDark && enoughContext && isNight(point.time, lat, lon),
     })),
   );
 }
