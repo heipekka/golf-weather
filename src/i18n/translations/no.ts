@@ -169,6 +169,12 @@ export const no: TranslationDictionary = {
         'Når aktivert, merkes timer uten spillbart lys som Mørkt og tas med i poengberegningen.',
       toggle: 'Ta hensyn til mørke',
     },
+    windLabels: {
+      title: 'Vindmerking',
+      description:
+        'Når aktivert, får blåsige timer en vindbeskrivende merkelapp (f.eks. Vindfullt, Kastevind, Hard vind, Storm) i stedet for det vanlige nivået.',
+      toggle: 'Bruk vindbeskrivelser',
+    },
     location: {
       title: 'Standardposisjon',
       description:

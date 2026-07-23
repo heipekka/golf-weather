@@ -24,6 +24,7 @@ import { useSortedCourseOrder } from '@/hooks/use-sorted-course-order';
 import { resolveNow, useStartTime } from '@/hooks/use-start-time';
 import { useTheme } from '@/hooks/use-theme';
 import { useWebPullToRefresh } from '@/hooks/use-web-pull-to-refresh';
+import { useWindLabels } from '@/hooks/use-wind-labels';
 import { useI18n } from '@/i18n';
 import { WINDOW_HOURS, currentPlayability } from '@/lib/course-sort';
 import { sortByDistance, type GolfCourseWithDistance } from '@/lib/geo';
@@ -37,6 +38,7 @@ export default function FavoritesScreen() {
   const { favorites } = useFavorites();
   const { sortMode, setSortMode } = useCourseSort();
   const { darkScoringEnabled } = useDarkScoring();
+  const { windLabelsEnabled } = useWindLabels();
   const { t } = useI18n();
   const theme = useTheme();
   const hourTick = useCurrentHour();
@@ -139,7 +141,14 @@ export default function FavoritesScreen() {
               Math.max(startIndex, 0),
               Math.max(startIndex, 0) + NEXT_HOURS_SHOWN
             );
-            const playability = currentPlayability(entry, item.lat, item.lon, now, darkScoringEnabled);
+            const playability = currentPlayability(
+              entry,
+              item.lat,
+              item.lon,
+              now,
+              darkScoringEnabled,
+              windLabelsEnabled,
+            );
             const sun = hasHydrated ? getSunTimes(item.lat, item.lon) : EMPTY_SUN_TIMES;
             const dailyOnly = !!entry?.weather && !hasHourlyData(entry.weather.sources);
 

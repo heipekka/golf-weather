@@ -169,6 +169,12 @@ export const en: TranslationDictionary = {
         "When on, hours with no playable light are labeled Dark and factored into playability.",
       toggle: "Account for darkness",
     },
+    windLabels: {
+      title: "Wind labels",
+      description:
+        "When on, windy hours get a wind-descriptive label (e.g. Windy, Gusty, Blustery, Gale) instead of the plain condition tier.",
+      toggle: "Use wind descriptions",
+    },
     location: {
       title: "Default location",
       description:

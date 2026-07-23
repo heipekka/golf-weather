@@ -169,6 +169,12 @@ export const lt: TranslationDictionary = {
         'Kai įjungta, valandos be žaidimui tinkamos šviesos pažymimos kaip Tamsu ir įtraukiamos į vertinimą.',
       toggle: 'Atsižvelgti į tamsą',
     },
+    windLabels: {
+      title: 'Vėjo žymėjimas',
+      description:
+        'Kai įjungta, vėjuotoms valandoms priskiriama vėją nusakanti žyma (pvz., Vėjuota, Gūsinga, Smarkiai vėjuota, Vėtra) vietoj paprasto lygio.',
+      toggle: 'Naudoti vėjo aprašymus',
+    },
     location: {
       title: 'Numatytoji vieta',
       description:

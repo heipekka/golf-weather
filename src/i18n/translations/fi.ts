@@ -168,6 +168,12 @@ export const fi = {
         "Kun käytössä, tunnit ilman pelivaloa merkitään Pimeä-luokkaan ja huomioidaan pisteytyksessä.",
       toggle: "Huomioi pimeys",
     },
+    windLabels: {
+      title: "Tuulen kuvaukset",
+      description:
+        "Kun käytössä, tuulisille tunneille annetaan tuulta kuvaava luokka (esim. Tuulinen, Puuskainen, Myrskyinen, Myrsky) tavallisen luokan sijaan.",
+      toggle: "Käytä tuulen kuvauksia",
+    },
     location: {
       title: "Oletussijainti",
       description:

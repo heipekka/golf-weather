@@ -37,6 +37,7 @@ export function currentPlayability(
   lon: number,
   now?: Date,
   includeDark = true,
+  windLabels = true,
 ): Playability | null {
   const aggregated = entry?.weather?.aggregated ?? [];
   const current = entry?.weather ? findCurrentPoint(aggregated, now) : null;
@@ -65,6 +66,7 @@ export function currentPlayability(
       cloudCover: point.cloudCover,
       isDark: includeDark && enoughContext && isNight(point.time, lat, lon),
     })),
+    windLabels,
   );
 }
 

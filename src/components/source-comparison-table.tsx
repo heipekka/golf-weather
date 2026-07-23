@@ -4,6 +4,7 @@ import { Platform, StyleSheet, View, type ViewStyle } from "react-native";
 import { Spacing } from "@/constants/theme";
 import { useDarkScoring } from "@/hooks/use-dark-scoring";
 import { useTheme } from "@/hooks/use-theme";
+import { useWindLabels } from "@/hooks/use-wind-labels";
 import { useI18n } from "@/i18n";
 import {
   formatHourShort,
@@ -44,6 +45,7 @@ export function SourceComparisonTable({
   const theme = useTheme();
   const { t, locale } = useI18n();
   const { darkScoringEnabled } = useDarkScoring();
+  const { windLabelsEnabled } = useWindLabels();
   const indexed = useMemo(
     () =>
       sources.map((source) => ({ source, byHour: indexByHour(source.hourly) })),
@@ -104,15 +106,18 @@ export function SourceComparisonTable({
             {indexed.map(({ source, byHour }) => {
               const point = byHour.get(hour);
               const playability = point
-                ? scorePlayability({
-                    temperature: point.temperature,
-                    windSpeed: point.windSpeed,
-                    windGust: point.windGust,
-                    precipitation: point.precipitation,
-                    precipitationProbability: point.precipitationProbability,
-                    cloudCover: point.cloudCover,
-                    isDark: darkScoringEnabled && night,
-                  })
+                ? scorePlayability(
+                    {
+                      temperature: point.temperature,
+                      windSpeed: point.windSpeed,
+                      windGust: point.windGust,
+                      precipitation: point.precipitation,
+                      precipitationProbability: point.precipitationProbability,
+                      cloudCover: point.cloudCover,
+                      isDark: darkScoringEnabled && night,
+                    },
+                    windLabelsEnabled,
+                  )
                 : null;
 
               return (

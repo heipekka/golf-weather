@@ -169,6 +169,12 @@ export const et: TranslationDictionary = {
         'Kui see on sees, märgistatakse tunnid, mil mängitav valgus puudub, kui Pime ja need arvestatakse hindamisel.',
       toggle: 'Arvesta pimedust',
     },
+    windLabels: {
+      title: 'Tuule märgistus',
+      description:
+        'Kui see on sees, saavad tuulised tunnid tuult kirjeldava märgise (nt Tuuline, Puhanguline, Tormine, Torm) tavalise taseme asemel.',
+      toggle: 'Kasuta tuule kirjeldusi',
+    },
     location: {
       title: 'Vaikeasukoht',
       description:

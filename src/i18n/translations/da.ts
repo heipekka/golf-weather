@@ -169,6 +169,12 @@ export const da: TranslationDictionary = {
         'Når aktiveret, mærkes timer uden spilbart lys som Mørkt og indgår i scoren.',
       toggle: 'Tag højde for mørke',
     },
+    windLabels: {
+      title: 'Vindmærkning',
+      description:
+        'Når aktiveret, får blæsende timer en vindbeskrivende mærkning (f.eks. Blæsende, Kraftig vind, Hård vind, Storm) i stedet for det almindelige niveau.',
+      toggle: 'Brug vindbeskrivelser',
+    },
     location: {
       title: 'Standardplacering',
       description:

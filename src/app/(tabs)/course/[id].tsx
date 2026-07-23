@@ -23,6 +23,7 @@ import { useLocation } from "@/hooks/use-location";
 import { resolveNow, useStartTime } from "@/hooks/use-start-time";
 import { useTheme } from "@/hooks/use-theme";
 import { useWebPullToRefresh } from "@/hooks/use-web-pull-to-refresh";
+import { useWindLabels } from "@/hooks/use-wind-labels";
 import { useI18n } from "@/i18n";
 import { currentPlayability } from "@/lib/course-sort";
 import { formatDate, formatDistance, formatHour } from "@/lib/format";
@@ -37,6 +38,7 @@ export default function CourseDetailScreen() {
   const course = getCourseById(id);
   const { coords } = useLocation();
   const { darkScoringEnabled } = useDarkScoring();
+  const { windLabelsEnabled } = useWindLabels();
   const { t, locale } = useI18n();
   const theme = useTheme();
   const hourTick = useCurrentHour();
@@ -72,6 +74,7 @@ export default function CourseDetailScreen() {
     course?.lon ?? 0,
     now,
     darkScoringEnabled,
+    windLabelsEnabled,
   );
 
   const upcoming = useMemo(() => {

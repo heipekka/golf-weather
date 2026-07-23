@@ -11,6 +11,7 @@ import { FavoritesProvider } from '@/hooks/use-favorites';
 import { LocationProvider } from '@/hooks/use-location';
 import { StartTimeProvider } from '@/hooks/use-start-time';
 import { ThemeModeProvider, useResolvedColorScheme } from '@/hooks/use-theme-mode';
+import { WindLabelsProvider } from '@/hooks/use-wind-labels';
 import { LanguageProvider } from '@/i18n';
 import { recordSession } from '@/lib/usage-log';
 
@@ -46,13 +47,15 @@ export default function RootLayout() {
           <BookmarksProvider>
             <SortModeProvider>
               <DarkScoringProvider>
-                <StartTimeProvider>
-                  <DistanceFilterProvider>
-                    <ThemeModeProvider>
-                      <ThemedApp />
-                    </ThemeModeProvider>
-                  </DistanceFilterProvider>
-                </StartTimeProvider>
+                <WindLabelsProvider>
+                  <StartTimeProvider>
+                    <DistanceFilterProvider>
+                      <ThemeModeProvider>
+                        <ThemedApp />
+                      </ThemeModeProvider>
+                    </DistanceFilterProvider>
+                  </StartTimeProvider>
+                </WindLabelsProvider>
               </DarkScoringProvider>
             </SortModeProvider>
           </BookmarksProvider>

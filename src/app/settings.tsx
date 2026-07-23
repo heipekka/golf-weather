@@ -15,6 +15,7 @@ import { useDistanceFilter } from '@/hooks/use-distance-filter';
 import { useLocation } from '@/hooks/use-location';
 import { useTheme } from '@/hooks/use-theme';
 import { useThemeMode, type ThemeMode } from '@/hooks/use-theme-mode';
+import { useWindLabels } from '@/hooks/use-wind-labels';
 import { useI18n, type Language } from '@/i18n';
 import type { Coordinates } from '@/lib/geo';
 
@@ -209,6 +210,29 @@ function DarkScoringSection() {
   );
 }
 
+function WindLabelsSection() {
+  const { t } = useI18n();
+  const { windLabelsEnabled, setWindLabelsEnabled } = useWindLabels();
+
+  return (
+    <>
+      <View style={styles.sectionHeading}>
+        <ThemedText type="smallBold">{t('settings.windLabels.title')}</ThemedText>
+        <ThemedText type="small" themeColor="textSecondary">
+          {t('settings.windLabels.description')}
+        </ThemedText>
+      </View>
+
+      <ThemedView type="backgroundElement" style={styles.optionList}>
+        <View style={styles.option}>
+          <ThemedText type="default">{t('settings.windLabels.toggle')}</ThemedText>
+          <Switch value={windLabelsEnabled} onValueChange={setWindLabelsEnabled} />
+        </View>
+      </ThemedView>
+    </>
+  );
+}
+
 function DefaultLocationSection() {
   const { t } = useI18n();
   const { savedLocation, setSavedLocation, clearSavedLocation } = useLocation();
@@ -325,6 +349,7 @@ export default function SettingsScreen() {
           ) : (
             <>
               <DarkScoringSection />
+              <WindLabelsSection />
               <DefaultLocationSection />
               <DistanceRangeSection />
             </>

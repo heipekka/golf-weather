@@ -169,6 +169,12 @@ export const lv: TranslationDictionary = {
         'Kad ieslēgts, stundas bez spēlei piemērotas gaismas tiek apzīmētas kā Tumsa un tiek iekļautas vērtējumā.',
       toggle: 'Ņemt vērā tumsu',
     },
+    windLabels: {
+      title: 'Vēja apzīmējumi',
+      description:
+        'Kad ieslēgts, vējainām stundām tiek piešķirts vēju raksturojošs apzīmējums (piem., Vējains, Brāzmains, Stiprs vējš, Vētra) parastā līmeņa vietā.',
+      toggle: 'Lietot vēja apzīmējumus',
+    },
     location: {
       title: 'Noklusējuma atrašanās vieta',
       description:

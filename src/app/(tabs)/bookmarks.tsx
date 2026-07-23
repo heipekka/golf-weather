@@ -18,6 +18,7 @@ import { useCurrentHour } from '@/hooks/use-current-hour';
 import { useDarkScoring } from '@/hooks/use-dark-scoring';
 import { useLocation } from '@/hooks/use-location';
 import { useWebPullToRefresh } from '@/hooks/use-web-pull-to-refresh';
+import { useWindLabels } from '@/hooks/use-wind-labels';
 import { useI18n } from '@/i18n';
 import { WINDOW_HOURS, currentPlayability } from '@/lib/course-sort';
 import { sortByDistance, type GolfCourse, type GolfCourseWithDistance } from '@/lib/geo';
@@ -35,6 +36,7 @@ export default function BookmarksScreen() {
   const { coords, loading: locationLoading, refresh } = useLocation();
   const { bookmarks, pruneExpired, removeBookmark } = useBookmarks();
   const { darkScoringEnabled } = useDarkScoring();
+  const { windLabelsEnabled } = useWindLabels();
   const { t } = useI18n();
   const hourTick = useCurrentHour();
   const hasHydrated = useHasHydrated();
@@ -172,7 +174,8 @@ export default function BookmarksScreen() {
               course.lat,
               course.lon,
               bookmarkDateTime,
-              darkScoringEnabled
+              darkScoringEnabled,
+              windLabelsEnabled
             );
             const sun = hasHydrated ? getSunTimes(course.lat, course.lon) : EMPTY_SUN_TIMES;
             const dailyOnly = !!entry?.weather && !hasHourlyData(entry.weather.sources);

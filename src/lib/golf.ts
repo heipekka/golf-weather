@@ -286,16 +286,42 @@ function reasonsFor(label: PlayabilityLabel): PlayabilityReasonCode[] {
   }
 }
 
+/** Maps each wind-descriptive tier to the base tier it refines, used to collapse wind labels when the wind-labelling setting is off. */
+const WIND_FLAVOR_TO_BASE: Partial<Record<PlayabilityLabel, PlayabilityLabel>> = {
+  Windy: "Good",
+  Gusty: "Fair",
+  Blustery: "Poor",
+  Gale: "Bad",
+};
+
+/**
+ * Collapses a wind-descriptive tier (`Windy`/`Gusty`/`Blustery`/`Gale`) back
+ * to its base tier. Every other label (including the temperature-flavored
+ * `Cold`) passes through unchanged. Since wind flavors always share the
+ * same `TIER_SCORE`/`TIER_RANK` as their base tier, this only changes the
+ * displayed text, never the score or sort order.
+ */
+function collapseWindLabel(label: PlayabilityLabel): PlayabilityLabel {
+  return WIND_FLAVOR_TO_BASE[label] ?? label;
+}
+
 /**
  * Scores a single hour's playability. Wind, rain, and temperature are
  * evaluated with OR logic, so any one poor factor is enough to lower the
  * tier — a single heavy rain shower shouldn't be masked by otherwise calm
  * conditions.
+ *
+ * `windLabels` (default `true`) controls whether wind-descriptive tiers
+ * (`Windy`/`Gusty`/`Blustery`/`Gale`) are surfaced; when `false` they
+ * collapse to their base tier (`Good`/`Fair`/`Poor`/`Bad`) without changing
+ * the score.
  */
 export function scorePlayability(
   conditions: PlayabilityConditions,
+  windLabels = true,
 ): Playability {
-  const label = classifyHour(conditions);
+  const rawLabel = classifyHour(conditions);
+  const label = windLabels ? rawLabel : collapseWindLabel(rawLabel);
   return { score: TIER_SCORE[label], label, reasons: reasonsFor(label) };
 }
 
@@ -339,9 +365,10 @@ function averageRank(hours: PlayabilityConditions[]): number {
  * Resolves a half-window's raw average rank to a representative tier.
  * Normally rounded down, so a mixed half reads as its lower tier rather than
  * being flattered by its best hours — except at the top of the scale: a half
- * made up entirely of pleasant hours (Excellent/Good/Hot) rounds up instead,
- * so a single stray Good or Hot hour doesn't mask an otherwise Excellent
- * half. Any Fair/Poor/Bad hour disables this and keeps the strict floor.
+ * made up entirely of pleasant hours (Excellent/Good/Hot/Windy) rounds up
+ * instead, so a single stray Good, Hot, or Windy hour doesn't mask an
+ * otherwise Excellent half. Any Fair/Poor/Bad hour disables this and keeps
+ * the strict floor.
  */
 function halfTier(
   hours: PlayabilityConditions[],
@@ -352,7 +379,12 @@ function halfTier(
     floored === "Good" &&
     hours.every((hour) => {
       const label = classifyHour(hour);
-      return label === "Excellent" || label === "Good" || label === "Hot";
+      return (
+        label === "Excellent" ||
+        label === "Good" ||
+        label === "Hot" ||
+        label === "Windy"
+      );
     })
   ) {
     return RANK_TIER[Math.round(avg)];
@@ -397,9 +429,14 @@ function halfTier(
  *   dominant count of `Windy`/`Gusty`/`Blustery`/`Gale` (or `Cold`) hours
  *   (`FLAVOR_DOMINANCE_MIN_HOURS`) refines that same tier into its
  *   cold/windy flavor, so the badge conveys *why* the window is that tier
- *   instead of just how good it is.
+ *   instead of just how good it is. When `windLabels` (default `true`) is
+ *   `false`, only the `Cold` flavor is applied and the wind flavors are
+ *   skipped, leaving the base tier (and its `trend`, if any) in place.
  */
-export function scoreWindow(hours: PlayabilityConditions[]): Playability {
+export function scoreWindow(
+  hours: PlayabilityConditions[],
+  windLabels = true,
+): Playability {
   if (hours.length === 0) {
     return { score: 0, label: "Fair", reasons: [] };
   }
@@ -461,7 +498,7 @@ export function scoreWindow(hours: PlayabilityConditions[]): Playability {
   }
 
   const flavorOverride = flavorFor(label, rounded);
-  if (flavorOverride) {
+  if (flavorOverride && (windLabels || flavorOverride === "Cold")) {
     return {
       score: TIER_SCORE[flavorOverride],
       label: flavorOverride,

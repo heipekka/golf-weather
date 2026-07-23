@@ -169,6 +169,12 @@ export const sv: TranslationDictionary = {
         'När aktiverat märks timmar utan spelbart ljus som Mörkt och räknas in i poängsättningen.',
       toggle: 'Ta hänsyn till mörker',
     },
+    windLabels: {
+      title: 'Vindetiketter',
+      description:
+        'När aktiverat får blåsiga timmar en vindbeskrivande etikett (t.ex. Blåsigt, Byigt, Hård vind, Storm) istället för den vanliga nivån.',
+      toggle: 'Använd vindbeskrivningar',
+    },
     location: {
       title: 'Standardplats',
       description:
