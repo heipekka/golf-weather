@@ -1,4 +1,4 @@
-import { Link } from "expo-router";
+import { Link, type Href } from "expo-router";
 import { SymbolView } from "expo-symbols";
 import { useState } from "react";
 import { Platform, Pressable, StyleSheet, View } from "react-native";
@@ -50,6 +50,8 @@ export type CourseCardProps = {
   bookmarkIsNow?: boolean;
   /** When set, the corner shows only a remove button (calling this) instead of the favorite/bookmark buttons — used on the bookmarks list. */
   onRemoveBookmark?: () => void;
+  /** Overrides the card body's navigation target (defaults to `/course/${id}`) — used to link to the bookmark detail instead. */
+  detailHref?: Href;
 };
 
 export function CourseCard({
@@ -69,6 +71,7 @@ export function CourseCard({
   showBookmarkDateTime,
   bookmarkIsNow,
   onRemoveBookmark,
+  detailHref,
 }: CourseCardProps) {
   const [showHourly, setShowHourly] = useState(false);
   const theme = useTheme();
@@ -108,7 +111,7 @@ export function CourseCard({
         )}
       </View>
 
-      <Link href={`/course/${id}`} asChild>
+      <Link href={detailHref ?? `/course/${id}`} asChild>
         <Pressable style={({ pressed }) => pressed && styles.pressed}>
           {showBookmarkDateTime && bookmarkDateTime && (
             <ThemedText type="smallBold" style={styles.bookmarkHeading} numberOfLines={1}>

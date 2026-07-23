@@ -110,25 +110,9 @@ export default function TabsLayout() {
               tintColor={color}
             />
           ),
-          headerShown: true,
-          headerTitle: t("bookmarks.title"),
-          headerTitleAlign: "center",
-          headerRight: () => (
-            <Link href="/settings" asChild>
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel={t("courses.openSettings")}
-                hitSlop={Spacing.two}
-                style={({ pressed }) => [styles.settingsButton, pressed && styles.settingsButtonPressed]}>
-                <SymbolView
-                  name={{ ios: "gearshape", android: "settings", web: "settings" }}
-                  size={24}
-                  tintColor={theme.textSecondary}
-                />
-              </Pressable>
-            </Link>
-          ),
-          headerRightContainerStyle: styles.headerSideContainer,
+          // The bookmarks route is a nested stack (list + detail) that owns
+          // its own per-screen headers, so the tab-level header stays off.
+          headerShown: false,
         }}
       />
       <Tabs.Screen name="course" options={{ href: null }} />

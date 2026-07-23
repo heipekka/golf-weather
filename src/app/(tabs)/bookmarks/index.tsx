@@ -1,5 +1,7 @@
+import { Link, Stack } from 'expo-router';
+import { SymbolView } from 'expo-symbols';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { FlatList, RefreshControl, StyleSheet, View } from 'react-native';
+import { FlatList, Pressable, RefreshControl, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ConfirmDialog } from '@/components/confirm-dialog';
@@ -17,6 +19,7 @@ import { useCoursesWeather } from '@/hooks/use-courses-weather';
 import { useCurrentHour } from '@/hooks/use-current-hour';
 import { useDarkScoring } from '@/hooks/use-dark-scoring';
 import { useLocation } from '@/hooks/use-location';
+import { useTheme } from '@/hooks/use-theme';
 import { useWebPullToRefresh } from '@/hooks/use-web-pull-to-refresh';
 import { useWindLabels } from '@/hooks/use-wind-labels';
 import { useI18n } from '@/i18n';
@@ -38,6 +41,7 @@ export default function BookmarksScreen() {
   const { darkScoringEnabled } = useDarkScoring();
   const { windLabelsEnabled } = useWindLabels();
   const { t } = useI18n();
+  const theme = useTheme();
   const hourTick = useCurrentHour();
   const hasHydrated = useHasHydrated();
   const [searchQuery, setSearchQuery] = useState('');
@@ -125,6 +129,28 @@ export default function BookmarksScreen() {
 
   return (
     <ThemedView style={styles.container}>
+      <Stack.Screen
+        options={{
+          headerTitle: t('bookmarks.title'),
+          headerTitleAlign: 'center',
+          headerRight: () => (
+            <Link href="/settings" asChild>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={t('courses.openSettings')}
+                hitSlop={Spacing.two}
+                style={({ pressed }) => [styles.settingsButton, pressed && styles.settingsButtonPressed]}>
+                <SymbolView
+                  name={{ ios: 'gearshape', android: 'settings', web: 'settings' }}
+                  size={24}
+                  tintColor={theme.textSecondary}
+                />
+              </Pressable>
+            </Link>
+          ),
+          headerRightContainerStyle: styles.headerSideContainer,
+        }}
+      />
       <SafeAreaView style={styles.safeArea}>
         {pullToRefreshIndicator}
         <FlatList
@@ -198,6 +224,7 @@ export default function BookmarksScreen() {
                 showBookmarkDateTime
                 bookmarkIsNow={bookmark.isNow}
                 onRemoveBookmark={() => setPendingRemoval(bookmark)}
+                detailHref={{ pathname: '/bookmarks/[id]', params: { id: bookmark.id } }}
               />
             );
           }}
@@ -254,5 +281,14 @@ const styles = StyleSheet.create({
   },
   searchSlot: {
     flex: 1,
+  },
+  settingsButton: {
+    padding: Spacing.one,
+  },
+  settingsButtonPressed: {
+    opacity: 0.6,
+  },
+  headerSideContainer: {
+    paddingHorizontal: Spacing.three,
   },
 });
