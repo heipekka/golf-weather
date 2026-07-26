@@ -4,27 +4,40 @@ import { scoreWindow, type Playability } from "@/lib/golf";
 import { isNight } from "@/lib/sun";
 import { findCurrentPoint, hasHourlyData } from "@/lib/weather";
 
+/**
+ * Legacy discrete sort mode, kept only for migrating old persisted values
+ * and `?sort=` deep links to the numeric `weatherWeight` scale (0 = pure
+ * location, 1 = pure weather) used everywhere else.
+ */
 export type SortMode = "location" | "weather" | "combined";
 
-export const SortModeLabels: Record<SortMode, string> = {
-  location: "Location",
-  weather: "Best weather",
-  combined: "Combined",
+/** Weight assigned to weather when migrating a legacy `SortMode` to the numeric scale. */
+const LEGACY_MODE_WEIGHT: Record<SortMode, number> = {
+  location: 0,
+  weather: 1,
+  combined: 0.35,
 };
+
+/** Maps a legacy discrete sort mode to its equivalent `weatherWeight`. */
+export function weightFromLegacyMode(mode: SortMode): number {
+  return LEGACY_MODE_WEIGHT[mode];
+}
+
+/** Clamps an arbitrary number into the valid `weatherWeight` range `[0, 1]`. */
+export function clampWeight(value: number): number {
+  if (!Number.isFinite(value)) return 0;
+  return Math.min(1, Math.max(0, value));
+}
 
 /**
  * Distance beyond which the location score bottoms out at 0. Kept wide
- * (most Finnish courses fall within this) so `combined` mode can actually
+ * (most Finnish courses fall within this) so a blended weight can actually
  * discriminate between a 100 km and a 400 km course instead of both
  * flooring at 0 and collapsing the sort into pure weather ranking.
  */
 const MAX_SCORED_DISTANCE_KM = 500;
 
-/** Weights for `combined` mode: distance dominates, weather only breaks ties among similarly-close courses. */
-const COMBINED_DISTANCE_WEIGHT = 0.65;
-const COMBINED_WEATHER_WEIGHT = 0.35;
-
-/** Small combined-mode nudge (max ~a few points) so sunnier courses edge ahead among near-ties. */
+/** Small blended-weight nudge (max ~a few points) so sunnier courses edge ahead among near-ties. */
 const COMBINED_SUNSHINE_WEIGHT = 0.05;
 
 /** Number of upcoming hours considered when scoring a course's playability. */
@@ -103,14 +116,22 @@ export function windowSunshine(
   return 100 - clouds.reduce((sum, c) => sum + c, 0) / clouds.length;
 }
 
+/**
+ * Ranks courses by a blend of proximity and current playability.
+ * `weatherWeight` is `0` for pure location, `1` for pure weather, and
+ * anything in between blends `distanceScore` and `playability.score`
+ * proportionally (with a small sunshine tie-break nudge throughout).
+ */
 export function sortCourses(
   courses: GolfCourseWithDistance[],
   weatherByCourse: Record<string, CourseWeatherState>,
-  mode: SortMode,
+  weatherWeight: number,
   now?: Date,
   includeDark = true,
 ): GolfCourseWithDistance[] {
-  if (mode === "location") {
+  const weight = clampWeight(weatherWeight);
+
+  if (weight === 0) {
     return [...courses].sort((a, b) => a.distanceKm - b.distanceKm);
   }
 
@@ -132,7 +153,7 @@ export function sortCourses(
     const playability = playabilityById.get(course.id) ?? null;
     if (!playability) return null;
 
-    if (mode === "weather") return playability.score;
+    if (weight === 1) return playability.score;
 
     const sunshine = sunshineById.get(course.id) ?? null;
     const sunTerm =
@@ -143,8 +164,8 @@ export function sortCourses(
           (playability.label === "Hot" ? -1 : 1);
 
     return (
-      COMBINED_DISTANCE_WEIGHT * distanceScore(course.distanceKm) +
-      COMBINED_WEATHER_WEIGHT * playability.score +
+      (1 - weight) * distanceScore(course.distanceKm) +
+      weight * playability.score +
       sunTerm
     );
   };
@@ -158,7 +179,7 @@ export function sortCourses(
     if (scoreA === null) return 1;
     if (scoreB === null) return -1;
 
-    if (scoreA === scoreB && mode === "weather") {
+    if (scoreA === scoreB && weight === 1) {
       const sunA = sunshineById.get(a.id) ?? null;
       const sunB = sunshineById.get(b.id) ?? null;
       if (sunA === null && sunB === null) return a.distanceKm - b.distanceKm;

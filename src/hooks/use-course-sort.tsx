@@ -12,39 +12,56 @@ import {
 } from 'react';
 
 import type { TranslationKey } from '@/i18n';
-import { type SortMode } from '@/lib/course-sort';
+import { clampWeight, weightFromLegacyMode, type SortMode } from '@/lib/course-sort';
 
 const STORAGE_KEY = 'golf-weather.courseSort';
 
-const SORT_MODES: SortMode[] = ['location', 'weather', 'combined'];
+const LEGACY_SORT_MODES: SortMode[] = ['location', 'weather', 'combined'];
 
-export const SUBTITLE_KEY_BY_MODE: Record<SortMode, TranslationKey> = {
-  location: 'courses.subtitleLocation',
-  weather: 'courses.subtitleWeather',
-  combined: 'courses.subtitleCombined',
-};
-
-function isSortMode(value: unknown): value is SortMode {
-  return typeof value === 'string' && (SORT_MODES as string[]).includes(value);
+function isLegacySortMode(value: unknown): value is SortMode {
+  return typeof value === 'string' && (LEGACY_SORT_MODES as string[]).includes(value);
 }
 
+/** Parses a persisted/URL sort value: a numeric weight (`"0.4"`), a legacy mode string, or invalid/missing -> `null`. */
+function parseWeight(value: unknown): number | null {
+  if (typeof value !== 'string') return null;
+  if (isLegacySortMode(value)) return weightFromLegacyMode(value);
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed)) return null;
+  return clampWeight(parsed);
+}
+
+/** Picks the courses subtitle translation key for a given weatherWeight. */
+export function subtitleKeyForWeight(weight: number): TranslationKey {
+  if (weight <= 0) return 'courses.subtitleLocation';
+  if (weight >= 1) return 'courses.subtitleWeather';
+  return 'courses.subtitleCombined';
+}
+
+type SetWeatherWeightOptions = {
+  /** Whether to persist the new value to storage. Defaults to `true`; pass `false` for live drag updates. */
+  persist?: boolean;
+};
+
 type SortModeContextValue = {
-  sortMode: SortMode;
-  setSortMode: (mode: SortMode) => void;
+  weatherWeight: number;
+  setWeatherWeight: (weight: number, options?: SetWeatherWeightOptions) => void;
 };
 
 const SortModeContext = createContext<SortModeContextValue | null>(null);
 
 /**
- * Shares a single sort mode across every screen that renders `SortControl`
- * (Courses and Favorites), so switching the tab on one screen is instantly
- * reflected on the other — mirroring `FavoritesProvider`. Persists the
- * latest choice under `golf-weather.courseSort`, so relaunching the app
- * restores the last used tab.
+ * Shares a single location/weather weight across every screen that renders
+ * `SortControl` (Courses and Favorites), so dragging the slider on one
+ * screen is instantly reflected on the other — mirroring `FavoritesProvider`.
+ * Persists the latest value under `golf-weather.courseSort`, so relaunching
+ * the app restores the last used weight. Accepts legacy `location` /
+ * `weather` / `combined` strings (from older persisted values or deep
+ * links) and migrates them to the equivalent numeric weight.
  */
 export function SortModeProvider({ children }: { children: ReactNode }) {
-  const [sortMode, setSortModeState] = useState<SortMode>('location');
-  // Tracks whether `setSortMode` has already fired (e.g. a deep-linked
+  const [weatherWeight, setWeatherWeightState] = useState<number>(0);
+  // Tracks whether `setWeatherWeight` has already fired (e.g. a deep-linked
   // `?sort=` param resolved via `useSortModeUrlSync`) before the storage
   // read below settles, so a slower storage read can't clobber it.
   const hasExternalOverrideRef = useRef(false);
@@ -54,8 +71,10 @@ export function SortModeProvider({ children }: { children: ReactNode }) {
 
     AsyncStorage.getItem(STORAGE_KEY)
       .then((stored) => {
-        if (cancelled || hasExternalOverrideRef.current || !isSortMode(stored)) return;
-        setSortModeState(stored);
+        if (cancelled || hasExternalOverrideRef.current) return;
+        const parsed = parseWeight(stored);
+        if (parsed === null) return;
+        setWeatherWeightState(parsed);
       })
       .catch(() => {});
 
@@ -64,13 +83,18 @@ export function SortModeProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  const setSortMode = useCallback((mode: SortMode) => {
+  const setWeatherWeight = useCallback((weight: number, options?: SetWeatherWeightOptions) => {
+    const clamped = clampWeight(weight);
     hasExternalOverrideRef.current = true;
-    setSortModeState(mode);
-    AsyncStorage.setItem(STORAGE_KEY, mode).catch(() => {});
+    setWeatherWeightState(clamped);
+    if (options?.persist === false) return;
+    AsyncStorage.setItem(STORAGE_KEY, String(clamped)).catch(() => {});
   }, []);
 
-  const value = useMemo<SortModeContextValue>(() => ({ sortMode, setSortMode }), [sortMode, setSortMode]);
+  const value = useMemo<SortModeContextValue>(
+    () => ({ weatherWeight, setWeatherWeight }),
+    [weatherWeight, setWeatherWeight]
+  );
 
   return <SortModeContext.Provider value={value}>{children}</SortModeContext.Provider>;
 }
@@ -84,53 +108,65 @@ export function useCourseSort(): SortModeContextValue {
 }
 
 /**
- * Reconciles the Courses screen's shared sort mode with the `?sort=` query
- * param (for direct linking): on mount, a valid `sort` param wins outright.
- * Every subsequent change is written back to the URL via `router.setParams`
- * (an in-place replace, no history entry) so the address bar always
- * reflects the active tab. Favorites has no such param, so it doesn't use
- * this hook.
+ * Reconciles the Courses screen's shared sort weight with the `?sort=` query
+ * param (for direct linking): on mount, a valid `sort` param (numeric weight
+ * or legacy mode string) wins outright. Every subsequent change is written
+ * back to the URL as a numeric weight via `router.setParams` (an in-place
+ * replace, no history entry) so the address bar always reflects the active
+ * weight. Favorites has no such param, so it doesn't use this hook.
  */
 export function useSortModeUrlSync(): void {
   const params = useLocalSearchParams<{ sort?: string }>();
   const router = useRouter();
   const navigationRef = useNavigationContainerRef();
-  const { sortMode, setSortMode } = useCourseSort();
+  const { weatherWeight, setWeatherWeight } = useCourseSort();
 
   useEffect(() => {
     // A deep link wins outright, overriding both the current in-memory
     // value and whatever is persisted in storage (see `hasExternalOverrideRef`
     // in `SortModeProvider`).
-    const paramSortMode = isSortMode(params.sort) ? params.sort : null;
-    if (paramSortMode) {
-      setSortMode(paramSortMode);
+    const paramWeight = parseWeight(params.sort);
+    if (paramWeight !== null) {
+      setWeatherWeight(paramWeight);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- runs once on mount; only cares whether a param was present initially.
   }, []);
 
   useEffect(() => {
-    if (params.sort === sortMode) return;
+    const currentParamWeight = parseWeight(params.sort);
+    if (currentParamWeight === weatherWeight) return;
 
-    // The navigation container can emit its initial state (and thus a
-    // truthy root navigation state) before it actually reports ready via
-    // `isReady()`. Calling `router.setParams` while not ready throws
-    // "Attempted to navigate before mounting the Root Layout component.",
-    // which is reliably hit when deep-linking straight into `/courses`
-    // (skipping the `/` redirect that otherwise delays this mount). Retry
-    // on the next frame until the container settles.
-    let frame: ReturnType<typeof requestAnimationFrame> | undefined;
-    const writeParam = () => {
-      if (navigationRef.isReady()) {
-        router.setParams({ sort: sortMode });
-        return;
-      }
-      frame = requestAnimationFrame(writeParam);
-    };
-    writeParam();
+    // Slider drags update `weatherWeight` on every frame (with `persist:
+    // false`); debounce so the URL only settles once dragging pauses,
+    // instead of calling `router.setParams` dozens of times per drag.
+    let cleanupFrame: (() => void) | undefined;
+    const debounce = setTimeout(() => {
+      // The navigation container can emit its initial state (and thus a
+      // truthy root navigation state) before it actually reports ready via
+      // `isReady()`. Calling `router.setParams` while not ready throws
+      // "Attempted to navigate before mounting the Root Layout component.",
+      // which is reliably hit when deep-linking straight into `/courses`
+      // (skipping the `/` redirect that otherwise delays this mount). Retry
+      // on the next frame until the container settles.
+      let frame: ReturnType<typeof requestAnimationFrame> | undefined;
+      const writeParam = () => {
+        if (navigationRef.isReady()) {
+          router.setParams({ sort: String(weatherWeight) });
+          return;
+        }
+        frame = requestAnimationFrame(writeParam);
+      };
+      writeParam();
+
+      cleanupFrame = () => {
+        if (frame !== undefined) cancelAnimationFrame(frame);
+      };
+    }, 250);
 
     return () => {
-      if (frame !== undefined) cancelAnimationFrame(frame);
+      clearTimeout(debounce);
+      cleanupFrame?.();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- reacts to sortMode/param changes; navigationRef and router are stable refs.
-  }, [sortMode, params.sort]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- reacts to weatherWeight/param changes; navigationRef and router are stable refs.
+  }, [weatherWeight, params.sort]);
 }

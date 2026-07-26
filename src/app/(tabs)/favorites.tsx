@@ -36,7 +36,7 @@ const NEXT_HOURS_SHOWN = WINDOW_HOURS;
 export default function FavoritesScreen() {
   const { coords, loading: locationLoading, deviceMovedFar, refresh } = useLocation();
   const { favorites } = useFavorites();
-  const { sortMode, setSortMode } = useCourseSort();
+  const { weatherWeight, setWeatherWeight } = useCourseSort();
   const { darkScoringEnabled } = useDarkScoring();
   const { windLabelsEnabled } = useWindLabels();
   const { t } = useI18n();
@@ -73,7 +73,7 @@ export default function FavoritesScreen() {
   const { sortedCourses, orderIsStale, refreshOrder } = useSortedCourseOrder(
     coursesByDistance,
     weatherByCourse,
-    sortMode,
+    weatherWeight,
     startTime,
     darkScoringEnabled
   );
@@ -108,7 +108,7 @@ export default function FavoritesScreen() {
                   <StartTimeButton />
                 </View>
               </View>
-              <SortControl value={sortMode} onChange={setSortMode} />
+              <SortControl value={weatherWeight} onChange={setWeatherWeight} />
               {(deviceMovedFar || orderIsStale) && (
                 <Pressable
                   accessibilityRole="button"

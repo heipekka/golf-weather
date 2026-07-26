@@ -52,7 +52,7 @@ const PAGE_SIZE = 15;
 
 export default function CoursesScreen() {
   const { coords, loading: locationLoading, deviceMovedFar, refresh } = useLocation();
-  const { sortMode, setSortMode } = useCourseSort();
+  const { weatherWeight, setWeatherWeight } = useCourseSort();
   useSortModeUrlSync();
   const { darkScoringEnabled } = useDarkScoring();
   const { windLabelsEnabled } = useWindLabels();
@@ -86,7 +86,7 @@ export default function CoursesScreen() {
   const { sortedCourses, orderIsStale, refreshOrder } = useSortedCourseOrder(
     coursesInRange,
     weatherByCourse,
-    sortMode,
+    weatherWeight,
     startTime,
     darkScoringEnabled
   );
@@ -116,13 +116,13 @@ export default function CoursesScreen() {
   // recommended pattern for derived state) rather than in an effect, to
   // avoid an extra commit.
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
-  const [pageResetKey, setPageResetKey] = useState({ sortMode, startTime, searchQuery });
+  const [pageResetKey, setPageResetKey] = useState({ weatherWeight, startTime, searchQuery });
   if (
-    pageResetKey.sortMode !== sortMode ||
+    pageResetKey.weatherWeight !== weatherWeight ||
     pageResetKey.startTime !== startTime ||
     pageResetKey.searchQuery !== searchQuery
   ) {
-    setPageResetKey({ sortMode, startTime, searchQuery });
+    setPageResetKey({ weatherWeight, startTime, searchQuery });
     setVisibleCount(PAGE_SIZE);
   }
   const visibleCourses = useMemo(
@@ -197,7 +197,7 @@ export default function CoursesScreen() {
               <StartTimeButton>
                 <CourseSearchBar query={searchQuery} onChangeQuery={setSearchQuery} />
               </StartTimeButton>
-              <SortControl value={sortMode} onChange={setSortMode} />
+              <SortControl value={weatherWeight} onChange={setWeatherWeight} />
               {(deviceMovedFar || orderIsStale) && (
                 <Pressable
                   accessibilityRole="button"
