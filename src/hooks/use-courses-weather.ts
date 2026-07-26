@@ -2,18 +2,19 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useI18n } from '@/i18n';
 import type { GolfCourseWithDistance } from '@/lib/geo';
-import { fetchAllSources } from '@/lib/weather';
+import { fetchCoursesWeather } from '@/lib/weather';
 import type { CourseWeather } from '@/lib/weather';
-
-// Bounds how many course forecasts are in flight at once, so browsing the
-// full course list doesn't burst dozens of simultaneous requests at the
-// weather providers.
-const CONCURRENCY = 4;
 
 // Individual course results are buffered and flushed to React state on this
 // trailing interval, so dozens of near-simultaneous results collapse into a
 // handful of renders instead of re-rendering the whole list per result.
 const FLUSH_INTERVAL_MS = 1000;
+
+// Forced refreshes are spread over this window. Every mounted screen reacts to
+// the same hour rollover at the same instant, and spacing them out keeps their
+// requests from arriving as one burst at the providers. In-flight requests are
+// already shared across screens, so this is a second line of defence.
+const MAX_REFRESH_JITTER_MS = 1500;
 
 export type CourseWeatherState = {
   weather: CourseWeather | null;
@@ -27,6 +28,10 @@ export type UseCoursesWeatherResult = {
   refreshing: boolean;
 };
 
+function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 export function useCoursesWeather(
   courses: GolfCourseWithDistance[],
   reloadToken?: number
@@ -34,8 +39,12 @@ export function useCoursesWeather(
   const { t } = useI18n();
   const [state, setState] = useState<Record<string, CourseWeatherState>>({});
   const requestedRef = useRef(new Set<string>());
+  // Held in a ref rather than read directly in the fetch effect, so switching
+  // language updates the message without re-triggering a refetch.
   const failedToLoadWeatherRef = useRef(t('errors.failedToLoadWeather'));
-  failedToLoadWeatherRef.current = t('errors.failedToLoadWeather');
+  useEffect(() => {
+    failedToLoadWeatherRef.current = t('errors.failedToLoadWeather');
+  }, [t]);
 
   // Buffers individual course results so they can be flushed to state in
   // batches (see `FLUSH_INTERVAL_MS`) instead of one `setState` per result.
@@ -106,46 +115,49 @@ export function useCoursesWeather(
     // active, so a cancelled run can release the rest back for re-fetching.
     const completed = new Set<string>();
 
-    let cursor = 0;
-    async function worker() {
-      while (!cancelled && cursor < pending.length) {
-        const course = pending[cursor++];
-        try {
-          const weather = await fetchAllSources(course.lat, course.lon, {
-            forceRefresh: isReloadRun,
-            onPartial: (partial) => {
-              if (cancelled || partial.aggregated.length === 0) return;
-              queueUpdate(course.id, { weather: partial, loading: false, error: null });
-            },
-          });
-          if (!cancelled) {
-            completed.add(course.id);
-            queueUpdate(course.id, { weather, loading: false, error: null });
-          }
-        } catch (err) {
-          if (!cancelled) {
-            completed.add(course.id);
-            queueUpdate(course.id, {
-              weather: null,
-              loading: false,
-              error: err instanceof Error ? err.message : failedToLoadWeatherRef.current,
-            });
-          }
+    async function load() {
+      if (isReloadRun) await delay(Math.random() * MAX_REFRESH_JITTER_MS);
+      if (cancelled) return;
+
+      // Concurrency, retries and caching all live in `@/lib/weather`, which
+      // batches Open-Meteo into a single request for the whole list and caps
+      // in-flight requests per provider across every screen.
+      const results = await fetchCoursesWeather(
+        pending.map((course) => ({ lat: course.lat, lon: course.lon })),
+        {
+          forceRefresh: isReloadRun,
+          onPartial: (index, partial) => {
+            if (cancelled || partial.aggregated.length === 0) return;
+            queueUpdate(pending[index].id, { weather: partial, loading: false, error: null });
+          },
         }
-      }
-    }
+      );
+      if (cancelled) return;
 
-    const workerCount = Math.min(CONCURRENCY, pending.length);
-    const workers: Promise<void>[] = [];
-    for (let i = 0; i < workerCount; i++) {
-      workers.push(worker());
-    }
+      results.forEach((weather, index) => {
+        const course = pending[index];
+        completed.add(course.id);
 
-    if (isReloadRun) {
-      Promise.all(workers).then(() => {
-        if (!cancelled) setRefreshing(false);
+        if (weather.aggregated.length > 0) {
+          queueUpdate(course.id, { weather, loading: false, error: null });
+          return;
+        }
+
+        // Not one provider returned usable data, and none had a previous value
+        // to fall back on. Release the course so the next run retries it
+        // instead of leaving the card empty for the rest of the session.
+        requestedRef.current.delete(course.id);
+        queueUpdate(course.id, {
+          weather: null,
+          loading: false,
+          error: failedToLoadWeatherRef.current,
+        });
       });
     }
+
+    load().finally(() => {
+      if (!cancelled && isReloadRun) setRefreshing(false);
+    });
 
     return () => {
       cancelled = true;

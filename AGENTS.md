@@ -4,7 +4,7 @@ Read the exact versioned docs at https://docs.expo.dev/versions/v57.0.0/ before 
 
 ## Overview
 
-Finnish golf course weather app. Lists ~99 static golf courses, fetches forecasts from three weather sources, aggregates them, and scores playability per hour/window. Supports favorites, i18n (fi/en, Finnish default), and deploys as a static web export to Vercel. No backend (all API calls happen client-side), no test suite.
+Nordic golf course weather app. Lists ~400 static golf courses (Finland, Denmark, Norway, Sweden, Spain, Estonia; the list screen filters them to a distance radius, 200 km by default), fetches forecasts from three weather sources, aggregates them, and scores playability per hour/window. Supports favorites, i18n (fi/en, Finnish default), and deploys as a static web export to Vercel. No backend (all API calls happen client-side), no test suite.
 
 ## Tech stack
 
@@ -24,7 +24,7 @@ Finnish golf course weather app. Lists ~99 static golf courses, fetches forecast
 - `src/components/` — reusable UI (`CourseCard`, `HourlyStrip`, `PlayabilityBadge`, `SourceComparisonTable`, `ThemedText`/`ThemedView`, etc.)
 - `src/hooks/` — custom hooks and context providers (`use-favorites`, `use-course-sort`, `use-location`, `use-courses-weather`, `use-course-weather`, `use-current-hour`, `use-theme`, `use-color-scheme` + `.web` variant)
 - `src/lib/` — business logic:
-  - `lib/weather/` — API clients + aggregation (core data layer): `fmi.ts`, `yr.ts`, `open-meteo.ts`, `aggregate.ts`, `types.ts`, `index.ts` (orchestration, caching, timeouts)
+  - `lib/weather/` — API clients + aggregation (core data layer): `fmi.ts`, `yr.ts`, `open-meteo.ts`, `aggregate.ts`, `types.ts`, `index.ts` (orchestration), `request.ts` (concurrency caps, retries, timeouts), `cache.ts` (per-source cache), `persist.ts` (bounded AsyncStorage cache)
   - `lib/golf.ts` — playability scoring/classification
   - `lib/course-sort.ts` — list ordering (location/weather/combined)
   - `lib/geo.ts` — `GolfCourse` type, haversine distance, `sortByDistance`
@@ -56,13 +56,15 @@ Provider nesting in [src/app/_layout.tsx](src/app/_layout.tsx): `LanguageProvide
 ```
 golf-courses.json
   -> useLocation()               (GPS, Kuopio fallback if denied)
-  -> sortByDistance()
+  -> sortByDistance() + distance filter
   -> useCoursesWeather() / useCourseWeather()
-  -> fetchAllSources(lat, lon)   [src/lib/weather/index.ts]
-       - fetchFmi()        FMI WFS XML (Harmonie)
-       - fetchYr()         MET Norway Locationforecast (requires User-Agent header)
-       - fetchOpenMeteo()  Open-Meteo hourly forecast
-     (parallel, 10s timeout per source, errors isolated per source)
+  -> fetchCoursesWeather(points) / fetchAllSources(lat, lon)   [src/lib/weather/index.ts]
+       -> cache.ts        per-source cache, in-flight dedupe, last-known-good
+       -> request.ts      per-provider concurrency cap, retries, timeouts
+            - fetchOpenMeteoBatch()  Open-Meteo, all courses in one request
+            - fetchFmi()             FMI WFS XML (Harmonie), per course
+            - fetchYr()              MET Norway Locationforecast, per course
+     (errors isolated per source; a failed source falls back to its last value)
   -> aggregateForecasts()        hourly averages across available sources
   -> scorePlayability() / classifyHour()   [src/lib/golf.ts]
   -> UI (CourseCard, HourlyStrip, PlayabilityBadge, SourceComparisonTable)
@@ -79,7 +81,7 @@ Sun times come from `suncalc` locally, no network call.
 - Use `import type` for type-only imports
 - Styling is plain React Native `StyleSheet` (no NativeWind/Tamagui); theme via `useTheme()` -> `Colors` in `src/constants/theme.ts`; spacing via the `Spacing` scale
 - Global state is React Context only (language, favorites, sort mode) + AsyncStorage, keys prefixed `golf-weather.*`; no Redux/Zustand
-- Weather state is local to hooks, not global (in-memory `Map` cache, 30 min TTL, always enabled, only caches results with at least one successful source)
+- Weather state is local to hooks, not global. Caching lives in [src/lib/weather/cache.ts](src/lib/weather/cache.ts): keyed per course *and* per source (so one failing provider is retried on its own), 15 min TTL, only successful fetches are stored, and a bounded compact copy is persisted to AsyncStorage under `golf-weather.forecastCache.v1`
 
 ## Common task pointers
 
@@ -96,9 +98,11 @@ Sun times come from `suncalc` locally, no network call.
 
 ## Gotchas
 
-- YR.no requires a `User-Agent` header or requests are rejected
-- FMI responses are XML, parsed with `fast-xml-parser`
-- List weather fetch runs with concurrency 4 and batches state updates ~every 1s
-- Hour rollover happens at :45 past the hour (`useCurrentHour`), triggering a forced refresh
+- YR.no requires a `User-Agent` header or requests are rejected with 403. Browsers strip the custom header and substitute their own, which MET accepts
+- FMI responses are XML, parsed with `fast-xml-parser`. Harmonie only covers the Nordic/Baltic area, so the Spanish courses get no FMI data
+- Open-Meteo rejects bursts above roughly 9 concurrent requests per IP with `429 {"reason":"Too many concurrent requests"}`, separately from its 10k/day quota. Hence the batched multi-coordinate request and the concurrency caps in [src/lib/weather/request.ts](src/lib/weather/request.ts) — don't reintroduce per-course Open-Meteo fetching
+- Open-Meteo returns an array for several coordinates but a bare object for one, and echoes coordinates snapped to the model grid, so batch results must be matched to courses by index, never by coordinate
+- List weather fetch batches state updates ~every 1s; concurrency is enforced in the lib, not the hook, so extra mounted screens can't stack requests
+- Hour rollover happens at :45 past the hour (`useCurrentHour`), triggering a forced refresh, spread over a short jitter window since every mounted screen reacts at once
 - Web hydration: some values (e.g. sun times) render as empty defaults until client-side hydration completes
 - Some template leftovers are unused and safe to ignore/remove: `src/components/web-badge.tsx`, `hint-row.tsx`, `external-link.tsx`, `src/components/ui/collapsible.tsx`

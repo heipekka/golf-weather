@@ -1,12 +1,20 @@
+import type { Coordinates } from "@/lib/geo";
+
 import { aggregateForecasts } from "./aggregate";
+import {
+  ensureHydrated,
+  getInFlight,
+  readFresh,
+  readStale,
+  resolveSource,
+  settle,
+  trackInFlight,
+} from "./cache";
 import { fetchFmi } from "./fmi";
-import { fetchOpenMeteo } from "./open-meteo";
+import { fetchOpenMeteo, fetchOpenMeteoBatch } from "./open-meteo";
+import { isTimeoutError } from "./request";
 import type { CourseWeather, SourceForecast, SourceId } from "./types";
 import { fetchYr } from "./yr";
-
-const CACHE_TTL_MS = 15 * 60 * 1000;
-const CACHE_ENABLED = true;
-const cache = new Map<string, { expiresAt: number; data: CourseWeather }>();
 
 const SOURCE_LABELS: Record<SourceId, string> = {
   fmi: "FMI (Ilmatieteen laitos)",
@@ -14,53 +22,55 @@ const SOURCE_LABELS: Record<SourceId, string> = {
   openmeteo: "Open-Meteo",
 };
 
-function cacheKey(lat: number, lon: number): string {
-  return `${lat.toFixed(3)},${lon.toFixed(3)}`;
-}
-
-// Bounds how long a single provider can hang before it's treated as failed,
-// so a stuck/CORS-blocked request can't keep the whole card on "Loading...".
-const REQUEST_TIMEOUT_MS = 10_000;
-
-async function fetchSource(
-  id: SourceId,
-  lat: number,
-  lon: number,
-): Promise<SourceForecast> {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
-
-  try {
-    switch (id) {
-      case "fmi":
-        return await fetchFmi(lat, lon, controller.signal);
-      case "yr":
-        return await fetchYr(lat, lon, controller.signal);
-      case "openmeteo":
-        return await fetchOpenMeteo(lat, lon, controller.signal);
-    }
-  } catch (error) {
-    // Not shown directly to users (the UI only checks whether this is set),
-    // but stored as a translation key path so a caller could resolve it via
-    // `t()` if it's ever surfaced.
-    return {
-      source: id,
-      label: SOURCE_LABELS[id],
-      hourly: [],
-      error: controller.signal.aborted
-        ? "errors.forecastTimedOut"
-        : error instanceof Error
-          ? error.message
-          : "errors.failedToLoadForecast",
-    };
-  } finally {
-    clearTimeout(timer);
-  }
-}
-
 // Fixed column order, independent of arrival order, so the source comparison
 // table doesn't reshuffle as providers respond at different speeds.
 const SOURCE_ORDER: SourceId[] = ["openmeteo", "yr", "fmi"];
+
+/** Sources fetched one course at a time; Open-Meteo is batched separately. */
+const PER_COURSE_SOURCES: SourceId[] = ["yr", "fmi"];
+
+/**
+ * Describes a failed fetch. The message is a translation key path rather than
+ * user-facing text, so a caller could resolve it via `t()` if it's ever shown
+ * (today the UI only checks whether this is set).
+ */
+function toErrorForecast(id: SourceId, error: unknown): SourceForecast {
+  return {
+    source: id,
+    label: SOURCE_LABELS[id],
+    hourly: [],
+    error: isTimeoutError(error)
+      ? "errors.forecastTimedOut"
+      : error instanceof Error
+        ? error.message
+        : "errors.failedToLoadForecast",
+  };
+}
+
+/** Fetches one source for one course, reporting failure as data rather than throwing. */
+async function fetchSource(id: SourceId, lat: number, lon: number): Promise<SourceForecast> {
+  try {
+    switch (id) {
+      case "fmi":
+        return await fetchFmi(lat, lon);
+      case "yr":
+        return await fetchYr(lat, lon);
+      case "openmeteo":
+        return await fetchOpenMeteo(lat, lon);
+    }
+  } catch (error) {
+    return toErrorForecast(id, error);
+  }
+}
+
+function buildWeather(resolved: Map<SourceId, SourceForecast>): CourseWeather {
+  const sources = SOURCE_ORDER.filter((id) => resolved.has(id)).map((id) => resolved.get(id)!);
+  return {
+    fetchedAt: new Date().toISOString(),
+    sources,
+    aggregated: aggregateForecasts(sources),
+  };
+}
 
 export async function fetchAllSources(
   lat: number,
@@ -70,54 +80,150 @@ export async function fetchAllSources(
     onPartial?: (partial: CourseWeather) => void;
   },
 ): Promise<CourseWeather> {
-  const key = cacheKey(lat, lon);
-  const cached = cache.get(key);
-  if (
-    CACHE_ENABLED &&
-    !options?.forceRefresh &&
-    cached &&
-    cached.expiresAt > Date.now()
-  ) {
-    return cached.data;
-  }
-
-  // Each fetchSource() call catches its own errors, so a single failing
-  // provider never prevents the others from rendering. As each source
-  // resolves, report a partial result so callers can stop showing a
-  // loading state as soon as any one source has data, instead of waiting
-  // for every source to finish.
   const resolved = new Map<SourceId, SourceForecast>();
+  const report = () => options?.onPartial?.(buildWeather(resolved));
 
-  const buildPartial = (): CourseWeather => {
-    const sources = SOURCE_ORDER.filter((id) => resolved.has(id)).map(
-      (id) => resolved.get(id)!,
-    );
-    return {
-      fetchedAt: new Date().toISOString(),
-      sources,
-      aggregated: aggregateForecasts(sources),
-    };
-  };
-
+  // Each source resolves independently, so one failing provider never prevents
+  // the others from rendering, and partials let callers drop their loading
+  // state as soon as any one source has data.
   await Promise.all(
     SOURCE_ORDER.map(async (id) => {
-      const source = await fetchSource(id, lat, lon);
-      resolved.set(id, source);
-      options?.onPartial?.(buildPartial());
+      const forecast = await resolveSource(lat, lon, id, () => fetchSource(id, lat, lon), {
+        forceRefresh: options?.forceRefresh,
+        onStale: (stale) => {
+          resolved.set(id, stale);
+          report();
+        },
+      });
+      resolved.set(id, forecast);
+      report();
     }),
   );
 
-  const sources = SOURCE_ORDER.map((id) => resolved.get(id)!);
-  const data: CourseWeather = {
-    fetchedAt: new Date().toISOString(),
-    sources,
-    aggregated: aggregateForecasts(sources),
+  return buildWeather(resolved);
+}
+
+/**
+ * Resolves Open-Meteo for many courses using as few requests as possible: the
+ * provider accepts comma-separated coordinates, so a whole list costs one
+ * request instead of one per course. Returns a promise per input point, in the
+ * same order, none of which reject.
+ */
+function resolveOpenMeteoForAll(
+  points: Coordinates[],
+  forceRefresh: boolean,
+): Promise<SourceForecast>[] {
+  const resolved = new Array<Promise<SourceForecast>>(points.length);
+  const needed: number[] = [];
+
+  points.forEach((point, index) => {
+    if (!forceRefresh) {
+      const fresh = readFresh(point.lat, point.lon, "openmeteo");
+      if (fresh) {
+        resolved[index] = Promise.resolve(fresh);
+        return;
+      }
+    }
+
+    // Join a request another screen already started rather than duplicating it.
+    const pending = getInFlight(point.lat, point.lon, "openmeteo");
+    if (pending) {
+      resolved[index] = pending;
+      return;
+    }
+
+    needed.push(index);
+  });
+
+  if (needed.length > 0) {
+    const batch = fetchOpenMeteoBatch(needed.map((index) => points[index]));
+
+    needed.forEach((pointIndex, batchIndex) => {
+      const { lat, lon } = points[pointIndex];
+      resolved[pointIndex] = trackInFlight(
+        lat,
+        lon,
+        "openmeteo",
+        batch.then(
+          (forecasts) =>
+            settle(
+              lat,
+              lon,
+              "openmeteo",
+              forecasts[batchIndex] ?? toErrorForecast("openmeteo", null),
+            ),
+          (error) => settle(lat, lon, "openmeteo", toErrorForecast("openmeteo", error)),
+        ),
+      );
+    });
+  }
+
+  return resolved;
+}
+
+/**
+ * Fetches weather for a whole list of courses, batching Open-Meteo into a
+ * single request and fanning the remaining providers out under the shared
+ * per-provider concurrency caps in [request.ts](./request.ts). Results are
+ * returned in input order, and `onPartial` reports each course as its sources
+ * arrive so the list can render progressively.
+ */
+export async function fetchCoursesWeather(
+  points: Coordinates[],
+  options?: {
+    forceRefresh?: boolean;
+    onPartial?: (index: number, partial: CourseWeather) => void;
+  },
+): Promise<CourseWeather[]> {
+  if (points.length === 0) return [];
+  await ensureHydrated();
+
+  const forceRefresh = options?.forceRefresh ?? false;
+  const resolvedByCourse = points.map(() => new Map<SourceId, SourceForecast>());
+  const report = (index: number) =>
+    options?.onPartial?.(index, buildWeather(resolvedByCourse[index]));
+
+  // Paint last-known-good values before any request finishes, so a cold start
+  // or a refresh shows numbers immediately instead of empty cards.
+  points.forEach((point, index) => {
+    let seeded = false;
+    for (const id of SOURCE_ORDER) {
+      if (readFresh(point.lat, point.lon, id)) continue;
+      const stale = readStale(point.lat, point.lon, id);
+      if (!stale) continue;
+      resolvedByCourse[index].set(id, stale);
+      seeded = true;
+    }
+    if (seeded) report(index);
+  });
+
+  const openMeteo = resolveOpenMeteoForAll(points, forceRefresh);
+
+  const record = async (index: number, id: SourceId, request: Promise<SourceForecast>) => {
+    try {
+      resolvedByCourse[index].set(id, await request);
+    } catch (error) {
+      resolvedByCourse[index].set(id, toErrorForecast(id, error));
+    }
+    report(index);
   };
 
-  if (CACHE_ENABLED && data.aggregated.length > 0) {
-    cache.set(key, { expiresAt: Date.now() + CACHE_TTL_MS, data });
-  }
-  return data;
+  await Promise.all(
+    points.flatMap((point, index) => [
+      record(index, "openmeteo", openMeteo[index]),
+      ...PER_COURSE_SOURCES.map((id) =>
+        record(
+          index,
+          id,
+          resolveSource(point.lat, point.lon, id, () => fetchSource(id, point.lat, point.lon), {
+            forceRefresh,
+          }),
+        ),
+      ),
+    ]),
+  );
+
+  return resolvedByCourse.map(buildWeather);
 }
 
 export {
@@ -125,7 +231,6 @@ export {
   findCurrentPoint,
   hasHourlyData,
   HOUR_ROLLOVER_MINUTE,
-  indexByHour
+  indexByHour,
 } from "./aggregate";
 export * from "./types";
-

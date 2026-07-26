@@ -1,4 +1,5 @@
 import { computeApparentTemperature } from './feels-like';
+import { fetchWithPolicy } from './request';
 import type { ForecastPoint, SourceForecast } from './types';
 
 const YR_URL = 'https://api.met.no/weatherapi/locationforecast/2.0/compact';
@@ -39,15 +40,13 @@ export async function fetchYr(lat: number, lon: number, signal?: AbortSignal): P
     lon: lon.toFixed(4),
   });
 
-  const response = await fetch(`${YR_URL}?${params.toString()}`, {
-    signal,
-    headers: { 'User-Agent': USER_AGENT },
-  });
-  if (!response.ok) {
-    throw new Error(`YR.no request failed with status ${response.status}`);
-  }
+  const body = await fetchWithPolicy(
+    `${YR_URL}?${params.toString()}`,
+    { headers: { 'User-Agent': USER_AGENT } },
+    { source: 'yr', signal }
+  );
 
-  const data = (await response.json()) as YrResponse;
+  const data = JSON.parse(body) as YrResponse;
 
   const hourly: ForecastPoint[] = data.properties.timeseries.slice(0, MAX_HOURS).map((entry) => {
     const instant = entry.data.instant.details;

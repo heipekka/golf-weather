@@ -21,6 +21,14 @@ export type SourceForecast = {
   label: string;
   hourly: ForecastPoint[];
   error?: string;
+  /** ISO 8601 timestamp of when this source was last fetched successfully. */
+  fetchedAt?: string;
+  /**
+   * Set when this is a previously fetched forecast being served because the
+   * latest attempt failed, so the source stays present (with slightly older
+   * numbers) instead of disappearing from the comparison.
+   */
+  stale?: boolean;
 };
 
 export type AggregatedPoint = {

@@ -1,6 +1,7 @@
 import { XMLParser } from 'fast-xml-parser';
 
 import { computeApparentTemperature } from './feels-like';
+import { fetchWithPolicy } from './request';
 import type { ForecastPoint, SourceForecast } from './types';
 
 const FMI_WFS_URL = 'https://opendata.fmi.fi/wfs';
@@ -54,12 +55,11 @@ export async function fetchFmi(lat: number, lon: number, signal?: AbortSignal): 
     timestep: '60',
   });
 
-  const response = await fetch(`${FMI_WFS_URL}?${params.toString()}`, { signal });
-  if (!response.ok) {
-    throw new Error(`FMI request failed with status ${response.status}`);
-  }
+  const xmlText = await fetchWithPolicy(`${FMI_WFS_URL}?${params.toString()}`, undefined, {
+    source: 'fmi',
+    signal,
+  });
 
-  const xmlText = await response.text();
   const parsed = parser.parse(xmlText) as FmiFeatureCollection;
   const members = toArray(parsed.FeatureCollection?.member);
 
