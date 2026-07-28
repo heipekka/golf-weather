@@ -2,6 +2,7 @@ import { Link, Tabs } from "expo-router";
 import { SymbolView } from "expo-symbols";
 import { Pressable, StyleSheet } from "react-native";
 
+import { TeeTimeTabIcon } from "@/components/tee-time-tab-icon";
 import { Spacing } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
 import { useI18n } from "@/i18n";
@@ -100,15 +101,7 @@ export default function TabsLayout() {
         options={{
           title: t("tabs.bookmarks"),
           tabBarIcon: ({ color, focused }) => (
-            <SymbolView
-              name={{
-                ios: focused ? "figure.golf.circle.fill" : "figure.golf.circle",
-                android: "sports_golf",
-                web: "sports_golf",
-              }}
-              size={22}
-              tintColor={color}
-            />
+            <TeeTimeTabIcon color={color} focused={focused} />
           ),
           // The bookmarks route is a nested stack (list + detail) that owns
           // its own per-screen headers, so the tab-level header stays off.

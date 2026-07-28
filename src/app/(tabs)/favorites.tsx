@@ -6,6 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { CourseCard } from '@/components/course-card';
 import { CreatedByBanner } from '@/components/created-by-banner';
 import { LocationButton } from '@/components/location-button';
+import { QuickSelectButton } from '@/components/quick-select-button';
 import { SortControl } from '@/components/sort-control';
 import { StartTimeButton } from '@/components/start-time-button';
 import { ThemedText } from '@/components/themed-text';
@@ -103,6 +104,7 @@ export default function FavoritesScreen() {
             <ThemedView style={styles.headerBlock}>
               <CreatedByBanner />
               <View style={styles.buttonRow}>
+                <QuickSelectButton />
                 <LocationButton />
                 <View style={styles.startTimeSlot}>
                   <StartTimeButton />

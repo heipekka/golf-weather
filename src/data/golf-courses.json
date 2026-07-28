@@ -21,7 +21,10 @@
     "city": "Espoo",
     "country": "Finland",
     "lat": 60.17,
-    "lon": 24.6885
+    "lon": 24.6885,
+    "lists": [
+      "golfamore"
+    ]
   },
   {
     "id": "master-golf",
@@ -93,7 +96,10 @@
     "city": "Nurmijärvi",
     "country": "Finland",
     "lat": 60.4629,
-    "lon": 24.79
+    "lon": 24.79,
+    "lists": [
+      "golfamore"
+    ]
   },
   {
     "id": "kytaja",
@@ -117,7 +123,10 @@
     "city": "Loviisa",
     "country": "Finland",
     "lat": 60.4487,
-    "lon": 26.1721
+    "lon": 26.1721,
+    "lists": [
+      "kultakortti"
+    ]
   },
   {
     "id": "aura-golf",
@@ -141,7 +150,10 @@
     "city": "Salo",
     "country": "Finland",
     "lat": 60.3833,
-    "lon": 23.1333
+    "lon": 23.1333,
+    "lists": [
+      "kultakortti"
+    ]
   },
   {
     "id": "aurinko-golf",
@@ -149,7 +161,10 @@
     "city": "Naantali",
     "country": "Finland",
     "lat": 60.4994,
-    "lon": 22.0678
+    "lon": 22.0678,
+    "lists": [
+      "golfamore"
+    ]
   },
   {
     "id": "tammer-golf",
@@ -181,7 +196,10 @@
     "city": "Hämeenlinna",
     "country": "Finland",
     "lat": 60.9796,
-    "lon": 24.5596
+    "lon": 24.5596,
+    "lists": [
+      "golfamore"
+    ]
   },
   {
     "id": "aulanko-golf-eversti",
@@ -213,7 +231,10 @@
     "city": "Lahti",
     "country": "Finland",
     "lat": 60.9827,
-    "lon": 25.6612
+    "lon": 25.6612,
+    "lists": [
+      "kultakortti"
+    ]
   },
   {
     "id": "messila-golf",
@@ -261,7 +282,11 @@
     "city": "Siilinjärvi",
     "country": "Finland",
     "lat": 63.0606,
-    "lon": 27.6535
+    "lon": 27.6535,
+    "lists": [
+      "kultakortti",
+      "jarvi-suomi"
+    ]
   },
   {
     "id": "tahko-golf",
@@ -269,7 +294,11 @@
     "city": "Tahkovuori",
     "country": "Finland",
     "lat": 63.2985,
-    "lon": 28.0464
+    "lon": 28.0464,
+    "lists": [
+      "jarvi-suomi",
+      "golfamore"
+    ]
   },
   {
     "id": "tahko-golf-lake-forest",
@@ -277,7 +306,11 @@
     "city": "Tahkovuori",
     "country": "Finland",
     "lat": 63.2454,
-    "lon": 28.0487
+    "lon": 28.0487,
+    "lists": [
+      "jarvi-suomi",
+      "golfamore"
+    ]
   },
   {
     "id": "eerikkala-golf",
@@ -301,7 +334,10 @@
     "city": "Joroinen",
     "country": "Finland",
     "lat": 62.1772,
-    "lon": 27.8825
+    "lon": 27.8825,
+    "lists": [
+      "jarvi-suomi"
+    ]
   },
   {
     "id": "yla-savon-golf",
@@ -317,7 +353,10 @@
     "city": "Kontiolahti",
     "country": "Finland",
     "lat": 62.7478,
-    "lon": 29.8214
+    "lon": 29.8214,
+    "lists": [
+      "jarvi-suomi"
+    ]
   },
   {
     "id": "outokummun-golf",
@@ -333,7 +372,10 @@
     "city": "Nurmes",
     "country": "Finland",
     "lat": 63.533,
-    "lon": 29.1979
+    "lon": 29.1979,
+    "lists": [
+      "jarvi-suomi"
+    ]
   },
   {
     "id": "katinkulta-golf",
@@ -373,7 +415,10 @@
     "city": "Mikkeli",
     "country": "Finland",
     "lat": 61.6496,
-    "lon": 27.2813
+    "lon": 27.2813,
+    "lists": [
+      "jarvi-suomi"
+    ]
   },
   {
     "id": "puula-golf",
@@ -381,7 +426,10 @@
     "city": "Kangasniemi",
     "country": "Finland",
     "lat": 62.0033,
-    "lon": 26.6862
+    "lon": 26.6862,
+    "lists": [
+      "jarvi-suomi"
+    ]
   },
   {
     "id": "jyvas-golf",
@@ -397,7 +445,10 @@
     "city": "Muurame",
     "country": "Finland",
     "lat": 62.1315,
-    "lon": 25.6808
+    "lon": 25.6808,
+    "lists": [
+      "golfamore"
+    ]
   },
   {
     "id": "laukaan-peurunkagolf",
@@ -405,7 +456,10 @@
     "city": "Laukaa",
     "country": "Finland",
     "lat": 62.4339,
-    "lon": 25.869
+    "lon": 25.869,
+    "lists": [
+      "jarvi-suomi"
+    ]
   },
   {
     "id": "revontuli-golf",
@@ -413,7 +467,10 @@
     "city": "Hankasalmi",
     "country": "Finland",
     "lat": 62.329,
-    "lon": 26.5199
+    "lon": 26.5199,
+    "lists": [
+      "golfamore"
+    ]
   },
   {
     "id": "himos-golf",
@@ -437,7 +494,10 @@
     "city": "Vaasa",
     "country": "Finland",
     "lat": 63.0951,
-    "lon": 21.6165
+    "lon": 21.6165,
+    "lists": [
+      "golfamore"
+    ]
   },
   {
     "id": "kokkolan-golfkerho",
@@ -477,7 +537,11 @@
     "city": "Hartola",
     "country": "Finland",
     "lat": 61.5764,
-    "lon": 26.04
+    "lon": 26.04,
+    "lists": [
+      "kultakortti",
+      "golfamore"
+    ]
   },
   {
     "id": "paloheina-golf",
@@ -501,7 +565,11 @@
     "city": "Espoo",
     "country": "Finland",
     "lat": 60.224,
-    "lon": 24.6113
+    "lon": 24.6113,
+    "lists": [
+      "kultakortti",
+      "golfamore"
+    ]
   },
   {
     "id": "espoo-ringside-golf",
@@ -509,7 +577,10 @@
     "city": "Espoo",
     "country": "Finland",
     "lat": 60.2768,
-    "lon": 24.7442
+    "lon": 24.7442,
+    "lists": [
+      "kultakortti"
+    ]
   },
   {
     "id": "suur-helsingin-golf-luukki",
@@ -517,7 +588,10 @@
     "city": "Espoo",
     "country": "Finland",
     "lat": 60.3171,
-    "lon": 24.6702
+    "lon": 24.6702,
+    "lists": [
+      "kultakortti"
+    ]
   },
   {
     "id": "hirsala-golf",
@@ -541,7 +615,10 @@
     "city": "Vantaa",
     "country": "Finland",
     "lat": 60.3208,
-    "lon": 24.8056
+    "lon": 24.8056,
+    "lists": [
+      "kultakortti"
+    ]
   },
   {
     "id": "hiekkaharju-golf",
@@ -557,7 +634,10 @@
     "city": "Lohja",
     "country": "Finland",
     "lat": 60.2297,
-    "lon": 24.0607
+    "lon": 24.0607,
+    "lists": [
+      "kultakortti"
+    ]
   },
   {
     "id": "hill-side-golf",
@@ -581,7 +661,10 @@
     "city": "Nurmijärvi",
     "country": "Finland",
     "lat": 60.4357,
-    "lon": 24.6468
+    "lon": 24.6468,
+    "lists": [
+      "kultakortti"
+    ]
   },
   {
     "id": "tuusulan-golfklubi",
@@ -589,7 +672,10 @@
     "city": "Tuusula",
     "country": "Finland",
     "lat": 60.415,
-    "lon": 25.0492
+    "lon": 25.0492,
+    "lists": [
+      "kultakortti"
+    ]
   },
   {
     "id": "kotojarvi-golf",
@@ -621,7 +707,10 @@
     "city": "Raasepori",
     "country": "Finland",
     "lat": 59.9961,
-    "lon": 23.4681
+    "lon": 23.4681,
+    "lists": [
+      "golfamore"
+    ]
   },
   {
     "id": "ruukkigolf",
@@ -629,7 +718,11 @@
     "city": "Raasepori",
     "country": "Finland",
     "lat": 60.1108,
-    "lon": 23.4725
+    "lon": 23.4725,
+    "lists": [
+      "kultakortti",
+      "golfamore"
+    ]
   },
   {
     "id": "golf-pirkkala",
@@ -677,7 +770,10 @@
     "city": "Sastamala",
     "country": "Finland",
     "lat": 61.4223,
-    "lon": 23.0018
+    "lon": 23.0018,
+    "lists": [
+      "kultakortti"
+    ]
   },
   {
     "id": "poltinkoski-golf",
@@ -749,7 +845,10 @@
     "city": "Virolahti",
     "country": "Finland",
     "lat": 60.5502,
-    "lon": 27.6749
+    "lon": 27.6749,
+    "lists": [
+      "golfamore"
+    ]
   },
   {
     "id": "koski-golf",
@@ -765,7 +864,10 @@
     "city": "Kotka",
     "country": "Finland",
     "lat": 60.4854,
-    "lon": 26.8524
+    "lon": 26.8524,
+    "lists": [
+      "golfamore"
+    ]
   },
   {
     "id": "lampila-golf",
@@ -925,7 +1027,10 @@
     "city": "Mäntsälä",
     "country": "Finland",
     "lat": 60.6304,
-    "lon": 25.2038
+    "lon": 25.2038,
+    "lists": [
+      "kultakortti"
+    ]
   },
   {
     "id": "hirvensalon-golf",
@@ -957,7 +1062,10 @@
     "city": "Lappajärvi",
     "country": "Finland",
     "lat": 63.2518,
-    "lon": 23.636
+    "lon": 23.636,
+    "lists": [
+      "kultakortti"
+    ]
   },
   {
     "id": "kankaisten-golf",
@@ -965,7 +1073,10 @@
     "city": "Masku",
     "country": "Finland",
     "lat": 60.5486,
-    "lon": 22.1099
+    "lon": 22.1099,
+    "lists": [
+      "kultakortti"
+    ]
   },
   {
     "id": "kultaranta-golf",
@@ -1005,7 +1116,10 @@
     "city": "Paltamo",
     "country": "Finland",
     "lat": 64.396,
-    "lon": 27.8685
+    "lon": 27.8685,
+    "lists": [
+      "golfamore"
+    ]
   },
   {
     "id": "porvoo-golf",
@@ -1013,7 +1127,10 @@
     "city": "Porvoo",
     "country": "Finland",
     "lat": 60.4213,
-    "lon": 25.6978
+    "lon": 25.6978,
+    "lists": [
+      "kultakortti"
+    ]
   },
   {
     "id": "ruuhikoski-golf",
@@ -1021,7 +1138,10 @@
     "city": "Seinäjoki",
     "country": "Finland",
     "lat": 62.7941,
-    "lon": 22.9802
+    "lon": 22.9802,
+    "lists": [
+      "golfamore"
+    ]
   },
   {
     "id": "santa-claus-golf",
@@ -1037,7 +1157,10 @@
     "city": "Pyhäjärvi",
     "country": "Finland",
     "lat": 63.6432,
-    "lon": 26.0482
+    "lon": 26.0482,
+    "lists": [
+      "golfamore"
+    ]
   },
   {
     "id": "uudenkaupungin-golfklubi",
@@ -1045,7 +1168,10 @@
     "city": "Uusikaupunki",
     "country": "Finland",
     "lat": 60.7932,
-    "lon": 21.4312
+    "lon": 21.4312,
+    "lists": [
+      "kultakortti"
+    ]
   },
   {
     "id": "virpiniemi-golf",
@@ -1061,7 +1187,10 @@
     "city": "Vöyri",
     "country": "Finland",
     "lat": 63.1365,
-    "lon": 22.2599
+    "lon": 22.2599,
+    "lists": [
+      "golfamore"
+    ]
   },
   {
     "id": "yyteri-golf",
@@ -1069,7 +1198,10 @@
     "city": "Pori",
     "country": "Finland",
     "lat": 61.5843,
-    "lon": 21.5014
+    "lon": 21.5014,
+    "lists": [
+      "kultakortti"
+    ]
   },
   {
     "id": "ahtarin-golf",
@@ -1077,7 +1209,10 @@
     "city": "Ähtäri",
     "country": "Finland",
     "lat": 62.5303,
-    "lon": 24.205
+    "lon": 24.205,
+    "lists": [
+      "kultakortti"
+    ]
   },
   {
     "id": "rauma-golf",
@@ -1085,7 +1220,10 @@
     "city": "Rauma",
     "country": "Finland",
     "lat": 61.1401,
-    "lon": 21.5617
+    "lon": 21.5617,
+    "lists": [
+      "kultakortti"
+    ]
   },
   {
     "id": "alands-golfklubb",
@@ -1093,7 +1231,10 @@
     "city": "Kastelholm",
     "country": "Finland",
     "lat": 60.2257,
-    "lon": 20.0673
+    "lon": 20.0673,
+    "lists": [
+      "golfamore"
+    ]
   },
   {
     "id": "remson-golf",
@@ -1141,7 +1282,10 @@
     "city": "Nivala",
     "country": "Finland",
     "lat": 63.9056,
-    "lon": 25.0226
+    "lon": 25.0226,
+    "lists": [
+      "golfamore"
+    ]
   },
   {
     "id": "green-zone-golf",
@@ -1149,7 +1293,11 @@
     "city": "Tornio",
     "country": "Finland",
     "lat": 65.8578,
-    "lon": 24.1338
+    "lon": 24.1338,
+    "lists": [
+      "kultakortti",
+      "golfamore"
+    ]
   },
   {
     "id": "kemin-golf",
@@ -1165,7 +1313,10 @@
     "city": "Ypäjä",
     "country": "Finland",
     "lat": 60.819,
-    "lon": 23.2324
+    "lon": 23.2324,
+    "lists": [
+      "kultakortti"
+    ]
   },
   {
     "id": "alastaro-golf",
@@ -1173,7 +1324,10 @@
     "city": "Alastaro",
     "country": "Finland",
     "lat": 60.9847,
-    "lon": 22.6418
+    "lon": 22.6418,
+    "lists": [
+      "kultakortti"
+    ]
   },
   {
     "id": "archipelagia-golf",
@@ -1181,7 +1335,10 @@
     "city": "Parainen",
     "country": "Finland",
     "lat": 60.316,
-    "lon": 22.2728
+    "lon": 22.2728,
+    "lists": [
+      "kultakortti"
+    ]
   },
   {
     "id": "levi-golf",
@@ -1205,7 +1362,10 @@
     "city": "Turku",
     "country": "Finland",
     "lat": 60.3669,
-    "lon": 22.285
+    "lon": 22.285,
+    "lists": [
+      "golfamore"
+    ]
   },
   {
     "id": "porin-golfkerho",
@@ -1221,7 +1381,10 @@
     "city": "Hyvinkää",
     "country": "Finland",
     "lat": 60.6577,
-    "lon": 24.8162
+    "lon": 24.8162,
+    "lists": [
+      "kultakortti"
+    ]
   },
   {
     "id": "rock-golf",
@@ -1237,7 +1400,11 @@
     "city": "Salo",
     "country": "Finland",
     "lat": 60.2384,
-    "lon": 22.9365
+    "lon": 22.9365,
+    "lists": [
+      "kultakortti",
+      "golfamore"
+    ]
   },
   {
     "id": "estonia-estonian-gcc",
@@ -3222,5 +3389,16 @@
     "country": "Denmark",
     "lat": 55.7725,
     "lon": 12.3917
+  },
+  {
+    "id": "bjarkas-golf",
+    "name": "Bjärkas Golf",
+    "city": "Kemiönsaari",
+    "country": "Finland",
+    "lat": 60.0738,
+    "lon": 22.6378,
+    "lists": [
+      "golfamore"
+    ]
   }
 ]

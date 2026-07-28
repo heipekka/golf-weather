@@ -1,3 +1,5 @@
+import type { CourseListId } from '@/lib/course-lists';
+
 export type Coordinates = {
   lat: number;
   lon: number;
@@ -10,6 +12,7 @@ export type GolfCourse = {
   country: string;
   lat: number;
   lon: number;
+  lists?: CourseListId[];
 };
 
 export type GolfCourseWithDistance = GolfCourse & {

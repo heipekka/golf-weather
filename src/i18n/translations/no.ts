@@ -175,6 +175,12 @@ export const no: TranslationDictionary = {
         'Når aktivert, får blåsige timer en vindbeskrivende merkelapp (f.eks. Vindfullt, Kastevind, Hard vind, Storm) i stedet for det vanlige nivået.',
       toggle: 'Bruk vindbeskrivelser',
     },
+    courseListLabels: {
+      title: 'Banelistemerker',
+      description:
+        'Når aktivert viser banekortene og banesiden hvilke fordelsprogrammer banen inngår i (Kultakortti, Järvi-Suomi, GolfAmore).',
+      toggle: 'Vis banelistemerker',
+    },
     location: {
       title: 'Standardposisjon',
       description:
@@ -196,6 +202,14 @@ export const no: TranslationDictionary = {
     empty: 'Ingen favoritter ennå. Legg til baner som favoritter med stjernen.',
     addFavorite: 'Legg til favoritt',
     removeFavorite: 'Fjern fra favoritter',
+  },
+  courseLists: {
+    open: 'Legg til en ferdig baneliste',
+    title: 'Ferdige banelister',
+    kultakortti: 'Kultakortti',
+    jarviSuomi: 'Järvi-Suomi',
+    golfamore: 'GolfAmore',
+    added: '{count}/{total} blant favoritter',
   },
   bookmarks: {
     title: 'Mine starttider',

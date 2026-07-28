@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 
 import { AnimatedSplashOverlay } from '@/components/animated-icon';
 import { BookmarksProvider } from '@/hooks/use-bookmarks';
+import { CourseListLabelsProvider } from '@/hooks/use-course-list-labels';
 import { SortModeProvider } from '@/hooks/use-course-sort';
 import { DarkScoringProvider } from '@/hooks/use-dark-scoring';
 import { DistanceFilterProvider } from '@/hooks/use-distance-filter';
@@ -48,13 +49,15 @@ export default function RootLayout() {
             <SortModeProvider>
               <DarkScoringProvider>
                 <WindLabelsProvider>
-                  <StartTimeProvider>
-                    <DistanceFilterProvider>
-                      <ThemeModeProvider>
-                        <ThemedApp />
-                      </ThemeModeProvider>
-                    </DistanceFilterProvider>
-                  </StartTimeProvider>
+                  <CourseListLabelsProvider>
+                    <StartTimeProvider>
+                      <DistanceFilterProvider>
+                        <ThemeModeProvider>
+                          <ThemedApp />
+                        </ThemeModeProvider>
+                      </DistanceFilterProvider>
+                    </StartTimeProvider>
+                  </CourseListLabelsProvider>
                 </WindLabelsProvider>
               </DarkScoringProvider>
             </SortModeProvider>

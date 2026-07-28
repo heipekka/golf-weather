@@ -10,6 +10,7 @@ import { LocationPicker } from '@/components/location-picker';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
+import { useCourseListLabels } from '@/hooks/use-course-list-labels';
 import { useDarkScoring } from '@/hooks/use-dark-scoring';
 import { useDistanceFilter } from '@/hooks/use-distance-filter';
 import { useLocation } from '@/hooks/use-location';
@@ -233,6 +234,29 @@ function WindLabelsSection() {
   );
 }
 
+function CourseListLabelsSection() {
+  const { t } = useI18n();
+  const { courseListLabelsEnabled, setCourseListLabelsEnabled } = useCourseListLabels();
+
+  return (
+    <>
+      <View style={styles.sectionHeading}>
+        <ThemedText type="smallBold">{t('settings.courseListLabels.title')}</ThemedText>
+        <ThemedText type="small" themeColor="textSecondary">
+          {t('settings.courseListLabels.description')}
+        </ThemedText>
+      </View>
+
+      <ThemedView type="backgroundElement" style={styles.optionList}>
+        <View style={styles.option}>
+          <ThemedText type="default">{t('settings.courseListLabels.toggle')}</ThemedText>
+          <Switch value={courseListLabelsEnabled} onValueChange={setCourseListLabelsEnabled} />
+        </View>
+      </ThemedView>
+    </>
+  );
+}
+
 function DefaultLocationSection() {
   const { t } = useI18n();
   const { savedLocation, setSavedLocation, clearSavedLocation } = useLocation();
@@ -350,6 +374,7 @@ export default function SettingsScreen() {
             <>
               <DarkScoringSection />
               <WindLabelsSection />
+              <CourseListLabelsSection />
               <DefaultLocationSection />
               <DistanceRangeSection />
             </>

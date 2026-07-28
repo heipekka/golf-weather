@@ -175,6 +175,12 @@ export const lt: TranslationDictionary = {
         'Kai įjungta, vėjuotoms valandoms priskiriama vėją nusakanti žyma (pvz., Vėjuota, Gūsinga, Smarkiai vėjuota, Vėtra) vietoj paprasto lygio.',
       toggle: 'Naudoti vėjo aprašymus',
     },
+    courseListLabels: {
+      title: 'Aikštynų sąrašų žymos',
+      description:
+        'Kai įjungta, aikštynų kortelės ir aikštyno rodinys rodo, kurioms privalumų programoms aikštynas priklauso (Kultakortti, Järvi-Suomi, GolfAmore).',
+      toggle: 'Rodyti aikštynų sąrašų žymas',
+    },
     location: {
       title: 'Numatytoji vieta',
       description:
@@ -196,6 +202,14 @@ export const lt: TranslationDictionary = {
     empty: 'Kol kas nėra mėgstamų. Pridėkite aikštynus prie mėgstamų su žvaigždute.',
     addFavorite: 'Pridėti prie mėgstamų',
     removeFavorite: 'Pašalinti iš mėgstamų',
+  },
+  courseLists: {
+    open: 'Pridėti paruoštą aikštynų sąrašą',
+    title: 'Paruošti aikštynų sąrašai',
+    kultakortti: 'Kultakortti',
+    jarviSuomi: 'Järvi-Suomi',
+    golfamore: 'GolfAmore',
+    added: '{count}/{total} tarp mėgstamų',
   },
   bookmarks: {
     title: 'Mano starto laikai',

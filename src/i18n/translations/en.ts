@@ -175,6 +175,12 @@ export const en: TranslationDictionary = {
         "When on, windy hours get a wind-descriptive label (e.g. Windy, Gusty, Blustery, Gale) instead of the plain condition tier.",
       toggle: "Use wind descriptions",
     },
+    courseListLabels: {
+      title: "Course list labels",
+      description:
+        "When on, course cards and the course detail screen show which membership programmes a course belongs to (Kultakortti, Järvi-Suomi, GolfAmore).",
+      toggle: "Show course list labels",
+    },
     location: {
       title: "Default location",
       description:
@@ -196,6 +202,14 @@ export const en: TranslationDictionary = {
     empty: "No favorites yet. Add courses to your favorites with the star.",
     addFavorite: "Add to favorites",
     removeFavorite: "Remove from favorites",
+  },
+  courseLists: {
+    open: "Add a preset course list",
+    title: "Preset course lists",
+    kultakortti: "Kultakortti",
+    jarviSuomi: "Järvi-Suomi",
+    golfamore: "GolfAmore",
+    added: "{count}/{total} in favorites",
   },
   bookmarks: {
     title: "My tee times",

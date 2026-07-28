@@ -174,6 +174,12 @@ export const fi = {
         "Kun käytössä, tuulisille tunneille annetaan tuulta kuvaava luokka (esim. Tuulinen, Puuskainen, Myrskyinen, Myrsky) tavallisen luokan sijaan.",
       toggle: "Käytä tuulen kuvauksia",
     },
+    courseListLabels: {
+      title: "Kenttälistojen merkinnät",
+      description:
+        "Kun käytössä, kenttäkorteissa ja kentän tiedoissa näytetään mihin etuohjelmiin kenttä kuuluu (Kultakortti, Järvi-Suomi, GolfAmore).",
+      toggle: "Näytä kenttälistojen merkinnät",
+    },
     location: {
       title: "Oletussijainti",
       description:
@@ -195,6 +201,14 @@ export const fi = {
     empty: "Ei suosikkeja vielä. Lisää kenttiä suosikeiksi tähdellä.",
     addFavorite: "Lisää suosikkeihin",
     removeFavorite: "Poista suosikeista",
+  },
+  courseLists: {
+    open: "Lisää valmis kenttälista",
+    title: "Valmiit kenttälistat",
+    kultakortti: "Kultakortti",
+    jarviSuomi: "Järvi-Suomi",
+    golfamore: "GolfAmore",
+    added: "{count}/{total} suosikeissa",
   },
   bookmarks: {
     title: "Omat lähtöajat",

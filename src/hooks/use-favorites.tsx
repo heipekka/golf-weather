@@ -19,6 +19,7 @@ type FavoritesContextValue = {
   favorites: string[];
   isFavorite: (courseId: string) => boolean;
   toggleFavorite: (courseId: string) => void;
+  addFavorites: (courseIds: string[]) => void;
 };
 
 const FavoritesContext = createContext<FavoritesContextValue | null>(null);
@@ -52,11 +53,21 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
+  const addFavorites = useCallback((courseIds: string[]) => {
+    setFavorites((prev) => {
+      const added = courseIds.filter((id) => !prev.includes(id));
+      if (added.length === 0) return prev;
+      const next = [...prev, ...added];
+      AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(next)).catch(() => {});
+      return next;
+    });
+  }, []);
+
   const isFavorite = useCallback((courseId: string) => favorites.includes(courseId), [favorites]);
 
   const value = useMemo<FavoritesContextValue>(
-    () => ({ favorites, isFavorite, toggleFavorite }),
-    [favorites, isFavorite, toggleFavorite]
+    () => ({ favorites, isFavorite, toggleFavorite, addFavorites }),
+    [favorites, isFavorite, toggleFavorite, addFavorites]
   );
 
   return <FavoritesContext.Provider value={value}>{children}</FavoritesContext.Provider>;

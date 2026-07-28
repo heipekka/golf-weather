@@ -175,6 +175,12 @@ export const lv: TranslationDictionary = {
         'Kad ieslēgts, vējainām stundām tiek piešķirts vēju raksturojošs apzīmējums (piem., Vējains, Brāzmains, Stiprs vējš, Vētra) parastā līmeņa vietā.',
       toggle: 'Lietot vēja apzīmējumus',
     },
+    courseListLabels: {
+      title: 'Laukumu sarakstu apzīmējumi',
+      description:
+        'Kad ieslēgts, laukumu kartītes un laukuma skats rāda, kurās priekšrocību programmās laukums ietilpst (Kultakortti, Järvi-Suomi, GolfAmore).',
+      toggle: 'Rādīt laukumu sarakstu apzīmējumus',
+    },
     location: {
       title: 'Noklusējuma atrašanās vieta',
       description:
@@ -196,6 +202,14 @@ export const lv: TranslationDictionary = {
     empty: 'Izlasē vēl nav laukumu. Pievienojiet laukumus izlasei ar zvaigznīti.',
     addFavorite: 'Pievienot izlasei',
     removeFavorite: 'Noņemt no izlases',
+  },
+  courseLists: {
+    open: 'Pievienot gatavu laukumu sarakstu',
+    title: 'Gatavi laukumu saraksti',
+    kultakortti: 'Kultakortti',
+    jarviSuomi: 'Järvi-Suomi',
+    golfamore: 'GolfAmore',
+    added: '{count}/{total} izlasē',
   },
   bookmarks: {
     title: 'Mani starta laiki',

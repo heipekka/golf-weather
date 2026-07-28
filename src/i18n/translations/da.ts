@@ -175,6 +175,12 @@ export const da: TranslationDictionary = {
         'Når aktiveret, får blæsende timer en vindbeskrivende mærkning (f.eks. Blæsende, Kraftig vind, Hård vind, Storm) i stedet for det almindelige niveau.',
       toggle: 'Brug vindbeskrivelser',
     },
+    courseListLabels: {
+      title: 'Banelistemærker',
+      description:
+        'Når aktiveret viser banekortene og banesiden, hvilke fordelsprogrammer banen indgår i (Kultakortti, Järvi-Suomi, GolfAmore).',
+      toggle: 'Vis banelistemærker',
+    },
     location: {
       title: 'Standardplacering',
       description:
@@ -196,6 +202,14 @@ export const da: TranslationDictionary = {
     empty: 'Ingen favoritter endnu. Tilføj baner som favoritter med stjernen.',
     addFavorite: 'Tilføj til favoritter',
     removeFavorite: 'Fjern fra favoritter',
+  },
+  courseLists: {
+    open: 'Tilføj en færdig baneliste',
+    title: 'Færdige banelister',
+    kultakortti: 'Kultakortti',
+    jarviSuomi: 'Järvi-Suomi',
+    golfamore: 'GolfAmore',
+    added: '{count}/{total} blandt favoritter',
   },
   bookmarks: {
     title: 'Mine starttider',

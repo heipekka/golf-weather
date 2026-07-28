@@ -4,6 +4,7 @@ import { useMemo, useRef } from "react";
 import { RefreshControl, ScrollView, StyleSheet, View } from "react-native";
 
 import { BackButton } from "@/components/back-button";
+import { CourseListLabels } from "@/components/course-list-labels";
 import { FavoriteButton } from "@/components/favorite-button";
 import { HourlyStrip } from "@/components/hourly-strip";
 import { PlayabilityBadge } from "@/components/playability-badge";
@@ -156,6 +157,8 @@ export default function CourseDetailScreen() {
                   ? ` · ${formatDistance(distanceKm)} ${t("courseDetail.away")}`
                   : ""}
               </ThemedText>
+
+              <CourseListLabels courseId={course.id} />
 
               <WeatherSummary
                 temperature={currentPoint?.temperature ?? null}

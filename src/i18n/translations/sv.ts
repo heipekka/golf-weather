@@ -175,6 +175,12 @@ export const sv: TranslationDictionary = {
         'När aktiverat får blåsiga timmar en vindbeskrivande etikett (t.ex. Blåsigt, Byigt, Hård vind, Storm) istället för den vanliga nivån.',
       toggle: 'Använd vindbeskrivningar',
     },
+    courseListLabels: {
+      title: 'Banlistetiketter',
+      description:
+        'När aktiverat visar bankorten och bansidan vilka förmånsprogram banan ingår i (Kultakortti, Järvi-Suomi, GolfAmore).',
+      toggle: 'Visa banlistetiketter',
+    },
     location: {
       title: 'Standardplats',
       description:
@@ -196,6 +202,14 @@ export const sv: TranslationDictionary = {
     empty: 'Inga favoriter än. Lägg till banor som favoriter med stjärnan.',
     addFavorite: 'Lägg till som favorit',
     removeFavorite: 'Ta bort från favoriter',
+  },
+  courseLists: {
+    open: 'Lägg till en färdig banlista',
+    title: 'Färdiga banlistor',
+    kultakortti: 'Kultakortti',
+    jarviSuomi: 'Järvi-Suomi',
+    golfamore: 'GolfAmore',
+    added: '{count}/{total} bland favoriter',
   },
   bookmarks: {
     title: 'Mina starttider',

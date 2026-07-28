@@ -175,6 +175,12 @@ export const et: TranslationDictionary = {
         'Kui see on sees, saavad tuulised tunnid tuult kirjeldava märgise (nt Tuuline, Puhanguline, Tormine, Torm) tavalise taseme asemel.',
       toggle: 'Kasuta tuule kirjeldusi',
     },
+    courseListLabels: {
+      title: 'Väljakuloendi märgised',
+      description:
+        'Kui see on sees, näitavad väljakukaardid ja väljaku vaade, millistesse soodusprogrammidesse väljak kuulub (Kultakortti, Järvi-Suomi, GolfAmore).',
+      toggle: 'Näita väljakuloendi märgiseid',
+    },
     location: {
       title: 'Vaikeasukoht',
       description:
@@ -196,6 +202,14 @@ export const et: TranslationDictionary = {
     empty: 'Lemmikuid veel ei ole. Lisa väljakuid lemmikutesse tähega.',
     addFavorite: 'Lisa lemmikutesse',
     removeFavorite: 'Eemalda lemmikutest',
+  },
+  courseLists: {
+    open: 'Lisa valmis väljakute loend',
+    title: 'Valmis väljakute loendid',
+    kultakortti: 'Kultakortti',
+    jarviSuomi: 'Järvi-Suomi',
+    golfamore: 'GolfAmore',
+    added: '{count}/{total} lemmikutes',
   },
   bookmarks: {
     title: 'Minu stardiajad',

@@ -20,6 +20,7 @@ import type { Playability } from "@/lib/golf";
 import type { SunTimes as SunTimesData } from "@/lib/sun";
 import type { AggregatedPoint } from "@/lib/weather";
 import { BookmarkButton } from "./bookmark-button";
+import { CourseListLabels } from "./course-list-labels";
 import { FavoriteButton } from "./favorite-button";
 import { HourlyStrip } from "./hourly-strip";
 import { PlayabilityBadge } from "./playability-badge";
@@ -139,6 +140,7 @@ export function CourseCard({
               >
                 {city} · {formatDistance(distanceKm)}
               </ThemedText>
+              <CourseListLabels courseId={id} />
             </View>
           </View>
 
