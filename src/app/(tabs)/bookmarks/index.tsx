@@ -9,10 +9,11 @@ import { CourseCard } from '@/components/course-card';
 import { CourseSearchBar } from '@/components/course-search-bar';
 import { CreatedByBanner } from '@/components/created-by-banner';
 import { LocationButton } from '@/components/location-button';
+import { TeeTimeAlternativesDialog } from '@/components/tee-time-alternatives-dialog';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
-import { getCourseById } from '@/data/golf-courses';
+import { getCourseById, golfCourses } from '@/data/golf-courses';
 import { type Bookmark, floorToHour, useBookmarks } from '@/hooks/use-bookmarks';
 import { useHasHydrated } from '@/hooks/use-color-scheme';
 import { useCoursesWeather } from '@/hooks/use-courses-weather';
@@ -25,7 +26,15 @@ import { useWindLabels } from '@/hooks/use-wind-labels';
 import { useI18n } from '@/i18n';
 import { WINDOW_HOURS, currentPlayability } from '@/lib/course-sort';
 import { sortByDistance, type GolfCourse, type GolfCourseWithDistance } from '@/lib/geo';
+import type { Playability } from '@/lib/golf';
 import { EMPTY_SUN_TIMES, getSunTimes } from '@/lib/sun';
+import {
+  candidatesFor,
+  isWithinLookahead,
+  needsAlternatives,
+  rankAlternatives,
+  type TeeTimeAlternative,
+} from '@/lib/tee-time-alternatives';
 import { findCurrentPoint, hasHourlyData } from '@/lib/weather';
 
 const NEXT_HOURS_SHOWN = WINDOW_HOURS;
@@ -35,9 +44,17 @@ type BookmarkEntry = {
   course: GolfCourseWithDistance;
 };
 
+/** A tee time whose conditions are poor enough to look for somewhere better nearby. */
+type PoorTeeTime = {
+  entry: BookmarkEntry;
+  teeTime: Date;
+  playability: Playability;
+  candidates: GolfCourseWithDistance[];
+};
+
 export default function BookmarksScreen() {
   const { coords, loading: locationLoading, refresh } = useLocation();
-  const { bookmarks, pruneExpired, removeBookmark } = useBookmarks();
+  const { bookmarks, pruneExpired, removeBookmark, replaceBookmark } = useBookmarks();
   const { darkScoringEnabled } = useDarkScoring();
   const { windLabelsEnabled } = useWindLabels();
   const { t } = useI18n();
@@ -46,6 +63,15 @@ export default function BookmarksScreen() {
   const hasHydrated = useHasHydrated();
   const [searchQuery, setSearchQuery] = useState('');
   const [pendingRemoval, setPendingRemoval] = useState<Bookmark | null>(null);
+  const [alternativesFor, setAlternativesFor] = useState<string | null>(null);
+  // Courses whose forecast is only fetched to compare against a poor tee time.
+  const [candidateIds, setCandidateIds] = useState<string[]>([]);
+
+  const now = useMemo(
+    () => new Date(),
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- hourTick is a deliberate recompute trigger, not read inside.
+    [hourTick]
+  );
 
   // Prunes bookmarks whose datetime has already passed, both on mount and
   // whenever the app's "current hour" rolls over.
@@ -74,11 +100,28 @@ export default function BookmarksScreen() {
     [coursesByDistance]
   );
 
+  const candidateCourses = useMemo(() => {
+    const courses: GolfCourse[] = [];
+    for (const id of candidateIds) {
+      const course = getCourseById(id);
+      if (course) courses.push(course);
+    }
+    return sortByDistance(courses, { lat: coords.lat, lon: coords.lon });
+  }, [candidateIds, coords.lat, coords.lon]);
+
+  // Candidates ride along in the same fetch list as the booked courses, so
+  // they go through the shared batching, caching and concurrency caps in
+  // `@/lib/weather` rather than a second, unbatched round of requests.
+  const fetchCourses = useMemo(
+    () => [...coursesByDistance, ...candidateCourses],
+    [coursesByDistance, candidateCourses]
+  );
+
   const {
     weatherByCourse,
     refresh: refreshWeather,
     refreshing: weatherRefreshing,
-  } = useCoursesWeather(coursesByDistance, hourTick);
+  } = useCoursesWeather(fetchCourses, hourTick);
   const onPullRefresh = useCallback(() => {
     refreshWeather();
     refresh();
@@ -109,6 +152,83 @@ export default function BookmarksScreen() {
     });
   }, [bookmarks, coursesById]);
 
+  const poorTeeTimes = useMemo<PoorTeeTime[]>(() => {
+    const list: PoorTeeTime[] = [];
+    for (const entry of entries) {
+      const teeTime = entry.bookmark.isNow
+        ? floorToHour(now)
+        : new Date(entry.bookmark.datetime ?? '');
+      if (!isWithinLookahead(teeTime, now)) continue;
+
+      const playability = currentPlayability(
+        weatherByCourse[entry.course.id],
+        entry.course.lat,
+        entry.course.lon,
+        teeTime,
+        darkScoringEnabled,
+        windLabelsEnabled
+      );
+      if (!playability || !needsAlternatives(playability)) continue;
+
+      list.push({
+        entry,
+        teeTime,
+        playability,
+        candidates: candidatesFor(entry.course, golfCourses),
+      });
+    }
+    return list;
+  }, [entries, weatherByCourse, now, darkScoringEnabled, windLabelsEnabled]);
+
+  const wantedCandidateIds = useMemo(() => {
+    const wanted: string[] = [];
+    // Courses already in the list have their forecast anyway, and a course is
+    // never its own alternative.
+    const seen = new Set(entries.map((entry) => entry.course.id));
+    for (const poor of poorTeeTimes) {
+      for (const candidate of poor.candidates) {
+        if (seen.has(candidate.id)) continue;
+        seen.add(candidate.id);
+        wanted.push(candidate.id);
+      }
+    }
+    return wanted;
+  }, [poorTeeTimes, entries]);
+
+  // Stored only when the set actually changes, so `fetchCourses` keeps a stable
+  // identity across the frequent `weatherByCourse` updates. Adjusted during
+  // render rather than in an effect, per
+  // https://react.dev/learn/you-might-not-need-an-effect.
+  if (
+    wantedCandidateIds.length !== candidateIds.length ||
+    wantedCandidateIds.some((id, index) => id !== candidateIds[index])
+  ) {
+    setCandidateIds(wantedCandidateIds);
+  }
+
+  const alternativesByBookmark = useMemo(() => {
+    const map: Record<string, TeeTimeAlternative[]> = {};
+    for (const poor of poorTeeTimes) {
+      map[poor.entry.bookmark.id] = rankAlternatives(
+        poor.candidates,
+        weatherByCourse,
+        poor.teeTime,
+        poor.playability,
+        darkScoringEnabled,
+        windLabelsEnabled
+      );
+    }
+    return map;
+  }, [poorTeeTimes, weatherByCourse, darkScoringEnabled, windLabelsEnabled]);
+
+  const alternativesTarget = useMemo(() => {
+    if (!alternativesFor) return null;
+    const poor = poorTeeTimes.find((entry) => entry.entry.bookmark.id === alternativesFor);
+    const alternatives = alternativesByBookmark[alternativesFor] ?? [];
+    if (!poor || alternatives.length === 0) return null;
+    return { poor, alternatives };
+  }, [alternativesFor, poorTeeTimes, alternativesByBookmark]);
+
   const normalizedQuery = searchQuery.trim().toLowerCase();
   const filteredEntries = useMemo(
     () =>
@@ -123,8 +243,14 @@ export default function BookmarksScreen() {
   );
 
   const listExtraData = useMemo(
-    () => ({ weatherByCourse, hourTick, hasHydrated, darkScoringEnabled }),
-    [weatherByCourse, hourTick, hasHydrated, darkScoringEnabled]
+    () => ({
+      weatherByCourse,
+      hourTick,
+      hasHydrated,
+      darkScoringEnabled,
+      alternativesByBookmark,
+    }),
+    [weatherByCourse, hourTick, hasHydrated, darkScoringEnabled, alternativesByBookmark]
   );
 
   return (
@@ -223,6 +349,8 @@ export default function BookmarksScreen() {
                 bookmarkDateTime={bookmarkDateTime}
                 showBookmarkDateTime
                 bookmarkIsNow={bookmark.isNow}
+                alternativesCount={alternativesByBookmark[bookmark.id]?.length ?? 0}
+                onShowAlternatives={() => setAlternativesFor(bookmark.id)}
                 onRemoveBookmark={() => setPendingRemoval(bookmark)}
                 detailHref={{ pathname: '/bookmarks/[id]', params: { id: bookmark.id } }}
               />
@@ -243,6 +371,21 @@ export default function BookmarksScreen() {
         }}
         onCancel={() => setPendingRemoval(null)}
       />
+
+      {alternativesTarget && (
+        <TeeTimeAlternativesDialog
+          visible
+          teeTime={alternativesTarget.poor.teeTime}
+          courseName={alternativesTarget.poor.entry.course.name}
+          playability={alternativesTarget.poor.playability}
+          alternatives={alternativesTarget.alternatives}
+          onSelect={(courseId) => {
+            replaceBookmark(alternativesTarget.poor.entry.bookmark.id, courseId);
+            setAlternativesFor(null);
+          }}
+          onClose={() => setAlternativesFor(null)}
+        />
+      )}
     </ThemedView>
   );
 }

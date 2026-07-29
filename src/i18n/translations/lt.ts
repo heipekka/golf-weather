@@ -222,6 +222,12 @@ export const lt: TranslationDictionary = {
     now: 'Dabar',
     addMyTee: 'Pridėti mano tee',
     removeMyTee: 'Pašalinti mano tee',
+    alternativesButton: '{count} geresni netoliese',
+    alternativesTitle: 'Netoliese geresnis oras',
+    alternativesMessage:
+      'Aikštynai {radius} km atstumu, kuriuose tuo pačiu starto laiku sąlygos geresnės.',
+    alternativesCurrent: 'Jūsų starto laikas',
+    alternativesSwitch: 'Pereiti į {course}',
   },
   createdBy: {
     credit: 'Sukūrė Pekka Heikkinen',

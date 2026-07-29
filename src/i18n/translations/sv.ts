@@ -222,6 +222,12 @@ export const sv: TranslationDictionary = {
     now: 'Nu',
     addMyTee: 'Lägg till min tee',
     removeMyTee: 'Ta bort min tee',
+    alternativesButton: '{count} bättre i närheten',
+    alternativesTitle: 'Bättre väder i närheten',
+    alternativesMessage:
+      'Banor inom {radius} km med bättre förhållanden vid samma starttid.',
+    alternativesCurrent: 'Din starttid',
+    alternativesSwitch: 'Byt till {course}',
   },
   createdBy: {
     credit: 'Skapad av Pekka Heikkinen',

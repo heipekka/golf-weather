@@ -60,6 +60,8 @@ type BookmarksContextValue = {
   bookmarks: Bookmark[];
   addBookmark: (courseId: string, datetime: Date) => void;
   removeBookmark: (id: string) => void;
+  /** Moves an existing tee time to another course, keeping its hour. */
+  replaceBookmark: (id: string, courseId: string) => void;
   hasBookmark: (courseId: string, datetime: Date) => boolean;
   pruneExpired: () => void;
 };
@@ -118,6 +120,36 @@ export function BookmarksProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
+  const replaceBookmark = useCallback((id: string, courseId: string) => {
+    setBookmarks((prev) => {
+      const index = prev.findIndex((bookmark) => bookmark.id === id);
+      if (index === -1) return prev;
+
+      const current = prev[index];
+      const datetime = current.isNow
+        ? floorToHour(new Date())
+        : new Date(current.datetime ?? '');
+      if (Number.isNaN(datetime.getTime())) return prev;
+
+      const nextId = bookmarkId(courseId, datetime);
+      if (nextId === id) return prev;
+
+      const replacement: Bookmark = current.isNow
+        ? { id: nextId, courseId, isNow: true }
+        : { id: nextId, courseId, datetime: floorToHour(datetime).toISOString() };
+
+      // Replaced in place so the list keeps its position, unless that course
+      // and hour is already bookmarked — then the old entry just goes away.
+      const alreadyExists = prev.some((bookmark) => bookmark.id === nextId);
+      const next = alreadyExists
+        ? prev.filter((bookmark) => bookmark.id !== id)
+        : prev.map((bookmark) => (bookmark.id === id ? replacement : bookmark));
+
+      AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(next)).catch(() => {});
+      return next;
+    });
+  }, []);
+
   const hasBookmark = useCallback(
     (courseId: string, datetime: Date) => {
       const id = bookmarkId(courseId, datetime);
@@ -138,8 +170,15 @@ export function BookmarksProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const value = useMemo<BookmarksContextValue>(
-    () => ({ bookmarks, addBookmark, removeBookmark, hasBookmark, pruneExpired }),
-    [bookmarks, addBookmark, removeBookmark, hasBookmark, pruneExpired]
+    () => ({
+      bookmarks,
+      addBookmark,
+      removeBookmark,
+      replaceBookmark,
+      hasBookmark,
+      pruneExpired,
+    }),
+    [bookmarks, addBookmark, removeBookmark, replaceBookmark, hasBookmark, pruneExpired]
   );
 
   return <BookmarksContext.Provider value={value}>{children}</BookmarksContext.Provider>;

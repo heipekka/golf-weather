@@ -222,6 +222,12 @@ export const lv: TranslationDictionary = {
     now: 'Tagad',
     addMyTee: 'Pievienot manu tee',
     removeMyTee: 'Noņemt manu tee',
+    alternativesButton: '{count} labāki tuvumā',
+    alternativesTitle: 'Tuvumā labāki laikapstākļi',
+    alternativesMessage:
+      'Laukumi {radius} km rādiusā ar labākiem apstākļiem tajā pašā starta laikā.',
+    alternativesCurrent: 'Tavs starta laiks',
+    alternativesSwitch: 'Pārslēgties uz {course}',
   },
   createdBy: {
     credit: 'Izveidojis Pekka Heikkinen',

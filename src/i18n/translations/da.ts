@@ -222,6 +222,12 @@ export const da: TranslationDictionary = {
     now: 'Nu',
     addMyTee: 'Tilføj min tee',
     removeMyTee: 'Fjern min tee',
+    alternativesButton: '{count} bedre i nærheden',
+    alternativesTitle: 'Bedre vejr i nærheden',
+    alternativesMessage:
+      'Baner inden for {radius} km med bedre forhold på samme starttid.',
+    alternativesCurrent: 'Din starttid',
+    alternativesSwitch: 'Skift til {course}',
   },
   createdBy: {
     credit: 'Udviklet af Pekka Heikkinen',

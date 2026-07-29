@@ -222,6 +222,12 @@ export const fi = {
     now: "Nyt",
     addMyTee: "Lisää lähtö",
     removeMyTee: "Poista lähtö",
+    alternativesButton: "{count} parempaa lähellä",
+    alternativesTitle: "Parempi sää lähellä",
+    alternativesMessage:
+      "Kentät {radius} km:n säteellä, joilla on paremmat olosuhteet samaan lähtöaikaan.",
+    alternativesCurrent: "Oma lähtöaika",
+    alternativesSwitch: "Vaihda kenttään {course}",
   },
   createdBy: {
     credit: "Tehnyt Pekka Heikkinen",

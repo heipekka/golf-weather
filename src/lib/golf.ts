@@ -85,6 +85,14 @@ const TIER_RANK: Record<PlayabilityLabel, number> = {
   Excellent: 4,
 };
 
+/** Rank of the `Fair` tier: at or below this, conditions aren't worth playing. */
+export const FAIR_TIER_RANK = 2;
+
+/** Coarse tier rank of a label: -1 Dark, 0 Bad, 1 Poor, 2 Fair, 3 Good, 4 Excellent. */
+export function playabilityRank(label: PlayabilityLabel): number {
+  return TIER_RANK[label];
+}
+
 const RANK_TIER: PlayabilityLabel[] = [
   "Bad",
   "Poor",

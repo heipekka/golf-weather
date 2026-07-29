@@ -222,6 +222,12 @@ export const et: TranslationDictionary = {
     now: 'Nüüd',
     addMyTee: 'Lisa minu tee',
     removeMyTee: 'Eemalda minu tee',
+    alternativesButton: '{count} paremat lähedal',
+    alternativesTitle: 'Lähedal parem ilm',
+    alternativesMessage:
+      'Väljakud {radius} km raadiuses, kus on samal stardiajal paremad tingimused.',
+    alternativesCurrent: 'Sinu stardiaeg',
+    alternativesSwitch: 'Vaheta väljakule {course}',
   },
   createdBy: {
     credit: 'Loonud Pekka Heikkinen',

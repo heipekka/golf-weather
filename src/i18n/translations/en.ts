@@ -222,6 +222,12 @@ export const en: TranslationDictionary = {
     now: "Now",
     addMyTee: "My tee",
     removeMyTee: "Remove my tee",
+    alternativesButton: "{count} better nearby",
+    alternativesTitle: "Better weather nearby",
+    alternativesMessage:
+      "Courses within {radius} km with better conditions at the same tee time.",
+    alternativesCurrent: "Your tee time",
+    alternativesSwitch: "Switch to {course}",
   },
   createdBy: {
     credit: "Created by Pekka Heikkinen",

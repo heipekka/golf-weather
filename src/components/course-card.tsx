@@ -29,6 +29,12 @@ import { ThemedText } from "./themed-text";
 import { ThemedView } from "./themed-view";
 import { WeatherIcon } from "./weather-icon";
 
+/** Space kept clear on the right of the card body for the absolutely positioned corner controls. */
+const CornerReserve = Spacing.six + Spacing.five;
+
+/** Cap on the alternatives button's width, so the space reserved for it stays predictable across languages. */
+const AlternativesWidth = 200;
+
 export type CourseCardProps = {
   id: string;
   name: string;
@@ -51,6 +57,9 @@ export type CourseCardProps = {
   bookmarkIsNow?: boolean;
   /** When set, the corner shows only a remove button (calling this) instead of the favorite/bookmark buttons — used on the bookmarks list. */
   onRemoveBookmark?: () => void;
+  /** Number of nearby courses with better weather at `bookmarkDateTime`; shows the alternatives button when above zero. */
+  alternativesCount?: number;
+  onShowAlternatives?: () => void;
   /** Overrides the card body's navigation target (defaults to `/course/${id}`) — used to link to the bookmark detail instead. */
   detailHref?: Href;
 };
@@ -72,6 +81,8 @@ export function CourseCard({
   showBookmarkDateTime,
   bookmarkIsNow,
   onRemoveBookmark,
+  alternativesCount = 0,
+  onShowAlternatives,
   detailHref,
 }: CourseCardProps) {
   const [showHourly, setShowHourly] = useState(false);
@@ -80,42 +91,83 @@ export function CourseCard({
   const { hasBookmark } = useBookmarks();
   const canShowHourly = !loading && !dailyOnly && hourly.length > 1;
   const showDailyOnlyNotice = !loading && !canShowHourly && hourly.length > 0;
-  const showBookmarkButton = !!bookmarkDateTime && !hasBookmark(id, bookmarkDateTime);
+  const showBookmarkButton =
+    !!bookmarkDateTime && !hasBookmark(id, bookmarkDateTime);
+  const showAlternatives = !!onShowAlternatives && alternativesCount > 0;
 
   return (
     <ThemedView type="backgroundElement" style={styles.card}>
       <View style={styles.topRightCorner}>
-        {onRemoveBookmark ? (
+        <View style={styles.cornerRow}>
+          {onRemoveBookmark ? (
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={t("bookmarks.removeMyTee")}
+              hitSlop={Spacing.two}
+              onPress={onRemoveBookmark}
+              style={({ pressed }) => [
+                styles.removeButton,
+                pressed && styles.pressed,
+              ]}
+            >
+              <SymbolView
+                name={{ ios: "trash", android: "delete", web: "delete" }}
+                size={20}
+                tintColor={theme.textSecondary}
+              />
+            </Pressable>
+          ) : (
+            <>
+              {showBookmarkButton && bookmarkDateTime && (
+                <>
+                  <BookmarkButton
+                    courseId={id}
+                    datetime={bookmarkDateTime}
+                    showLabel
+                  />
+                  <ThemedText themeColor="textSecondary">·</ThemedText>
+                </>
+              )}
+              <FavoriteButton courseId={id} />
+            </>
+          )}
+        </View>
+
+        {showAlternatives && (
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel={t('bookmarks.removeMyTee')}
-            hitSlop={Spacing.two}
-            onPress={onRemoveBookmark}
-            style={({ pressed }) => [styles.removeButton, pressed && styles.pressed]}
+            accessibilityLabel={t("bookmarks.alternativesTitle")}
+            onPress={onShowAlternatives}
+            style={({ pressed }) => [
+              styles.alternativesButton,
+              { borderColor: theme.textSecondary },
+              pressed && styles.pressed,
+            ]}
           >
             <SymbolView
-              name={{ ios: "trash", android: "delete", web: "delete" }}
-              size={20}
-              tintColor={theme.textSecondary}
+              name={{
+                ios: "arrow.triangle.swap",
+                android: "swap_horiz",
+                web: "swap_horiz",
+              }}
+              size={16}
+              tintColor={theme.text}
             />
+            <ThemedText type="small" numberOfLines={1} style={styles.name}>
+              {t("bookmarks.alternativesButton", { count: alternativesCount })}
+            </ThemedText>
           </Pressable>
-        ) : (
-          <>
-            {showBookmarkButton && bookmarkDateTime && (
-              <>
-                <BookmarkButton courseId={id} datetime={bookmarkDateTime} showLabel />
-                <ThemedText themeColor="textSecondary">·</ThemedText>
-              </>
-            )}
-            <FavoriteButton courseId={id} />
-          </>
         )}
       </View>
 
       <Link href={detailHref ?? `/course/${id}`} asChild>
         <Pressable style={({ pressed }) => pressed && styles.pressed}>
           {showBookmarkDateTime && bookmarkDateTime && (
-            <ThemedText type="smallBold" style={styles.bookmarkHeading} numberOfLines={1}>
+            <ThemedText
+              type="smallBold"
+              style={styles.bookmarkHeading}
+              numberOfLines={1}
+            >
               {bookmarkIsNow
                 ? t("bookmarks.now")
                 : `${formatDayLabel(bookmarkDateTime.toISOString(), locale)} ${formatHour(bookmarkDateTime.toISOString(), locale)}`}
@@ -125,8 +177,15 @@ export function CourseCard({
           <View style={styles.nameRow}>
             <View style={styles.nameCol}>
               <ThemedText
-                type={showBookmarkDateTime && bookmarkDateTime ? "small" : "smallBold"}
-                style={styles.name}
+                type={
+                  showBookmarkDateTime && bookmarkDateTime
+                    ? "small"
+                    : "smallBold"
+                }
+                style={[
+                  styles.name,
+                  showAlternatives && styles.alternativesReserve,
+                ]}
                 numberOfLines={1}
               >
                 {name}
@@ -134,7 +193,11 @@ export function CourseCard({
               <ThemedText
                 type="small"
                 themeColor="textSecondary"
-                style={[styles.statText, styles.noEllipsis]}
+                style={[
+                  styles.statText,
+                  styles.noEllipsis,
+                  showAlternatives && styles.alternativesReserve,
+                ]}
                 numberOfLines={1}
                 ellipsizeMode="clip"
               >
@@ -153,7 +216,7 @@ export function CourseCard({
                   themeColor="textSecondary"
                   style={styles.statText}
                 >
-                  {t('courseCard.loadingForecast')}
+                  {t("courseCard.loadingForecast")}
                 </ThemedText>
               ) : (
                 <>
@@ -186,7 +249,9 @@ export function CourseCard({
                       themeColor="textSecondary"
                       style={styles.statText}
                     >
-                      {formatPrecipitationRange(hourly.map((point) => point.precipitation))}
+                      {formatPrecipitationRange(
+                        hourly.map((point) => point.precipitation),
+                      )}
                     </ThemedText>
                   </View>
                 </>
@@ -203,7 +268,9 @@ export function CourseCard({
                 <ThemedText type="subtitle" style={styles.temp}>
                   {loading
                     ? "…"
-                    : formatTemperatureAverage(hourly.map((point) => point.temperature))}
+                    : formatTemperatureAverage(
+                        hourly.map((point) => point.temperature),
+                      )}
                 </ThemedText>
               </View>
             </View>
@@ -217,9 +284,14 @@ export function CourseCard({
             <Pressable
               accessibilityRole="button"
               accessibilityLabel={
-                showHourly ? t('courseCard.hideHourlyForecast') : t('courseCard.showHourlyForecast')
+                showHourly
+                  ? t("courseCard.hideHourlyForecast")
+                  : t("courseCard.showHourlyForecast")
               }
-              style={({ pressed }) => [styles.toggle, pressed && styles.pressed]}
+              style={({ pressed }) => [
+                styles.toggle,
+                pressed && styles.pressed,
+              ]}
               onPress={() => setShowHourly((value) => !value)}
             >
               <SymbolView
@@ -241,7 +313,7 @@ export function CourseCard({
                 tintColor={theme.textSecondary}
               />
               <ThemedText type="small" themeColor="textSecondary">
-                {t('courseCard.hourlyForecast')}
+                {t("courseCard.hourlyForecast")}
               </ThemedText>
             </Pressable>
           ) : (
@@ -252,7 +324,7 @@ export function CourseCard({
                 tintColor={theme.textSecondary}
               />
               <ThemedText type="small" themeColor="textSecondary">
-                {t('courseCard.hourlyUnavailable')}
+                {t("courseCard.hourlyUnavailable")}
               </ThemedText>
             </View>
           )}
@@ -283,10 +355,14 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: Spacing.three,
     right: Spacing.three,
+    alignItems: "flex-end",
+    gap: Spacing.two,
+    zIndex: 1,
+  },
+  cornerRow: {
     flexDirection: "row",
     alignItems: "center",
     gap: Spacing.two,
-    zIndex: 1,
   },
   nameRow: {
     flexDirection: "row",
@@ -294,7 +370,14 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.two,
     // Reserves room for the "My tee" label + separator + favorite star now
     // shown in the top-right corner, wider than the old icon-only layout.
-    paddingRight: Spacing.six + Spacing.five,
+    paddingRight: CornerReserve,
+  },
+  // Extra inset, on top of `nameRow`'s, for the two lines that sit level with
+  // the alternatives button stacked under the corner controls. Applied per line
+  // rather than to the whole row so the course list chips below the button keep
+  // the full width and stay on one row.
+  alternativesReserve: {
+    paddingRight: AlternativesWidth + Spacing.two - CornerReserve,
   },
   nameCol: {
     flex: 1,
@@ -305,7 +388,7 @@ const styles = StyleSheet.create({
   },
   bookmarkHeading: {
     marginBottom: Spacing.one,
-    paddingRight: Spacing.six + Spacing.five,
+    paddingRight: CornerReserve,
   },
   header: {
     flexDirection: "row",
@@ -361,6 +444,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: Spacing.one,
+  },
+  alternativesButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.two,
+    maxWidth: AlternativesWidth,
+    borderRadius: Spacing.three,
+    borderWidth: 1,
+    paddingVertical: Spacing.one,
+    paddingHorizontal: Spacing.two,
   },
   removeButton: {
     alignItems: "center",
