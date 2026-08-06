@@ -18,7 +18,6 @@ import {
     ThemeModeProvider,
     useResolvedColorScheme,
     useResolvedPalette,
-    useThemeMode,
 } from "@/hooks/use-theme-mode";
 import { WindLabelsProvider } from "@/hooks/use-wind-labels";
 import { LanguageProvider } from "@/i18n";
@@ -49,17 +48,13 @@ const GlassNavTheme = {
   },
 };
 
-const BACKGROUND_SOURCES = {
-  photo: require("@/assets/images/backgrounds/course-photo.jpg"),
-  illustration: require("@/assets/images/backgrounds/course-illustration.jpg"),
-};
+const BACKGROUND_SOURCE = require("@/assets/images/backgrounds/course-illustration.jpg");
 
-// Full-bleed photo behind the whole app plus a dark scrim for text legibility,
-// only rendered for the glass palette. Sits behind the Stack, which is why it
-// must be a sibling rendered before it rather than a wrapper.
+// Full-bleed illustration behind the whole app plus a dark scrim for text
+// legibility, only rendered for the glass palette. Sits behind the Stack,
+// which is why it must be a sibling rendered before it rather than a wrapper.
 function AppBackdrop() {
   const palette = useResolvedPalette();
-  const { glassBackground } = useThemeMode();
 
   if (palette !== "glass") return null;
 
@@ -67,7 +62,7 @@ function AppBackdrop() {
     <View style={StyleSheet.absoluteFill} pointerEvents="none">
       <Image
         style={StyleSheet.absoluteFill}
-        source={BACKGROUND_SOURCES[glassBackground]}
+        source={BACKGROUND_SOURCE}
         contentFit="cover"
       />
       <View style={styles.scrim} />

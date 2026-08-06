@@ -162,12 +162,6 @@ export const et: TranslationDictionary = {
       light: "Hele",
       dark: "Tume",
       glass: "Klaas",
-      background: {
-        title: "Taustapilt",
-        description: "Valige klaasiteema taustapilt.",
-        photo: "Foto",
-        illustration: "Illustratsioon",
-      },
     },
     darkScoring: {
       title: "Pimeduse hindamine",

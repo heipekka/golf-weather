@@ -15,11 +15,7 @@ import { useDarkScoring } from "@/hooks/use-dark-scoring";
 import { useDistanceFilter } from "@/hooks/use-distance-filter";
 import { useLocation } from "@/hooks/use-location";
 import { useTheme } from "@/hooks/use-theme";
-import {
-    useThemeMode,
-    type GlassBackground,
-    type ThemeMode,
-} from "@/hooks/use-theme-mode";
+import { useThemeMode, type ThemeMode } from "@/hooks/use-theme-mode";
 import { useWindLabels } from "@/hooks/use-wind-labels";
 import { useI18n, type Language } from "@/i18n";
 import type { Coordinates } from "@/lib/geo";
@@ -62,14 +58,6 @@ const THEME_MODES: {
   { mode: "light", labelKey: "settings.theme.light" },
   { mode: "dark", labelKey: "settings.theme.dark" },
   { mode: "glass", labelKey: "settings.theme.glass" },
-];
-
-const GLASS_BACKGROUNDS: {
-  background: GlassBackground;
-  labelKey: "settings.theme.background.photo" | "settings.theme.background.illustration";
-}[] = [
-  { background: "photo", labelKey: "settings.theme.background.photo" },
-  { background: "illustration", labelKey: "settings.theme.background.illustration" },
 ];
 
 type SettingsTab = "user" | "search";
@@ -206,58 +194,6 @@ function ThemeSection() {
               key={mode}
               accessibilityRole="button"
               onPress={() => setThemeMode(mode)}
-              style={({ pressed }) => [
-                styles.option,
-                index > 0 && styles.optionBorder,
-                { borderColor: theme.backgroundSolid },
-                pressed && styles.optionPressed,
-              ]}
-            >
-              <ThemedText
-                type="default"
-                themeColor={selected ? "text" : "textSecondary"}
-              >
-                {t(labelKey)}
-              </ThemedText>
-              {selected && (
-                <SymbolView
-                  name={{ ios: "checkmark", android: "check", web: "check" }}
-                  size={18}
-                  tintColor={theme.text}
-                />
-              )}
-            </Pressable>
-          );
-        })}
-      </ThemedView>
-    </>
-  );
-}
-
-function GlassBackgroundSection() {
-  const { t } = useI18n();
-  const theme = useTheme();
-  const { glassBackground, setGlassBackground } = useThemeMode();
-
-  return (
-    <>
-      <View style={styles.sectionHeading}>
-        <ThemedText type="smallBold">
-          {t("settings.theme.background.title")}
-        </ThemedText>
-        <ThemedText type="small" themeColor="textSecondary">
-          {t("settings.theme.background.description")}
-        </ThemedText>
-      </View>
-
-      <ThemedView type="backgroundElement" style={styles.optionList}>
-        {GLASS_BACKGROUNDS.map(({ background, labelKey }, index) => {
-          const selected = background === glassBackground;
-          return (
-            <Pressable
-              key={background}
-              accessibilityRole="button"
-              onPress={() => setGlassBackground(background)}
               style={({ pressed }) => [
                 styles.option,
                 index > 0 && styles.optionBorder,
@@ -476,7 +412,6 @@ function DistanceRangeSection() {
 export default function SettingsScreen() {
   const { t } = useI18n();
   const [tab, setTab] = useState<SettingsTab>("user");
-  const { themeMode } = useThemeMode();
 
   return (
     <ThemedView style={styles.container}>
@@ -498,7 +433,6 @@ export default function SettingsScreen() {
             <>
               <LanguageSection />
               <ThemeSection />
-              {themeMode === "glass" && <GlassBackgroundSection />}
             </>
           ) : (
             <>

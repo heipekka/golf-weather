@@ -16,10 +16,8 @@ import { useColorScheme } from "@/hooks/use-color-scheme";
 // under the old key — that key is simply abandoned. Choosing a theme again
 // after this persists normally under the new key.
 const STORAGE_KEY = "golf-weather.themeMode.v2";
-const BACKGROUND_STORAGE_KEY = "golf-weather.glassBackground";
 
 export type ThemeMode = "system" | "light" | "dark" | "glass";
-export type GlassBackground = "photo" | "illustration";
 
 function isThemeMode(value: unknown): value is ThemeMode {
   return (
@@ -30,29 +28,20 @@ function isThemeMode(value: unknown): value is ThemeMode {
   );
 }
 
-function isGlassBackground(value: unknown): value is GlassBackground {
-  return value === "photo" || value === "illustration";
-}
-
 type ThemeModeContextValue = {
   themeMode: ThemeMode;
   setThemeMode: (mode: ThemeMode) => void;
-  glassBackground: GlassBackground;
-  setGlassBackground: (background: GlassBackground) => void;
 };
 
 const ThemeModeContext = createContext<ThemeModeContextValue | null>(null);
 
 /**
- * Shares the user's preferred theme mode (system/light/dark/glass) and, for
- * the glass theme, which background image to show, persisted under
- * `golf-weather.themeMode.v2` and `golf-weather.glassBackground`. Defaults
- * to `glass` until a stored override under the new key is loaded.
+ * Shares the user's preferred theme mode (system/light/dark/glass),
+ * persisted under `golf-weather.themeMode.v2`. Defaults to `glass` until a
+ * stored override under the new key is loaded.
  */
 export function ThemeModeProvider({ children }: { children: ReactNode }) {
   const [themeMode, setThemeModeState] = useState<ThemeMode>("glass");
-  const [glassBackground, setGlassBackgroundState] =
-    useState<GlassBackground>("photo");
 
   useEffect(() => {
     let cancelled = false;
@@ -61,13 +50,6 @@ export function ThemeModeProvider({ children }: { children: ReactNode }) {
       .then((stored) => {
         if (cancelled || !isThemeMode(stored)) return;
         setThemeModeState(stored);
-      })
-      .catch(() => {});
-
-    AsyncStorage.getItem(BACKGROUND_STORAGE_KEY)
-      .then((stored) => {
-        if (cancelled || !isGlassBackground(stored)) return;
-        setGlassBackgroundState(stored);
       })
       .catch(() => {});
 
@@ -81,14 +63,9 @@ export function ThemeModeProvider({ children }: { children: ReactNode }) {
     AsyncStorage.setItem(STORAGE_KEY, mode).catch(() => {});
   }, []);
 
-  const setGlassBackground = useCallback((background: GlassBackground) => {
-    setGlassBackgroundState(background);
-    AsyncStorage.setItem(BACKGROUND_STORAGE_KEY, background).catch(() => {});
-  }, []);
-
   const value = useMemo<ThemeModeContextValue>(
-    () => ({ themeMode, setThemeMode, glassBackground, setGlassBackground }),
-    [themeMode, setThemeMode, glassBackground, setGlassBackground],
+    () => ({ themeMode, setThemeMode }),
+    [themeMode, setThemeMode],
   );
 
   return (

@@ -164,12 +164,6 @@ export const lv: TranslationDictionary = {
       light: "Gaišs",
       dark: "Tumšs",
       glass: "Stikls",
-      background: {
-        title: "Fona attēls",
-        description: "Izvēlieties stikla tēmas fona attēlu.",
-        photo: "Fotoattēls",
-        illustration: "Ilustrācija",
-      },
     },
     darkScoring: {
       title: "Tumsas vērtējums",

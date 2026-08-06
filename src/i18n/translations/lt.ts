@@ -165,12 +165,6 @@ export const lt: TranslationDictionary = {
       light: "Šviesi",
       dark: "Tamsi",
       glass: "Stiklas",
-      background: {
-        title: "Fono paveikslėlis",
-        description: "Pasirinkite stiklo temos fono paveikslėlį.",
-        photo: "Nuotrauka",
-        illustration: "Iliustracija",
-      },
     },
     darkScoring: {
       title: "Tamsos vertinimas",

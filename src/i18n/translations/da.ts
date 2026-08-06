@@ -163,12 +163,6 @@ export const da: TranslationDictionary = {
       light: "Lyst",
       dark: "Mørkt",
       glass: "Glas",
-      background: {
-        title: "Baggrundsbillede",
-        description: "Vælg baggrundsbillede til glastemaet.",
-        photo: "Foto",
-        illustration: "Illustration",
-      },
     },
     darkScoring: {
       title: "Mørkescoring",

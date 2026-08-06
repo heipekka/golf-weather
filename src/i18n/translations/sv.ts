@@ -161,12 +161,6 @@ export const sv: TranslationDictionary = {
       light: "Ljust",
       dark: "Mörkt",
       glass: "Glas",
-      background: {
-        title: "Bakgrundsbild",
-        description: "Välj bakgrundsbild för glastemat.",
-        photo: "Foto",
-        illustration: "Illustration",
-      },
     },
     darkScoring: {
       title: "Mörkerpoäng",

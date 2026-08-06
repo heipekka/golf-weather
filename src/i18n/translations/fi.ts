@@ -162,12 +162,6 @@ export const fi = {
       light: "Vaalea",
       dark: "Tumma",
       glass: "Lasi",
-      background: {
-        title: "Taustakuva",
-        description: "Valitse lasiteeman taustakuva.",
-        photo: "Valokuva",
-        illustration: "Kuvitus",
-      },
     },
     darkScoring: {
       title: "Pimeän pisteytys",
