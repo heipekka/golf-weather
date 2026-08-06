@@ -1,10 +1,10 @@
-import { Modal, Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from "react-native";
 
-import { ThemedText } from './themed-text';
-import { ThemedView } from './themed-view';
+import { DialogSurface } from "./dialog-surface";
+import { ThemedText } from "./themed-text";
 
-import { Spacing } from '@/constants/theme';
-import { useTheme } from '@/hooks/use-theme';
+import { Spacing } from "@/constants/theme";
+import { useTheme } from "@/hooks/use-theme";
 
 export type ConfirmDialogProps = {
   visible: boolean;
@@ -29,76 +29,51 @@ export function ConfirmDialog({
   const theme = useTheme();
 
   return (
-    <Modal visible={visible} transparent animationType="fade" onRequestClose={onCancel}>
-      <View style={styles.backdrop}>
+    <DialogSurface visible={visible} onClose={onCancel} dismissLabel={cancelLabel}>
+      <ThemedText type="smallBold">{title}</ThemedText>
+
+      {message && (
+        <ThemedText type="small" themeColor="textSecondary">
+          {message}
+        </ThemedText>
+      )}
+
+      <View style={styles.footer}>
         <Pressable
-          style={StyleSheet.absoluteFill}
-          onPress={onCancel}
           accessibilityRole="button"
-          accessibilityLabel={cancelLabel}
-        />
-        <ThemedView
-          type="background"
-          style={[styles.dialog, { borderColor: theme.textSecondary }]}
+          style={({ pressed }) => [
+            styles.footerButton,
+            pressed && styles.pressed,
+          ]}
+          onPress={onCancel}
         >
-          <ThemedText type="smallBold">{title}</ThemedText>
-
-          {message && (
-            <ThemedText type="small" themeColor="textSecondary">
-              {message}
-            </ThemedText>
-          )}
-
-          <View style={styles.footer}>
-            <Pressable
-              accessibilityRole="button"
-              style={({ pressed }) => [styles.footerButton, pressed && styles.pressed]}
-              onPress={onCancel}
-            >
-              <ThemedText type="smallBold" themeColor="textSecondary">
-                {cancelLabel}
-              </ThemedText>
-            </Pressable>
-            <Pressable
-              accessibilityRole="button"
-              style={({ pressed }) => [
-                styles.confirmButton,
-                { backgroundColor: theme.text },
-                pressed && styles.pressed,
-              ]}
-              onPress={onConfirm}
-            >
-              <ThemedText type="smallBold" style={{ color: theme.background }}>
-                {confirmLabel}
-              </ThemedText>
-            </Pressable>
-          </View>
-        </ThemedView>
+          <ThemedText type="smallBold" themeColor="textSecondary">
+            {cancelLabel}
+          </ThemedText>
+        </Pressable>
+        <Pressable
+          accessibilityRole="button"
+          style={({ pressed }) => [
+            styles.confirmButton,
+            { backgroundColor: theme.text },
+            pressed && styles.pressed,
+          ]}
+          onPress={onConfirm}
+        >
+          <ThemedText type="smallBold" style={{ color: theme.backgroundSolid }}>
+            {confirmLabel}
+          </ThemedText>
+        </Pressable>
       </View>
-    </Modal>
+    </DialogSurface>
   );
 }
 
 const styles = StyleSheet.create({
-  backdrop: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: Spacing.four,
-  },
-  dialog: {
-    borderRadius: Spacing.three,
-    borderWidth: StyleSheet.hairlineWidth,
-    padding: Spacing.four,
-    gap: Spacing.two,
-    width: '100%',
-    maxWidth: 360,
-  },
   footer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginTop: Spacing.one,
   },
   footerButton: {

@@ -1,14 +1,17 @@
 import { Link, Tabs } from "expo-router";
 import { SymbolView } from "expo-symbols";
-import { Pressable, StyleSheet } from "react-native";
+import { Platform, Pressable, StyleSheet, type ViewStyle } from "react-native";
 
 import { TeeTimeTabIcon } from "@/components/tee-time-tab-icon";
-import { Spacing } from "@/constants/theme";
+import { GlassSurface, Spacing } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
+import { useResolvedPalette } from "@/hooks/use-theme-mode";
 import { useI18n } from "@/i18n";
 
 export default function TabsLayout() {
   const theme = useTheme();
+  const palette = useResolvedPalette();
+  const isGlass = palette === "glass";
   const { t } = useI18n();
 
   return (
@@ -16,12 +19,21 @@ export default function TabsLayout() {
       backBehavior="history"
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: theme.text,
+        tabBarActiveTintColor: theme.accent,
         tabBarInactiveTintColor: theme.textSecondary,
-        tabBarStyle: {
-          backgroundColor: theme.background,
-          borderTopColor: theme.backgroundElement,
-        },
+        tabBarStyle: isGlass
+          ? {
+              backgroundColor: theme.backgroundElement,
+              borderTopColor: GlassSurface.borderColor,
+              ...(Platform.OS === "web"
+                ? ({ backdropFilter: GlassSurface.webBackdropFilter } as ViewStyle)
+                : null),
+            }
+          : {
+              backgroundColor: theme.background,
+              borderTopColor: theme.backgroundElement,
+            },
+        sceneStyle: isGlass ? styles.transparentScene : undefined,
       }}
     >
       <Tabs.Screen
@@ -48,9 +60,17 @@ export default function TabsLayout() {
                 accessibilityRole="button"
                 accessibilityLabel={t("courses.openSettings")}
                 hitSlop={Spacing.two}
-                style={({ pressed }) => [styles.settingsButton, pressed && styles.settingsButtonPressed]}>
+                style={({ pressed }) => [
+                  styles.settingsButton,
+                  pressed && styles.settingsButtonPressed,
+                ]}
+              >
                 <SymbolView
-                  name={{ ios: "gearshape", android: "settings", web: "settings" }}
+                  name={{
+                    ios: "gearshape",
+                    android: "settings",
+                    web: "settings",
+                  }}
                   size={24}
                   tintColor={theme.textSecondary}
                 />
@@ -84,9 +104,17 @@ export default function TabsLayout() {
                 accessibilityRole="button"
                 accessibilityLabel={t("courses.openSettings")}
                 hitSlop={Spacing.two}
-                style={({ pressed }) => [styles.settingsButton, pressed && styles.settingsButtonPressed]}>
+                style={({ pressed }) => [
+                  styles.settingsButton,
+                  pressed && styles.settingsButtonPressed,
+                ]}
+              >
                 <SymbolView
-                  name={{ ios: "gearshape", android: "settings", web: "settings" }}
+                  name={{
+                    ios: "gearshape",
+                    android: "settings",
+                    web: "settings",
+                  }}
                   size={24}
                   tintColor={theme.textSecondary}
                 />
@@ -122,5 +150,8 @@ const styles = StyleSheet.create({
   },
   headerSideContainer: {
     paddingHorizontal: Spacing.three,
+  },
+  transparentScene: {
+    backgroundColor: "transparent",
   },
 });

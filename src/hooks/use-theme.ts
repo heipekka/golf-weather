@@ -3,11 +3,11 @@
  * https://docs.expo.dev/guides/color-schemes/
  */
 
-import { Colors } from '@/constants/theme';
-import { useResolvedColorScheme } from '@/hooks/use-theme-mode';
+import { Colors } from "@/constants/theme";
+import { useResolvedPalette } from "@/hooks/use-theme-mode";
 
 export function useTheme() {
-  const theme = useResolvedColorScheme();
+  const palette = useResolvedPalette();
 
-  return Colors[theme];
+  return Colors[palette];
 }

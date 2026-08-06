@@ -3,6 +3,7 @@ import { Platform, StyleSheet, View, type ViewStyle } from "react-native";
 
 import { Spacing } from "@/constants/theme";
 import { useDarkScoring } from "@/hooks/use-dark-scoring";
+import { useIsGlassPalette } from "@/hooks/use-glass-surface";
 import { useTheme } from "@/hooks/use-theme";
 import { useWindLabels } from "@/hooks/use-wind-labels";
 import { useI18n } from "@/i18n";
@@ -12,7 +13,7 @@ import {
   formatTemperature,
   formatWind,
 } from "@/lib/format";
-import { PlayabilityColors, scorePlayability } from "@/lib/golf";
+import { glassBadgeBackground, PlayabilityColors, scorePlayability } from "@/lib/golf";
 import { isNight } from "@/lib/sun";
 import type { SourceForecast, SourceId } from "@/lib/weather";
 import { indexByHour } from "@/lib/weather";
@@ -46,6 +47,7 @@ export function SourceComparisonTable({
   const { t, locale } = useI18n();
   const { darkScoringEnabled } = useDarkScoring();
   const { windLabelsEnabled } = useWindLabels();
+  const isGlass = useIsGlassPalette();
   const indexed = useMemo(
     () =>
       sources.map((source) => ({ source, byHour: indexByHour(source.hourly) })),
@@ -159,6 +161,14 @@ export function SourceComparisonTable({
                           numberOfLines={1}
                           style={[
                             styles.playability,
+                            isGlass && {
+                              alignSelf: "flex-start",
+                              backgroundColor: glassBadgeBackground(
+                                PlayabilityColors[playability.label],
+                              ),
+                              paddingHorizontal: Spacing.one,
+                              borderRadius: Spacing.two,
+                            },
                             { color: PlayabilityColors[playability.label] },
                           ]}
                         >

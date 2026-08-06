@@ -1,24 +1,28 @@
-import Slider from '@react-native-community/slider';
-import { Stack } from 'expo-router';
-import { SymbolView } from 'expo-symbols';
-import { useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Switch, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import Slider from "@react-native-community/slider";
+import { Stack } from "expo-router";
+import { SymbolView } from "expo-symbols";
+import { useState } from "react";
+import { Pressable, ScrollView, StyleSheet, Switch, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-import { BackButton } from '@/components/back-button';
-import { LocationPicker } from '@/components/location-picker';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { MaxContentWidth, Spacing } from '@/constants/theme';
-import { useCourseListLabels } from '@/hooks/use-course-list-labels';
-import { useDarkScoring } from '@/hooks/use-dark-scoring';
-import { useDistanceFilter } from '@/hooks/use-distance-filter';
-import { useLocation } from '@/hooks/use-location';
-import { useTheme } from '@/hooks/use-theme';
-import { useThemeMode, type ThemeMode } from '@/hooks/use-theme-mode';
-import { useWindLabels } from '@/hooks/use-wind-labels';
-import { useI18n, type Language } from '@/i18n';
-import type { Coordinates } from '@/lib/geo';
+import { BackButton } from "@/components/back-button";
+import { LocationPicker } from "@/components/location-picker";
+import { ThemedText } from "@/components/themed-text";
+import { ThemedView } from "@/components/themed-view";
+import { MaxContentWidth, Spacing } from "@/constants/theme";
+import { useCourseListLabels } from "@/hooks/use-course-list-labels";
+import { useDarkScoring } from "@/hooks/use-dark-scoring";
+import { useDistanceFilter } from "@/hooks/use-distance-filter";
+import { useLocation } from "@/hooks/use-location";
+import { useTheme } from "@/hooks/use-theme";
+import {
+    useThemeMode,
+    type GlassBackground,
+    type ThemeMode,
+} from "@/hooks/use-theme-mode";
+import { useWindLabels } from "@/hooks/use-wind-labels";
+import { useI18n, type Language } from "@/i18n";
+import type { Coordinates } from "@/lib/geo";
 
 const MIN_DISTANCE_KM = 30;
 const MAX_DISTANCE_KM = 700;
@@ -27,51 +31,81 @@ const DISTANCE_STEP_KM = 10;
 const LANGUAGES: {
   code: Language;
   labelKey:
-    | 'settings.finnish'
-    | 'settings.english'
-    | 'settings.swedish'
-    | 'settings.norwegian'
-    | 'settings.estonian'
-    | 'settings.lithuanian'
-    | 'settings.latvian'
-    | 'settings.danish';
+    | "settings.finnish"
+    | "settings.english"
+    | "settings.swedish"
+    | "settings.norwegian"
+    | "settings.estonian"
+    | "settings.lithuanian"
+    | "settings.latvian"
+    | "settings.danish";
 }[] = [
-  { code: 'fi', labelKey: 'settings.finnish' },
-  { code: 'en', labelKey: 'settings.english' },
-  { code: 'sv', labelKey: 'settings.swedish' },
-  { code: 'no', labelKey: 'settings.norwegian' },
-  { code: 'et', labelKey: 'settings.estonian' },
-  { code: 'lt', labelKey: 'settings.lithuanian' },
-  { code: 'lv', labelKey: 'settings.latvian' },
-  { code: 'da', labelKey: 'settings.danish' },
+  { code: "fi", labelKey: "settings.finnish" },
+  { code: "en", labelKey: "settings.english" },
+  { code: "sv", labelKey: "settings.swedish" },
+  { code: "no", labelKey: "settings.norwegian" },
+  { code: "et", labelKey: "settings.estonian" },
+  { code: "lt", labelKey: "settings.lithuanian" },
+  { code: "lv", labelKey: "settings.latvian" },
+  { code: "da", labelKey: "settings.danish" },
 ];
 
 const THEME_MODES: {
   mode: ThemeMode;
-  labelKey: 'settings.theme.system' | 'settings.theme.light' | 'settings.theme.dark';
+  labelKey:
+    | "settings.theme.system"
+    | "settings.theme.light"
+    | "settings.theme.dark"
+    | "settings.theme.glass";
 }[] = [
-  { mode: 'system', labelKey: 'settings.theme.system' },
-  { mode: 'light', labelKey: 'settings.theme.light' },
-  { mode: 'dark', labelKey: 'settings.theme.dark' },
+  { mode: "system", labelKey: "settings.theme.system" },
+  { mode: "light", labelKey: "settings.theme.light" },
+  { mode: "dark", labelKey: "settings.theme.dark" },
+  { mode: "glass", labelKey: "settings.theme.glass" },
 ];
 
-type SettingsTab = 'user' | 'search';
+const GLASS_BACKGROUNDS: {
+  background: GlassBackground;
+  labelKey: "settings.theme.background.photo" | "settings.theme.background.illustration";
+}[] = [
+  { background: "photo", labelKey: "settings.theme.background.photo" },
+  { background: "illustration", labelKey: "settings.theme.background.illustration" },
+];
 
-const SETTINGS_TABS: { id: SettingsTab; labelKey: 'settings.tabs.user' | 'settings.tabs.search' }[] = [
-  { id: 'user', labelKey: 'settings.tabs.user' },
-  { id: 'search', labelKey: 'settings.tabs.search' },
+type SettingsTab = "user" | "search";
+
+const SETTINGS_TABS: {
+  id: SettingsTab;
+  labelKey: "settings.tabs.user" | "settings.tabs.search";
+}[] = [
+  { id: "user", labelKey: "settings.tabs.user" },
+  { id: "search", labelKey: "settings.tabs.search" },
 ];
 
 function formatCoords(coords: Coordinates): string {
   return `${coords.lat.toFixed(4)}, ${coords.lon.toFixed(4)}`;
 }
 
-function SettingsTabControl({ value, onChange }: { value: SettingsTab; onChange: (tab: SettingsTab) => void }) {
+function SettingsTabControl({
+  value,
+  onChange,
+}: {
+  value: SettingsTab;
+  onChange: (tab: SettingsTab) => void;
+}) {
   const { t } = useI18n();
   const theme = useTheme();
 
   return (
-    <View style={[styles.tabBar, { backgroundColor: theme.background, borderBottomColor: theme.backgroundElement }]}>
+    <View
+      style={[
+        styles.tabBar,
+        {
+          backgroundColor: theme.background,
+          borderBottomColor: theme.backgroundElement,
+        },
+      ]}
+    >
       <View style={styles.tabBarInner}>
         {SETTINGS_TABS.map(({ id, labelKey }) => {
           const isSelected = id === value;
@@ -83,10 +117,14 @@ function SettingsTabControl({ value, onChange }: { value: SettingsTab; onChange:
               onPress={() => onChange(id)}
               style={({ pressed }) => [
                 styles.tabItem,
-                { borderBottomColor: isSelected ? theme.text : 'transparent' },
+                { borderBottomColor: isSelected ? theme.text : "transparent" },
                 pressed && styles.optionPressed,
-              ]}>
-              <ThemedText type="smallBold" themeColor={isSelected ? 'text' : 'textSecondary'}>
+              ]}
+            >
+              <ThemedText
+                type="smallBold"
+                themeColor={isSelected ? "text" : "textSecondary"}
+              >
                 {t(labelKey)}
               </ThemedText>
             </Pressable>
@@ -104,9 +142,9 @@ function LanguageSection() {
   return (
     <>
       <View style={styles.sectionHeading}>
-        <ThemedText type="smallBold">{t('settings.language')}</ThemedText>
+        <ThemedText type="smallBold">{t("settings.language")}</ThemedText>
         <ThemedText type="small" themeColor="textSecondary">
-          {t('settings.languageDescription')}
+          {t("settings.languageDescription")}
         </ThemedText>
       </View>
 
@@ -121,15 +159,19 @@ function LanguageSection() {
               style={({ pressed }) => [
                 styles.option,
                 index > 0 && styles.optionBorder,
-                { borderColor: theme.background },
+                { borderColor: theme.backgroundSolid },
                 pressed && styles.optionPressed,
-              ]}>
-              <ThemedText type="default" themeColor={selected ? 'text' : 'textSecondary'}>
+              ]}
+            >
+              <ThemedText
+                type="default"
+                themeColor={selected ? "text" : "textSecondary"}
+              >
                 {t(labelKey)}
               </ThemedText>
               {selected && (
                 <SymbolView
-                  name={{ ios: 'checkmark', android: 'check', web: 'check' }}
+                  name={{ ios: "checkmark", android: "check", web: "check" }}
                   size={18}
                   tintColor={theme.text}
                 />
@@ -150,9 +192,9 @@ function ThemeSection() {
   return (
     <>
       <View style={styles.sectionHeading}>
-        <ThemedText type="smallBold">{t('settings.theme.title')}</ThemedText>
+        <ThemedText type="smallBold">{t("settings.theme.title")}</ThemedText>
         <ThemedText type="small" themeColor="textSecondary">
-          {t('settings.theme.description')}
+          {t("settings.theme.description")}
         </ThemedText>
       </View>
 
@@ -167,15 +209,71 @@ function ThemeSection() {
               style={({ pressed }) => [
                 styles.option,
                 index > 0 && styles.optionBorder,
-                { borderColor: theme.background },
+                { borderColor: theme.backgroundSolid },
                 pressed && styles.optionPressed,
-              ]}>
-              <ThemedText type="default" themeColor={selected ? 'text' : 'textSecondary'}>
+              ]}
+            >
+              <ThemedText
+                type="default"
+                themeColor={selected ? "text" : "textSecondary"}
+              >
                 {t(labelKey)}
               </ThemedText>
               {selected && (
                 <SymbolView
-                  name={{ ios: 'checkmark', android: 'check', web: 'check' }}
+                  name={{ ios: "checkmark", android: "check", web: "check" }}
+                  size={18}
+                  tintColor={theme.text}
+                />
+              )}
+            </Pressable>
+          );
+        })}
+      </ThemedView>
+    </>
+  );
+}
+
+function GlassBackgroundSection() {
+  const { t } = useI18n();
+  const theme = useTheme();
+  const { glassBackground, setGlassBackground } = useThemeMode();
+
+  return (
+    <>
+      <View style={styles.sectionHeading}>
+        <ThemedText type="smallBold">
+          {t("settings.theme.background.title")}
+        </ThemedText>
+        <ThemedText type="small" themeColor="textSecondary">
+          {t("settings.theme.background.description")}
+        </ThemedText>
+      </View>
+
+      <ThemedView type="backgroundElement" style={styles.optionList}>
+        {GLASS_BACKGROUNDS.map(({ background, labelKey }, index) => {
+          const selected = background === glassBackground;
+          return (
+            <Pressable
+              key={background}
+              accessibilityRole="button"
+              onPress={() => setGlassBackground(background)}
+              style={({ pressed }) => [
+                styles.option,
+                index > 0 && styles.optionBorder,
+                { borderColor: theme.backgroundSolid },
+                pressed && styles.optionPressed,
+              ]}
+            >
+              <ThemedText
+                type="default"
+                themeColor={selected ? "text" : "textSecondary"}
+              >
+                {t(labelKey)}
+              </ThemedText>
+              {selected && (
+                <SymbolView
+                  name={{ ios: "checkmark", android: "check", web: "check" }}
                   size={18}
                   tintColor={theme.text}
                 />
@@ -195,16 +293,23 @@ function DarkScoringSection() {
   return (
     <>
       <View style={styles.sectionHeading}>
-        <ThemedText type="smallBold">{t('settings.darkScoring.title')}</ThemedText>
+        <ThemedText type="smallBold">
+          {t("settings.darkScoring.title")}
+        </ThemedText>
         <ThemedText type="small" themeColor="textSecondary">
-          {t('settings.darkScoring.description')}
+          {t("settings.darkScoring.description")}
         </ThemedText>
       </View>
 
       <ThemedView type="backgroundElement" style={styles.optionList}>
         <View style={styles.option}>
-          <ThemedText type="default">{t('settings.darkScoring.toggle')}</ThemedText>
-          <Switch value={darkScoringEnabled} onValueChange={setDarkScoringEnabled} />
+          <ThemedText type="default">
+            {t("settings.darkScoring.toggle")}
+          </ThemedText>
+          <Switch
+            value={darkScoringEnabled}
+            onValueChange={setDarkScoringEnabled}
+          />
         </View>
       </ThemedView>
     </>
@@ -218,16 +323,23 @@ function WindLabelsSection() {
   return (
     <>
       <View style={styles.sectionHeading}>
-        <ThemedText type="smallBold">{t('settings.windLabels.title')}</ThemedText>
+        <ThemedText type="smallBold">
+          {t("settings.windLabels.title")}
+        </ThemedText>
         <ThemedText type="small" themeColor="textSecondary">
-          {t('settings.windLabels.description')}
+          {t("settings.windLabels.description")}
         </ThemedText>
       </View>
 
       <ThemedView type="backgroundElement" style={styles.optionList}>
         <View style={styles.option}>
-          <ThemedText type="default">{t('settings.windLabels.toggle')}</ThemedText>
-          <Switch value={windLabelsEnabled} onValueChange={setWindLabelsEnabled} />
+          <ThemedText type="default">
+            {t("settings.windLabels.toggle")}
+          </ThemedText>
+          <Switch
+            value={windLabelsEnabled}
+            onValueChange={setWindLabelsEnabled}
+          />
         </View>
       </ThemedView>
     </>
@@ -236,21 +348,29 @@ function WindLabelsSection() {
 
 function CourseListLabelsSection() {
   const { t } = useI18n();
-  const { courseListLabelsEnabled, setCourseListLabelsEnabled } = useCourseListLabels();
+  const { courseListLabelsEnabled, setCourseListLabelsEnabled } =
+    useCourseListLabels();
 
   return (
     <>
       <View style={styles.sectionHeading}>
-        <ThemedText type="smallBold">{t('settings.courseListLabels.title')}</ThemedText>
+        <ThemedText type="smallBold">
+          {t("settings.courseListLabels.title")}
+        </ThemedText>
         <ThemedText type="small" themeColor="textSecondary">
-          {t('settings.courseListLabels.description')}
+          {t("settings.courseListLabels.description")}
         </ThemedText>
       </View>
 
       <ThemedView type="backgroundElement" style={styles.optionList}>
         <View style={styles.option}>
-          <ThemedText type="default">{t('settings.courseListLabels.toggle')}</ThemedText>
-          <Switch value={courseListLabelsEnabled} onValueChange={setCourseListLabelsEnabled} />
+          <ThemedText type="default">
+            {t("settings.courseListLabels.toggle")}
+          </ThemedText>
+          <Switch
+            value={courseListLabelsEnabled}
+            onValueChange={setCourseListLabelsEnabled}
+          />
         </View>
       </ThemedView>
     </>
@@ -264,9 +384,9 @@ function DefaultLocationSection() {
   return (
     <>
       <View style={styles.sectionHeading}>
-        <ThemedText type="smallBold">{t('settings.location.title')}</ThemedText>
+        <ThemedText type="smallBold">{t("settings.location.title")}</ThemedText>
         <ThemedText type="small" themeColor="textSecondary">
-          {t('settings.location.description')}
+          {t("settings.location.description")}
         </ThemedText>
       </View>
 
@@ -274,8 +394,10 @@ function DefaultLocationSection() {
 
       <ThemedText type="small" themeColor="textSecondary">
         {savedLocation
-          ? t('settings.location.savedLabel', { coords: formatCoords(savedLocation) })
-          : t('settings.location.notSet')}
+          ? t("settings.location.savedLabel", {
+              coords: formatCoords(savedLocation),
+            })
+          : t("settings.location.notSet")}
       </ThemedText>
 
       <View style={styles.locationActions}>
@@ -283,9 +405,13 @@ function DefaultLocationSection() {
           accessibilityRole="button"
           disabled={!savedLocation}
           onPress={clearSavedLocation}
-          style={({ pressed }) => [styles.locationButton, pressed && styles.optionPressed]}>
+          style={({ pressed }) => [
+            styles.locationButton,
+            pressed && styles.optionPressed,
+          ]}
+        >
           <ThemedText type="link" themeColor="textSecondary">
-            {t('settings.location.clear')}
+            {t("settings.location.clear")}
           </ThemedText>
         </Pressable>
       </View>
@@ -310,15 +436,15 @@ function DistanceRangeSection() {
   return (
     <>
       <View style={styles.sectionHeading}>
-        <ThemedText type="smallBold">{t('distance.title')}</ThemedText>
+        <ThemedText type="smallBold">{t("distance.title")}</ThemedText>
         <ThemedText type="small" themeColor="textSecondary">
-          {t('distance.description')}
+          {t("distance.description")}
         </ThemedText>
       </View>
 
       <ThemedView type="backgroundElement" style={styles.distanceCard}>
         <ThemedText type="smallBold" style={styles.valueLabel}>
-          {t('distance.label').replace('{km}', String(liveKm))}
+          {t("distance.label").replace("{km}", String(liveKm))}
         </ThemedText>
 
         <Slider
@@ -349,26 +475,30 @@ function DistanceRangeSection() {
 
 export default function SettingsScreen() {
   const { t } = useI18n();
-  const [tab, setTab] = useState<SettingsTab>('user');
+  const [tab, setTab] = useState<SettingsTab>("user");
+  const { themeMode } = useThemeMode();
 
   return (
     <ThemedView style={styles.container}>
       <Stack.Screen
         options={{
-          title: t('settings.title'),
-          headerTitleAlign: 'center',
-          headerLeft: () => <BackButton accessibilityLabel="Back" fallbackHref="/courses" />,
+          title: t("settings.title"),
+          headerTitleAlign: "center",
+          headerLeft: () => (
+            <BackButton accessibilityLabel="Back" fallbackHref="/courses" />
+          ),
           headerLeftContainerStyle: styles.headerSideContainer,
           headerRightContainerStyle: styles.headerSideContainer,
         }}
       />
-      <SafeAreaView style={styles.safeArea} edges={['bottom']}>
+      <SafeAreaView style={styles.safeArea} edges={["bottom"]}>
         <SettingsTabControl value={tab} onChange={setTab} />
         <ScrollView contentContainerStyle={styles.content}>
-          {tab === 'user' ? (
+          {tab === "user" ? (
             <>
               <LanguageSection />
               <ThemeSection />
+              {themeMode === "glass" && <GlassBackgroundSection />}
             </>
           ) : (
             <>
@@ -396,20 +526,20 @@ const styles = StyleSheet.create({
     padding: Spacing.three,
     gap: Spacing.three,
     maxWidth: MaxContentWidth,
-    alignSelf: 'center',
-    width: '100%',
+    alignSelf: "center",
+    width: "100%",
   },
   sectionHeading: {
     gap: Spacing.half,
   },
   optionList: {
     borderRadius: Spacing.three,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   option: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     paddingVertical: Spacing.three,
     paddingHorizontal: Spacing.three,
   },
@@ -423,24 +553,24 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.three,
   },
   tabBar: {
-    width: '100%',
+    width: "100%",
     borderBottomWidth: 1,
   },
   tabBarInner: {
-    flexDirection: 'row',
+    flexDirection: "row",
     maxWidth: MaxContentWidth,
-    alignSelf: 'center',
-    width: '100%',
+    alignSelf: "center",
+    width: "100%",
   },
   tabItem: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: "center",
     paddingVertical: Spacing.three,
     borderBottomWidth: 2,
     marginBottom: -1,
   },
   locationActions: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: Spacing.four,
   },
   locationButton: {
@@ -452,15 +582,15 @@ const styles = StyleSheet.create({
     gap: Spacing.one,
   },
   valueLabel: {
-    textAlign: 'center',
+    textAlign: "center",
   },
   slider: {
-    width: '100%',
+    width: "100%",
     height: 40,
   },
   rangeRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginTop: -Spacing.two,
   },
 });

@@ -2,6 +2,7 @@ import { ScrollView, StyleSheet, View } from "react-native";
 
 import { Spacing } from "@/constants/theme";
 import { useDarkScoring } from "@/hooks/use-dark-scoring";
+import { useIsGlassPalette } from "@/hooks/use-glass-surface";
 import { useTheme } from "@/hooks/use-theme";
 import { useWindLabels } from "@/hooks/use-wind-labels";
 import { useI18n } from "@/i18n";
@@ -11,7 +12,7 @@ import {
   formatTemperature,
   formatWind,
 } from "@/lib/format";
-import { PlayabilityColors, scorePlayability } from "@/lib/golf";
+import { glassBadgeBackground, PlayabilityColors, scorePlayability } from "@/lib/golf";
 import { isNight } from "@/lib/sun";
 import type { AggregatedPoint } from "@/lib/weather";
 import { ThemedText } from "./themed-text";
@@ -29,6 +30,7 @@ export function HourlyStrip({ points, lat, lon }: HourlyStripProps) {
   const { t, locale } = useI18n();
   const { darkScoringEnabled } = useDarkScoring();
   const { windLabelsEnabled } = useWindLabels();
+  const isGlass = useIsGlassPalette();
 
   if (points.length === 0) return null;
 
@@ -96,17 +98,21 @@ export function HourlyStrip({ points, lat, lon }: HourlyStripProps) {
             >
               {formatPrecipitation(point.precipitation)}
             </ThemedText>
-            <ThemedText
-              type="small"
-              numberOfLines={1}
-              style={[
-                styles.playability,
-                styles.centeredText,
-                { color: PlayabilityColors[playability.label] },
-              ]}
+            <View
+              style={isGlass ? [styles.playabilityPill, { backgroundColor: glassBadgeBackground(PlayabilityColors[playability.label]) }] : styles.centeredText}
             >
-              {t(`playability.labels.${playability.label}`)}
-            </ThemedText>
+              <ThemedText
+                type="small"
+                numberOfLines={1}
+                style={[
+                  styles.playability,
+                  !isGlass && styles.centeredText,
+                  { color: PlayabilityColors[playability.label] },
+                ]}
+              >
+                {t(`playability.labels.${playability.label}`)}
+              </ThemedText>
+            </View>
           </View>
         );
       })}
@@ -142,6 +148,11 @@ const styles = StyleSheet.create({
     fontSize: 11,
     lineHeight: 14,
     fontWeight: "600",
+  },
+  playabilityPill: {
+    alignSelf: "center",
+    paddingHorizontal: Spacing.one,
+    borderRadius: Spacing.two,
   },
   centeredText: {
     textAlign: "center",

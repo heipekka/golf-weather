@@ -161,6 +161,13 @@ export const fi = {
       system: "Järjestelmä",
       light: "Vaalea",
       dark: "Tumma",
+      glass: "Lasi",
+      background: {
+        title: "Taustakuva",
+        description: "Valitse lasiteeman taustakuva.",
+        photo: "Valokuva",
+        illustration: "Kuvitus",
+      },
     },
     darkScoring: {
       title: "Pimeän pisteytys",

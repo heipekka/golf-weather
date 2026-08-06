@@ -1,11 +1,11 @@
-import { SymbolView } from 'expo-symbols';
-import { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import Animated, { Easing, Keyframe } from 'react-native-reanimated';
+import { SymbolView } from "expo-symbols";
+import { useState } from "react";
+import { StyleSheet, Text, View } from "react-native";
+import Animated, { Easing, Keyframe } from "react-native-reanimated";
 
-import { useBookmarks } from '@/hooks/use-bookmarks';
-import { useTheme } from '@/hooks/use-theme';
-import { useI18n } from '@/i18n';
+import { useBookmarks } from "@/hooks/use-bookmarks";
+import { useTheme } from "@/hooks/use-theme";
+import { useI18n } from "@/i18n";
 
 const BADGE_HEIGHT = 16;
 const SLIDE_DISTANCE = BADGE_HEIGHT;
@@ -50,15 +50,29 @@ const EXIT_DOWNWARDS = slideOut(SLIDE_DISTANCE);
 
 const BADGE_ENTER = new Keyframe({
   0: { opacity: 0, transform: [{ scale: 0.4 }] },
-  100: { opacity: 1, transform: [{ scale: 1 }], easing: Easing.out(Easing.back(2)) },
+  100: {
+    opacity: 1,
+    transform: [{ scale: 1 }],
+    easing: Easing.out(Easing.back(2)),
+  },
 }).duration(FADE_DURATION);
 
 const BADGE_EXIT = new Keyframe({
   0: { opacity: 1, transform: [{ scale: 1 }] },
-  100: { opacity: 0, transform: [{ scale: 0.4 }], easing: Easing.in(Easing.quad) },
+  100: {
+    opacity: 0,
+    transform: [{ scale: 0.4 }],
+    easing: Easing.in(Easing.quad),
+  },
 }).duration(FADE_DURATION);
 
-export function TeeTimeTabIcon({ color, focused }: { color: string; focused: boolean }) {
+export function TeeTimeTabIcon({
+  color,
+  focused,
+}: {
+  color: string;
+  focused: boolean;
+}) {
   const { bookmarks } = useBookmarks();
   const { t } = useI18n();
   const theme = useTheme();
@@ -66,7 +80,8 @@ export function TeeTimeTabIcon({ color, focused }: { color: string; focused: boo
   // The slide direction has to be known on the render where the count changes,
   // so it is derived during render rather than in an effect.
   const [tracked, setTracked] = useState({ count, increased: true });
-  const increased = tracked.count === count ? tracked.increased : count > tracked.count;
+  const increased =
+    tracked.count === count ? tracked.increased : count > tracked.count;
 
   if (tracked.count !== count) {
     setTracked({ count, increased });
@@ -78,9 +93,9 @@ export function TeeTimeTabIcon({ color, focused }: { color: string; focused: boo
     <View style={styles.container}>
       <SymbolView
         name={{
-          ios: focused ? 'figure.golf.circle.fill' : 'figure.golf.circle',
-          android: 'sports_golf',
-          web: 'sports_golf',
+          ios: focused ? "figure.golf.circle.fill" : "figure.golf.circle",
+          android: "sports_golf",
+          web: "sports_golf",
         }}
         size={22}
         tintColor={color}
@@ -90,7 +105,8 @@ export function TeeTimeTabIcon({ color, focused }: { color: string; focused: boo
           entering={BADGE_ENTER}
           exiting={BADGE_EXIT}
           style={[styles.badge, { backgroundColor: theme.textSecondary }]}
-          accessibilityLabel={`${t('tabs.bookmarks')}: ${count}`}>
+          accessibilityLabel={`${t("tabs.bookmarks")}: ${count}`}
+        >
           {/* Sizes the pill to the current label; the visible digits sit on top
               so the outgoing and incoming values can overlap while sliding. */}
           <Text style={[styles.count, styles.spacer]}>{label}</Text>
@@ -98,7 +114,12 @@ export function TeeTimeTabIcon({ color, focused }: { color: string; focused: boo
             key={label}
             entering={increased ? ENTER_FROM_BELOW : ENTER_FROM_ABOVE}
             exiting={increased ? EXIT_UPWARDS : EXIT_DOWNWARDS}
-            style={[styles.count, styles.countOverlay, { color: theme.background }]}>
+            style={[
+              styles.count,
+              styles.countOverlay,
+              { color: theme.backgroundSolid },
+            ]}
+          >
             {label}
           </Animated.Text>
         </Animated.View>
@@ -109,32 +130,32 @@ export function TeeTimeTabIcon({ color, focused }: { color: string; focused: boo
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   badge: {
-    position: 'absolute',
+    position: "absolute",
     top: -4,
     right: -10,
     minWidth: BADGE_HEIGHT,
     height: BADGE_HEIGHT,
     paddingHorizontal: 4,
     borderRadius: BADGE_HEIGHT / 2,
-    alignItems: 'center',
-    justifyContent: 'center',
-    overflow: 'hidden',
+    alignItems: "center",
+    justifyContent: "center",
+    overflow: "hidden",
   },
   count: {
     fontSize: 11,
     lineHeight: BADGE_HEIGHT,
     fontWeight: 700,
-    textAlign: 'center',
+    textAlign: "center",
   },
   spacer: {
     opacity: 0,
   },
   countOverlay: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,

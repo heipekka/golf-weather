@@ -1,5 +1,7 @@
 import { SymbolView } from "expo-symbols";
-import { Keyboard, Pressable, StyleSheet, TextInput, View } from "react-native";
+import { Keyboard, Pressable, StyleSheet, TextInput } from "react-native";
+
+import { ThemedView } from "./themed-view";
 
 import { Spacing } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
@@ -19,12 +21,7 @@ export function CourseSearchBar({
   const { t } = useI18n();
 
   return (
-    <View
-      style={[
-        styles.inputSurface,
-        { backgroundColor: theme.backgroundElement },
-      ]}
-    >
+    <ThemedView type="backgroundElement" style={styles.inputSurface}>
       <SymbolView
         name={{ ios: "magnifyingglass", android: "search", web: "search" }}
         size={18}
@@ -61,7 +58,7 @@ export function CourseSearchBar({
           tintColor={theme.textSecondary}
         />
       </Pressable>
-    </View>
+    </ThemedView>
   );
 }
 

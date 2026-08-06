@@ -1,14 +1,14 @@
-import { useState } from 'react';
-import { Modal, Pressable, StyleSheet, View } from 'react-native';
+import { useState } from "react";
+import { Pressable, StyleSheet, View } from "react-native";
 
-import { LocationPicker } from './location-picker';
-import { ThemedText } from './themed-text';
-import { ThemedView } from './themed-view';
+import { DialogSurface } from "./dialog-surface";
+import { LocationPicker } from "./location-picker";
+import { ThemedText } from "./themed-text";
 
-import { Spacing } from '@/constants/theme';
-import { useTheme } from '@/hooks/use-theme';
-import { useI18n } from '@/i18n';
-import type { Coordinates } from '@/lib/geo';
+import { Spacing } from "@/constants/theme";
+import { useTheme } from "@/hooks/use-theme";
+import { useI18n } from "@/i18n";
+import type { Coordinates } from "@/lib/geo";
 
 type LocationPickerDialogProps = {
   visible: boolean;
@@ -57,77 +57,57 @@ export function LocationPickerDialog({
   }
 
   return (
-    <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
-      <View style={styles.backdrop}>
+    <DialogSurface
+      visible={visible}
+      onClose={onClose}
+      dismissLabel={t("locationButton.title")}
+      maxWidth={400}
+    >
+      <ThemedText type="smallBold">{t("locationButton.title")}</ThemedText>
+
+      <LocationPicker value={draft} onChange={setDraft} height={420} />
+
+      <View style={styles.footer}>
+        {showUseDeviceLocation ? (
+          <Pressable
+            accessibilityRole="button"
+            style={({ pressed }) => [
+              styles.footerButton,
+              pressed && styles.pressed,
+            ]}
+            onPress={handleUseDeviceLocation}
+          >
+            <ThemedText type="smallBold" themeColor="textSecondary">
+              {t("locationButton.myLocation")}
+            </ThemedText>
+          </Pressable>
+        ) : (
+          <View />
+        )}
         <Pressable
-          style={StyleSheet.absoluteFill}
-          onPress={onClose}
           accessibilityRole="button"
-          accessibilityLabel={t('locationButton.title')}
-        />
-        <ThemedView
-          type="background"
-          style={[styles.dialog, { borderColor: theme.textSecondary }]}
+          disabled={!draft}
+          style={({ pressed }) => [
+            styles.doneButton,
+            { backgroundColor: draft ? theme.text : theme.textSecondary },
+            pressed && styles.pressed,
+          ]}
+          onPress={handleDone}
         >
-          <ThemedText type="smallBold">{t('locationButton.title')}</ThemedText>
-
-          <LocationPicker value={draft} onChange={setDraft} height={420} />
-
-          <View style={styles.footer}>
-            {showUseDeviceLocation ? (
-              <Pressable
-                accessibilityRole="button"
-                style={({ pressed }) => [styles.footerButton, pressed && styles.pressed]}
-                onPress={handleUseDeviceLocation}
-              >
-                <ThemedText type="smallBold" themeColor="textSecondary">
-                  {t('locationButton.myLocation')}
-                </ThemedText>
-              </Pressable>
-            ) : (
-              <View />
-            )}
-            <Pressable
-              accessibilityRole="button"
-              disabled={!draft}
-              style={({ pressed }) => [
-                styles.doneButton,
-                { backgroundColor: draft ? theme.text : theme.textSecondary },
-                pressed && styles.pressed,
-              ]}
-              onPress={handleDone}
-            >
-              <ThemedText type="smallBold" style={{ color: theme.background }}>
-                {t('locationButton.done')}
-              </ThemedText>
-            </Pressable>
-          </View>
-        </ThemedView>
+          <ThemedText type="smallBold" style={{ color: theme.backgroundSolid }}>
+            {t("locationButton.done")}
+          </ThemedText>
+        </Pressable>
       </View>
-    </Modal>
+    </DialogSurface>
   );
 }
 
 const styles = StyleSheet.create({
-  backdrop: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: Spacing.four,
-  },
-  dialog: {
-    borderRadius: Spacing.three,
-    borderWidth: StyleSheet.hairlineWidth,
-    padding: Spacing.four,
-    gap: Spacing.two,
-    width: '100%',
-    maxWidth: 400,
-  },
   footer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginTop: Spacing.one,
   },
   footerButton: {

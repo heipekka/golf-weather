@@ -64,6 +64,23 @@ export const PlayabilityColors: Record<PlayabilityLabel, string> = {
 };
 
 /**
+ * Mixes a playability color toward opaque white, for use as a badge/pill
+ * background in the `glass` theme. Elsewhere (`light`/`dark`) a translucent
+ * wash of the color (e.g. `${color}40`) is enough contrast because it sits
+ * over a known, opaque page color; `glass` cards are themselves translucent
+ * over an arbitrary background photo, so a low-alpha wash can end up nearly
+ * invisible (most notably `Dark`'s muted slate over a dark photo). An
+ * opaque pastel reads consistently regardless of what's behind the card.
+ */
+export function glassBadgeBackground(hex: string): string {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  const towardWhite = (channel: number) => Math.round(channel + (255 - channel) * 0.8);
+  return `rgb(${towardWhite(r)}, ${towardWhite(g)}, ${towardWhite(b)})`;
+}
+
+/**
  * Ladder position for each tier, worst to best; used when aggregating a
  * window of hours. `Dark` ranks below every weather tier so a dark-heavy
  * half always wins as the worse half when computing the main label (see

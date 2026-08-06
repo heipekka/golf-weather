@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Modal, Pressable, ScrollView, StyleSheet, View } from "react-native";
+import { Pressable, ScrollView, StyleSheet, View } from "react-native";
 
 import { Spacing } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
 import { useI18n } from "@/i18n";
 import { formatDayLabel } from "@/lib/format";
+import { DialogSurface } from "./dialog-surface";
 import { ThemedText } from "./themed-text";
 import { ThemedView } from "./themed-view";
 
@@ -104,139 +105,99 @@ export function StartTimePicker({
   }
 
   return (
-    <Modal
-      visible={visible}
-      transparent
-      animationType="fade"
-      onRequestClose={onClose}
-    >
-      <View style={styles.backdrop}>
-        <Pressable
-          style={StyleSheet.absoluteFill}
-          onPress={onClose}
-          accessibilityRole="button"
-          accessibilityLabel={t("startTime.title")}
-        />
-        <ThemedView
-          type="background"
-          style={[styles.dialog, { borderColor: theme.textSecondary }]}
-        >
-          <ThemedText type="smallBold">{t("startTime.title")}</ThemedText>
+    <DialogSurface visible={visible} onClose={onClose} dismissLabel={t("startTime.title")}>
+      <ThemedText type="smallBold">{t("startTime.title")}</ThemedText>
 
-          <ThemedText type="small" themeColor="textSecondary">
-            {t("startTime.selectDay")}
-          </ThemedText>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.chipRow}
-          >
-            {days.map((day, offset) => {
-              const isSelected = offset === dayOffset;
-              return (
-                <Pressable
-                  key={day.toISOString()}
-                  onPress={() => selectDay(offset)}
+      <ThemedText type="small" themeColor="textSecondary">
+        {t("startTime.selectDay")}
+      </ThemedText>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.chipRow}
+      >
+        {days.map((day, offset) => {
+          const isSelected = offset === dayOffset;
+          return (
+            <Pressable key={day.toISOString()} onPress={() => selectDay(offset)}>
+              <ThemedView
+                type={isSelected ? "backgroundSelected" : "backgroundElement"}
+                style={styles.chip}
+              >
+                <ThemedText
+                  type="small"
+                  themeColor={isSelected ? "text" : "textSecondary"}
                 >
-                  <ThemedView
-                    type={
-                      isSelected ? "backgroundSelected" : "backgroundElement"
-                    }
-                    style={styles.chip}
-                  >
-                    <ThemedText
-                      type="small"
-                      themeColor={isSelected ? "text" : "textSecondary"}
-                    >
-                      {offset === 0
-                        ? t("startTime.today")
-                        : formatDayLabel(day.toISOString(), locale)}
-                    </ThemedText>
-                  </ThemedView>
-                </Pressable>
-              );
-            })}
-          </ScrollView>
+                  {offset === 0
+                    ? t("startTime.today")
+                    : formatDayLabel(day.toISOString(), locale)}
+                </ThemedText>
+              </ThemedView>
+            </Pressable>
+          );
+        })}
+      </ScrollView>
 
-          <ThemedText type="small" themeColor="textSecondary">
-            {t("startTime.selectHour")}
-          </ThemedText>
-          <View style={styles.hourGrid}>
-            {hours.map((h) => {
-              const isSelected = h === hour;
-              return (
-                <Pressable
-                  key={h}
-                  onPress={() => setHour(h)}
-                  style={styles.hourChipWrapper}
+      <ThemedText type="small" themeColor="textSecondary">
+        {t("startTime.selectHour")}
+      </ThemedText>
+      <View style={styles.hourGrid}>
+        {hours.map((h) => {
+          const isSelected = h === hour;
+          return (
+            <Pressable
+              key={h}
+              onPress={() => setHour(h)}
+              style={styles.hourChipWrapper}
+            >
+              <ThemedView
+                type={isSelected ? "backgroundSelected" : "backgroundElement"}
+                style={styles.hourChip}
+              >
+                <ThemedText
+                  type="small"
+                  themeColor={isSelected ? "text" : "textSecondary"}
                 >
-                  <ThemedView
-                    type={
-                      isSelected ? "backgroundSelected" : "backgroundElement"
-                    }
-                    style={styles.hourChip}
-                  >
-                    <ThemedText
-                      type="small"
-                      themeColor={isSelected ? "text" : "textSecondary"}
-                    >
-                      {`${h.toString().padStart(2, "0")}:00`}
-                    </ThemedText>
-                  </ThemedView>
-                </Pressable>
-              );
-            })}
-          </View>
-
-          <View style={styles.footer}>
-            <Pressable
-              accessibilityRole="button"
-              style={({ pressed }) => [
-                styles.footerButton,
-                pressed && styles.pressed,
-              ]}
-              onPress={handleNow}
-            >
-              <ThemedText type="smallBold" themeColor="textSecondary">
-                {t("startTime.now")}
-              </ThemedText>
+                  {`${h.toString().padStart(2, "0")}:00`}
+                </ThemedText>
+              </ThemedView>
             </Pressable>
-            <Pressable
-              accessibilityRole="button"
-              style={({ pressed }) => [
-                styles.doneButton,
-                { backgroundColor: theme.text },
-                pressed && styles.pressed,
-              ]}
-              onPress={handleDone}
-            >
-              <ThemedText type="smallBold" style={{ color: theme.background }}>
-                {t("startTime.done")}
-              </ThemedText>
-            </Pressable>
-          </View>
-        </ThemedView>
+          );
+        })}
       </View>
-    </Modal>
+
+      <View style={styles.footer}>
+        <Pressable
+          accessibilityRole="button"
+          style={({ pressed }) => [
+            styles.footerButton,
+            pressed && styles.pressed,
+          ]}
+          onPress={handleNow}
+        >
+          <ThemedText type="smallBold" themeColor="textSecondary">
+            {t("startTime.now")}
+          </ThemedText>
+        </Pressable>
+        <Pressable
+          accessibilityRole="button"
+          style={({ pressed }) => [
+            styles.doneButton,
+            { backgroundColor: theme.text },
+            pressed && styles.pressed,
+          ]}
+          onPress={handleDone}
+        >
+          <ThemedText type="smallBold" style={{ color: theme.backgroundSolid }}>
+            {t("startTime.done")}
+          </ThemedText>
+        </Pressable>
+      </View>
+    </DialogSurface>
   );
 }
 
 const styles = StyleSheet.create({
-  backdrop: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.8)",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: Spacing.four,
-  },
-  dialog: {
-    borderRadius: Spacing.three,
-    borderWidth: StyleSheet.hairlineWidth,
-    padding: Spacing.four,
-    gap: Spacing.two,
-    width: "100%",
-    maxWidth: 360,
-  },
   chipRow: {
     gap: Spacing.two,
     paddingVertical: Spacing.one,

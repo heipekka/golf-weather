@@ -162,6 +162,13 @@ export const en: TranslationDictionary = {
       system: "System",
       light: "Light",
       dark: "Dark",
+      glass: "Glass",
+      background: {
+        title: "Background image",
+        description: "Choose the glass theme's background image.",
+        photo: "Photo",
+        illustration: "Illustration",
+      },
     },
     darkScoring: {
       title: "Dark scoring",
