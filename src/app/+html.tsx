@@ -30,9 +30,9 @@ export default function Root({ children }: PropsWithChildren) {
         {/*
           Painted straight from the static HTML, before any JS has loaded, so
           there's no white flash while the bundle boots. Mirrors the photo +
-          scrim + centered icon of `AnimatedSplashOverlay`/native splash
-          config, and is removed by that overlay once hydration completes —
-          the inline script below is only a safety net if that never fires.
+          scrim background of `AnimatedSplashOverlay`/native splash config,
+          and is removed by that overlay once hydration completes — the
+          inline script below is only a safety net if that never fires.
         */}
         <style
           dangerouslySetInnerHTML={{
@@ -41,26 +41,17 @@ export default function Root({ children }: PropsWithChildren) {
                 position: fixed;
                 inset: 0;
                 z-index: 9999;
-                display: flex;
-                align-items: center;
-                justify-content: center;
                 background-color: #0f1f18;
                 background-image: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)), url('/splash/backdrop.jpg');
                 background-size: cover;
                 background-position: center;
-              }
-              #boot-splash img {
-                width: 200px;
-                height: 200px;
               }
             `,
           }}
         />
       </head>
       <body>
-        <div id="boot-splash">
-          <img src="/icons/icon-192.png" alt="" width={200} height={200} />
-        </div>
+        <div id="boot-splash" />
         {children}
         <script
           dangerouslySetInnerHTML={{

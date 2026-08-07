@@ -9,12 +9,10 @@ import { useHasHydrated } from '@/hooks/use-color-scheme';
 import { Colors } from '@/constants/theme';
 
 const DURATION = 500;
-const ICON_SIZE = 200;
 
 // Same photo + scrim as `AppBackdrop` in `_layout.tsx`, so the overlay fades
 // away into an already-matching background instead of revealing a swap.
 const BACKGROUND_SOURCE = require('@/assets/images/backgrounds/course-illustration.jpg');
-const ICON_SOURCE = require('@/assets/images/splash-icon.png');
 
 export function AnimatedSplashOverlay() {
   const [animate, setAnimate] = useState(false);
@@ -50,7 +48,6 @@ export function AnimatedSplashOverlay() {
     <>
       <Image style={StyleSheet.absoluteFill} source={BACKGROUND_SOURCE} contentFit="cover" />
       <View style={styles.scrim} />
-      <Image style={styles.icon} source={ICON_SOURCE} contentFit="contain" />
     </>
   );
 
@@ -84,9 +81,5 @@ const styles = StyleSheet.create({
   scrim: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: 'rgba(0, 0, 0, 0.35)',
-  },
-  icon: {
-    width: ICON_SIZE,
-    height: ICON_SIZE,
   },
 });

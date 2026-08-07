@@ -34,11 +34,14 @@ const FONT_OPTIONS = {
 const COLOR = {
   scrim: "rgba(6, 18, 13, 0.55)",
   panelFill: "rgba(255, 255, 255, 0.16)",
-  panelStroke: "rgba(255, 255, 255, 0.35)",
   highlight: "rgba(255, 255, 255, 0.30)",
   white: "#ffffff",
   accent: "#3ddc84",
 };
+
+// Cap height of the bold Helvetica Neue wordmark as a fraction of its font
+// size, used to vertically center the two text lines on the canvas.
+const CAP_HEIGHT = 0.714;
 
 function imageDataUri(path) {
   const bytes = readFileSync(path);
@@ -95,57 +98,47 @@ function backgroundLayer({ focusFraction = 0.5, overscan = 1.3, blurFrac = 0.018
     </g>`;
 }
 
-/** Frosted glass panel: translucent rounded rect + hairline border + soft top-left highlight. */
-function panelLayer({ insetFrac, cornerFrac }) {
-  const inset = CANVAS * insetFrac;
-  const size = CANVAS - inset * 2;
-  const rx = size * cornerFrac;
-
+/** Frosted glass fill covering the whole icon edge-to-edge (no inset, no border) with a soft top-left highlight. */
+function panelLayer() {
   return `
     <linearGradient id="panelHighlight" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="${COLOR.highlight}" />
       <stop offset="0.6" stop-color="rgba(255,255,255,0)" />
     </linearGradient>
-    <rect
-      x="${inset}" y="${inset}" width="${size}" height="${size}" rx="${rx}"
-      fill="${COLOR.panelFill}" />
-    <rect
-      x="${inset}" y="${inset}" width="${size}" height="${size}" rx="${rx}"
-      fill="url(#panelHighlight)" />
-    <rect
-      x="${inset + 0.5}" y="${inset + 0.5}" width="${size - 1}" height="${size - 1}" rx="${rx}"
-      fill="none" stroke="${COLOR.panelStroke}" stroke-width="${CANVAS * 0.006}" />`;
+    <rect x="0" y="0" width="${CANVAS}" height="${CANVAS}" fill="${COLOR.panelFill}" />
+    <rect x="0" y="0" width="${CANVAS}" height="${CANVAS}" fill="url(#panelHighlight)" />`;
 }
 
-/** Two-line "Golf" / "sää" wordmark, centered on the canvas. */
+/** Two-line "GOLF" / "SÄÄ" wordmark, centered on the canvas by cap height rather than baseline. */
 function textLayer({ fontSizeFrac, lineGapFrac = 0.04, monochrome = false }) {
   const fontSize = CANVAS * fontSizeFrac;
   const lineHeight = fontSize * (1 + lineGapFrac);
   const cx = CANVAS / 2;
-  const firstY = CANVAS / 2 - lineHeight * 0.32;
+  // Centers the cap-top-of-first-line to baseline-of-second-line block on
+  // the canvas midpoint, so this stays balanced across every font size.
+  const firstY = CANVAS / 2 + (CAP_HEIGHT * fontSize - lineHeight) / 2;
   const secondY = firstY + lineHeight;
-  const golfColor = monochrome ? COLOR.white : COLOR.white;
   const saaColor = monochrome ? COLOR.white : COLOR.accent;
 
   return `
     <text
       x="${cx}" y="${firstY}"
       font-family="${FONT_FAMILY}" font-weight="700" font-size="${fontSize}"
-      fill="${golfColor}" text-anchor="middle" letter-spacing="${-fontSize * 0.01}">Golf</text>
+      fill="${COLOR.white}" text-anchor="middle" letter-spacing="${-fontSize * 0.01}">GOLF</text>
     <text
       x="${cx}" y="${secondY}"
       font-family="${FONT_FAMILY}" font-weight="700" font-size="${fontSize}"
-      fill="${saaColor}" text-anchor="middle" letter-spacing="${-fontSize * 0.01}">sää</text>`;
+      fill="${saaColor}" text-anchor="middle" letter-spacing="${-fontSize * 0.01}">SÄÄ</text>`;
 }
 
 function svgDocument(body, { canvas = CANVAS } = {}) {
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${canvas} ${canvas}" width="${canvas}" height="${canvas}"><defs></defs>${body}</svg>`;
 }
 
-/** Full-bleed icon: background photo + scrim, optional frosted panel, wordmark. Fills the entire CANVAS square (OS applies its own corner mask). */
+/** Full-bleed icon: background photo + scrim, optional edge-to-edge frosted glass, wordmark. Fills the entire CANVAS square (OS applies its own corner mask). */
 function fullBleedIcon({ panel, fontSizeFrac, focusFraction, overscan, blurFrac }) {
   const layers = [backgroundLayer({ focusFraction, overscan, blurFrac })];
-  if (panel) layers.push(panelLayer(panel));
+  if (panel) layers.push(panelLayer());
   layers.push(textLayer({ fontSizeFrac }));
   return layers.join("\n");
 }
@@ -166,19 +159,6 @@ function paddedTile({ tileFrac, cornerFrac, panel, fontSizeFrac, focusFraction }
   return `<g transform="translate(${offset}, ${offset}) scale(${tileFrac})">${inner}</g>`;
 }
 
-/** Content confined to Android's adaptive-icon safe zone (a circle at `safeFrac` of the canvas), transparent elsewhere. Used for the foreground and monochrome layers, which are composited by the OS over a separately supplied background layer. */
-function safeZoneContent({ safeFrac, panel, fontSizeFrac, monochrome }) {
-  // Inscribe the panel/text block in a square that fits inside the safe
-  // circle (side = diameter / sqrt(2)) so corners never clip.
-  const safeSide = CANVAS * safeFrac;
-  const inscribedSide = safeSide / Math.SQRT2;
-  const insetFrac = (CANVAS - inscribedSide) / 2 / CANVAS;
-  const layers = [];
-  if (panel) layers.push(panelLayer({ insetFrac, cornerFrac: panel.cornerFrac }));
-  layers.push(textLayer({ fontSizeFrac, monochrome }));
-  return layers.join("\n");
-}
-
 function renderPng(svg, size) {
   const resvg = new Resvg(svg, {
     font: FONT_OPTIONS,
@@ -195,15 +175,17 @@ function writeIcon(path, svgBody, size, { canvas = CANVAS } = {}) {
   console.log(`wrote ${path.replace(ROOT + "/", "")} (${size}px)`);
 }
 
-const REGULAR_PANEL = { insetFrac: 0.12, cornerFrac: 0.16 };
-const REGULAR_FONT_FRAC = 0.155;
-const MASKABLE_PANEL = { insetFrac: 0.24, cornerFrac: 0.16 };
-const MASKABLE_FONT_FRAC = 0.11;
+const REGULAR_FONT_FRAC = 0.31;
+const FAVICON_FONT_FRAC = 0.3;
+const MASKABLE_FONT_FRAC = 0.22;
+// Kept smaller than the other variants to fit inside Android's ~66%
+// adaptive-icon safe zone (see androidForegroundBody below).
+const ANDROID_FONT_FRAC = 0.16;
 const FOCUS = 0.46;
 
-// --- Full-bleed app/web icons (regular variant: inset frosted panel) ---
+// --- Full-bleed app/web icons (edge-to-edge frosted glass) ---
 const regularBody = fullBleedIcon({
-  panel: REGULAR_PANEL,
+  panel: true,
   fontSizeFrac: REGULAR_FONT_FRAC,
   focusFraction: FOCUS,
 });
@@ -213,12 +195,12 @@ writeIcon(join(ROOT, "public/icons/icon-512.png"), regularBody, 512);
 writeIcon(join(ROOT, "public/icons/icon-192.png"), regularBody, 192);
 writeIcon(join(ROOT, "public/icons/apple-touch-icon-180.png"), regularBody, 180);
 
-// --- Favicon (compact variant: no panel, near-full-bleed text for legibility at tiny sizes) ---
+// --- Favicon (compact variant: no glass, near-full-bleed text for legibility at tiny sizes) ---
 // Tighter crop + stronger blur than the large icons so there's no dark
 // treeline/water band left at the edges to read as a border at 48px.
 const compactBody = fullBleedIcon({
   panel: null,
-  fontSizeFrac: 0.34,
+  fontSizeFrac: FAVICON_FONT_FRAC,
   focusFraction: FOCUS,
   overscan: 2.4,
   blurFrac: 0.05,
@@ -227,7 +209,7 @@ writeIcon(join(ROOT, "assets/images/favicon.png"), compactBody, 48);
 
 // --- Maskable PWA icon (content kept inside the 80% safe zone) ---
 const maskableBody = fullBleedIcon({
-  panel: MASKABLE_PANEL,
+  panel: true,
   fontSizeFrac: MASKABLE_FONT_FRAC,
   focusFraction: FOCUS,
 });
@@ -237,35 +219,34 @@ writeIcon(join(ROOT, "public/icons/icon-maskable-512.png"), maskableBody, 512);
 const splashBody = paddedTile({
   tileFrac: 0.7,
   cornerFrac: 0.16,
-  panel: REGULAR_PANEL,
+  panel: true,
   fontSizeFrac: REGULAR_FONT_FRAC,
   focusFraction: FOCUS,
 });
 writeIcon(join(ROOT, "assets/images/splash-icon.png"), splashBody, 1024);
 
 // --- Android adaptive icon layers ---
-const androidBackgroundBody = backgroundLayer({ focusFraction: FOCUS });
+// The glass fill lives on the background layer (it now covers the whole
+// canvas), so the foreground/monochrome layers are text-only.
+const androidBackgroundBody = [
+  backgroundLayer({ focusFraction: FOCUS }),
+  panelLayer(),
+].join("\n");
 writeIcon(
   join(ROOT, "assets/images/android-icon-background.png"),
   androidBackgroundBody,
   432,
 );
 
-const androidForegroundBody = safeZoneContent({
-  safeFrac: 0.66,
-  panel: { cornerFrac: 0.16 },
-  fontSizeFrac: 0.1,
-});
+const androidForegroundBody = textLayer({ fontSizeFrac: ANDROID_FONT_FRAC });
 writeIcon(
   join(ROOT, "assets/images/android-icon-foreground.png"),
   androidForegroundBody,
   432,
 );
 
-const androidMonochromeBody = safeZoneContent({
-  safeFrac: 0.66,
-  panel: null,
-  fontSizeFrac: 0.1,
+const androidMonochromeBody = textLayer({
+  fontSizeFrac: ANDROID_FONT_FRAC,
   monochrome: true,
 });
 writeIcon(
