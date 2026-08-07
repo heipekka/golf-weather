@@ -64,10 +64,11 @@ const illustrationSize = imagePixelSize(ILLUSTRATION_PATH);
  * whole CANVAS square, biased toward the fairway/water band of the source
  * photo rather than its dead center (which is mostly sky).
  */
-function backgroundLayer({ focusFraction = 0.5 } = {}) {
+function backgroundLayer({ focusFraction = 0.5, overscan = 1.3, blurFrac = 0.018 } = {}) {
   // Scaled up beyond a plain `cover` fit so the Gaussian blur has bleed to
   // sample from and never reveals a transparent fringe at the canvas edge.
-  const overscan = 1.3;
+  // A larger overscan also zooms further into the photo, which is used at
+  // small sizes to crop out the dark treeline/water band at the edges.
   const scale =
     Math.max(
       CANVAS / illustrationSize.width,
@@ -81,7 +82,7 @@ function backgroundLayer({ focusFraction = 0.5 } = {}) {
   return `
     <clipPath id="bgClip"><rect x="0" y="0" width="${CANVAS}" height="${CANVAS}" /></clipPath>
     <filter id="bgBlur" x="-30%" y="-30%" width="160%" height="160%">
-      <feGaussianBlur stdDeviation="${CANVAS * 0.018}" />
+      <feGaussianBlur stdDeviation="${CANVAS * blurFrac}" />
       <feColorMatrix type="saturate" values="0.75" />
     </filter>
     <g clip-path="url(#bgClip)">
@@ -142,8 +143,8 @@ function svgDocument(body, { canvas = CANVAS } = {}) {
 }
 
 /** Full-bleed icon: background photo + scrim, optional frosted panel, wordmark. Fills the entire CANVAS square (OS applies its own corner mask). */
-function fullBleedIcon({ panel, fontSizeFrac, focusFraction }) {
-  const layers = [backgroundLayer({ focusFraction })];
+function fullBleedIcon({ panel, fontSizeFrac, focusFraction, overscan, blurFrac }) {
+  const layers = [backgroundLayer({ focusFraction, overscan, blurFrac })];
   if (panel) layers.push(panelLayer(panel));
   layers.push(textLayer({ fontSizeFrac }));
   return layers.join("\n");
@@ -213,10 +214,14 @@ writeIcon(join(ROOT, "public/icons/icon-192.png"), regularBody, 192);
 writeIcon(join(ROOT, "public/icons/apple-touch-icon-180.png"), regularBody, 180);
 
 // --- Favicon (compact variant: no panel, near-full-bleed text for legibility at tiny sizes) ---
+// Tighter crop + stronger blur than the large icons so there's no dark
+// treeline/water band left at the edges to read as a border at 48px.
 const compactBody = fullBleedIcon({
   panel: null,
-  fontSizeFrac: 0.27,
+  fontSizeFrac: 0.34,
   focusFraction: FOCUS,
+  overscan: 2.4,
+  blurFrac: 0.05,
 });
 writeIcon(join(ROOT, "assets/images/favicon.png"), compactBody, 48);
 
