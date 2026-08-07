@@ -1,108 +1,85 @@
 import { Image } from 'expo-image';
+import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import Animated, { Keyframe, Easing } from 'react-native-reanimated';
+import Animated, { Easing, Keyframe } from 'react-native-reanimated';
+import { scheduleOnRN } from 'react-native-worklets';
 
-import classes from './animated-icon.module.css';
-const DURATION = 300;
+import { Colors } from '@/constants/theme';
+import { useHasHydrated } from '@/hooks/use-color-scheme';
+
+const DURATION = 400;
+const ICON_SIZE = 200;
+// Matches `#boot-splash` in `+html.tsx`, which paints the same photo + icon
+// before React has even loaded so there's no white flash on first load.
+const BOOT_SPLASH_ID = 'boot-splash';
+
+const BACKGROUND_SOURCE = require('@/assets/images/backgrounds/course-illustration.jpg');
+const ICON_SOURCE = require('@/assets/images/splash-icon.png');
 
 export function AnimatedSplashOverlay() {
-  return null;
-}
+  const [animate, setAnimate] = useState(false);
+  const [visible, setVisible] = useState(true);
+  const hasHydrated = useHasHydrated();
 
-const keyframe = new Keyframe({
-  0: {
-    transform: [{ scale: 0 }],
-  },
-  60: {
-    transform: [{ scale: 1.2 }],
-    easing: Easing.elastic(1.2),
-  },
-  100: {
-    transform: [{ scale: 1 }],
-    easing: Easing.elastic(1.2),
-  },
-});
+  useEffect(() => {
+    if (!hasHydrated) return;
+    document.getElementById(BOOT_SPLASH_ID)?.remove();
+    // Deferred a tick so this doesn't set state synchronously within the
+    // effect body (which can trigger cascading renders).
+    Promise.resolve().then(() => setAnimate(true));
+  }, [hasHydrated]);
 
-const logoKeyframe = new Keyframe({
-  0: {
-    opacity: 0,
-  },
-  60: {
-    transform: [{ scale: 1.2 }],
-    opacity: 0,
-    easing: Easing.elastic(1.2),
-  },
-  100: {
-    transform: [{ scale: 1 }],
-    opacity: 1,
-    easing: Easing.elastic(1.2),
-  },
-});
+  if (!visible) return null;
 
-const glowKeyframe = new Keyframe({
-  0: {
-    transform: [{ rotateZ: '-180deg' }, { scale: 0.8 }],
-    opacity: 0,
-  },
-  [DURATION / 1000]: {
-    transform: [{ rotateZ: '0deg' }, { scale: 1 }],
-    opacity: 1,
-    easing: Easing.elastic(0.7),
-  },
-  100: {
-    transform: [{ rotateZ: '7200deg' }],
-  },
-});
+  const fadeOutKeyframe = new Keyframe({
+    0: {
+      opacity: 1,
+    },
+    100: {
+      opacity: 0,
+      easing: Easing.out(Easing.ease),
+    },
+  });
 
-export function AnimatedIcon() {
-  return (
-    <View style={styles.iconContainer}>
-      <Animated.View entering={glowKeyframe.duration(60 * 1000 * 4)} style={styles.glow}>
-        <Image style={styles.glow} source={require('@/assets/images/logo-glow.png')} />
-      </Animated.View>
+  const content = (
+    <>
+      <Image style={StyleSheet.absoluteFill} source={BACKGROUND_SOURCE} contentFit="cover" />
+      <View style={styles.scrim} />
+      <Image style={styles.icon} source={ICON_SOURCE} contentFit="contain" />
+    </>
+  );
 
-      <Animated.View style={styles.background} entering={keyframe.duration(DURATION)}>
-        <div className={classes.expoLogoBackground} />
-      </Animated.View>
-
-      <Animated.View style={styles.imageContainer} entering={logoKeyframe.duration(DURATION)}>
-        <Image style={styles.image} source={require('@/assets/images/expo-logo.png')} />
-      </Animated.View>
-    </View>
+  return animate ? (
+    <Animated.View
+      entering={fadeOutKeyframe.duration(DURATION).withCallback((finished) => {
+        'worklet';
+        if (finished) {
+          scheduleOnRN(setVisible, false);
+        }
+      })}
+      style={styles.overlay}
+      pointerEvents="none">
+      {content}
+    </Animated.View>
+  ) : (
+    <View style={styles.overlay}>{content}</View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: Colors.glass.backgroundSolid,
     alignItems: 'center',
-    width: '100%',
+    justifyContent: 'center',
     zIndex: 1000,
-    position: 'absolute',
-    top: 128 / 2 + 138,
   },
-  imageContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
+  scrim: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.35)',
   },
-  glow: {
-    width: 201,
-    height: 201,
-    position: 'absolute',
-  },
-  iconContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 128,
-    height: 128,
-  },
-  image: {
-    position: 'absolute',
-    width: 76,
-    height: 71,
-  },
-  background: {
-    width: 128,
-    height: 128,
-    position: 'absolute',
+  icon: {
+    width: ICON_SIZE,
+    height: ICON_SIZE,
   },
 });

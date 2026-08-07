@@ -11,18 +11,11 @@
 /*
  * Match the app's own theme background (see Colors in constants/theme.ts) so
  * any transient repaint gap during React re-renders shows the correct color
- * instead of the browser-default white.
+ * instead of the browser-default white. Glass is the default palette, so
+ * this is `glass.backgroundSolid` rather than plain black/white.
  */
 html,
 body,
 #root {
-  background-color: #ffffff;
-}
-
-@media (prefers-color-scheme: dark) {
-  html,
-  body,
-  #root {
-    background-color: #000000;
-  }
+  background-color: #0f1f18;
 }

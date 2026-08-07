@@ -38,6 +38,7 @@
     "suncalc": "^2.0.0"
   },
   "devDependencies": {
+    "@resvg/resvg-js": "^2.6.2",
     "@types/leaflet": "^1.9.21",
     "@types/react": "~19.2.2",
     "@types/react-native": "^0.72.8",
@@ -52,7 +53,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "icons": "node ./scripts/generate-icons.mjs"
   },
   "private": true
 }
