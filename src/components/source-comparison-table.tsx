@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { Platform, StyleSheet, View, type ViewStyle } from "react-native";
 
-import { Spacing } from "@/constants/theme";
+import { GlassSurface, Spacing } from "@/constants/theme";
 import { useDarkScoring } from "@/hooks/use-dark-scoring";
 import { useIsGlassPalette } from "@/hooks/use-glass-surface";
 import { useTheme } from "@/hooks/use-theme";
@@ -13,12 +13,15 @@ import {
   formatTemperature,
   formatWind,
 } from "@/lib/format";
-import { glassBadgeBackground, PlayabilityColors, scorePlayability } from "@/lib/golf";
+import {
+  glassBadgeBackground,
+  PlayabilityColors,
+  scorePlayability,
+} from "@/lib/golf";
 import { isNight } from "@/lib/sun";
 import type { SourceForecast, SourceId } from "@/lib/weather";
 import { indexByHour } from "@/lib/weather";
 import { ThemedText } from "./themed-text";
-import { ThemedView } from "./themed-view";
 import { WeatherIcon } from "./weather-icon";
 
 const SHORT_LABELS: Record<SourceId, string> = {
@@ -64,9 +67,21 @@ export function SourceComparisonTable({
 
   return (
     <View style={styles.table}>
-      <ThemedView
-        type="backgroundElement"
-        style={[styles.row, styles.headerRow]}
+      <View
+        style={[
+          styles.row,
+          styles.headerRow,
+          isGlass
+            ? [
+                styles.headerRowGlass,
+                Platform.OS === "web"
+                  ? ({
+                      backdropFilter: GlassSurface.webBackdropFilter,
+                    } as ViewStyle)
+                  : null,
+              ]
+            : { backgroundColor: theme.backgroundElement },
+        ]}
       >
         <View style={[styles.cell, styles.timeColumn]} />
         {indexed.map(({ source }) => (
@@ -85,7 +100,7 @@ export function SourceComparisonTable({
             )}
           </View>
         ))}
-      </ThemedView>
+      </View>
 
       {hours.map((hour, index) => {
         const night = isNight(hour, lat, lon);
@@ -162,7 +177,7 @@ export function SourceComparisonTable({
                           style={[
                             styles.playability,
                             isGlass && {
-                              alignSelf: "flex-start",
+                              alignSelf: "center",
                               backgroundColor: glassBadgeBackground(
                                 PlayabilityColors[playability.label],
                               ),
@@ -202,9 +217,19 @@ const styles = StyleSheet.create({
   headerRow: {
     borderBottomWidth: 1,
     borderBottomColor: "#808080",
+    marginHorizontal: -Spacing.three,
+    paddingHorizontal: Spacing.three,
     ...(Platform.OS === "web"
-      ? ({ position: "sticky", top: -2, zIndex: 1 } as ViewStyle)
+      ? ({
+          position: "sticky",
+          top: -2,
+          zIndex: 1,
+          width: "calc(100% + 2rem)",
+        } as unknown as ViewStyle)
       : null),
+  },
+  headerRowGlass: {
+    backgroundColor: GlassSurface.stickyHeaderBackground,
   },
   bodyRow: {
     borderBottomWidth: 1,

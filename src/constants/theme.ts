@@ -44,7 +44,9 @@ export const Colors = {
   },
 } as const;
 
-export type ThemeColor = keyof typeof Colors.light & keyof typeof Colors.dark & keyof typeof Colors.glass;
+export type ThemeColor = keyof typeof Colors.light &
+  keyof typeof Colors.dark &
+  keyof typeof Colors.glass;
 
 /**
  * Hairline border and web-only blur applied to `glass` palette surfaces so
@@ -65,6 +67,12 @@ export const GlassSurface = {
   // it too readable.
   backdropColor: "rgba(6, 18, 13, 0.72)",
   webBackdropBlur: "blur(10px)",
+  // Near-opaque tint, sampled from the overcast sky in the background photo,
+  // for glass surfaces that must stay legible while pinned in place, e.g. a
+  // sticky table header scrolled content passes behind — still blurred like
+  // other glass surfaces, just too opaque for that content to show through.
+  // Text on top of it stays the usual white, same as other glass surfaces.
+  stickyHeaderBackground: "rgba(119, 135, 142, 0.92)",
 } as const;
 
 export const Fonts = Platform.select({
