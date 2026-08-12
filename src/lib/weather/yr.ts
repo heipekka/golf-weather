@@ -1,12 +1,17 @@
+import { Platform } from 'react-native';
+
 import { computeApparentTemperature } from './feels-like';
 import { fetchWithPolicy } from './request';
 import type { ForecastPoint, SourceForecast } from './types';
 
 const YR_URL = 'https://api.met.no/weatherapi/locationforecast/2.0/compact';
 // MET Norway requires a descriptive User-Agent identifying the app, see
-// https://api.met.no/doc/TermsOfService. Browsers may silently strip this
-// header, which can cause requests to fail when running on web.
+// https://api.met.no/doc/TermsOfService. Browsers strip custom User-Agent
+// headers and MET doesn't grant CORS to arbitrary origins, so web goes
+// through a same-origin proxy (api/yr.ts) that sets this header server-side
+// instead of calling MET directly.
 const USER_AGENT = 'golf-weather-app/1.0 github.com/heipekka/golf-weather';
+const WEB_PROXY_URL = '/api/yr';
 
 const MAX_HOURS = 72;
 
@@ -40,11 +45,14 @@ export async function fetchYr(lat: number, lon: number, signal?: AbortSignal): P
     lon: lon.toFixed(4),
   });
 
-  const body = await fetchWithPolicy(
-    `${YR_URL}?${params.toString()}`,
-    { headers: { 'User-Agent': USER_AGENT } },
-    { source: 'yr', signal }
-  );
+  // Native can identify itself with a custom User-Agent and call MET
+  // directly; web can't (see the note above), so it goes through the
+  // same-origin proxy instead.
+  const isWeb = Platform.OS === 'web';
+  const url = isWeb ? `${WEB_PROXY_URL}?${params.toString()}` : `${YR_URL}?${params.toString()}`;
+  const init = isWeb ? undefined : { headers: { 'User-Agent': USER_AGENT } };
+
+  const body = await fetchWithPolicy(url, init, { source: 'yr', signal });
 
   const data = JSON.parse(body) as YrResponse;
 

@@ -4,7 +4,7 @@ Read the exact versioned docs at https://docs.expo.dev/versions/v57.0.0/ before 
 
 ## Overview
 
-Nordic golf course weather app. Lists ~400 static golf courses (Finland, Denmark, Norway, Sweden, Spain, Estonia; the list screen filters them to a distance radius, 200 km by default), fetches forecasts from three weather sources, aggregates them, and scores playability per hour/window. Supports favorites, i18n (fi/en, Finnish default), and deploys as a static web export to Vercel. No backend (all API calls happen client-side), no test suite.
+Nordic golf course weather app. Lists ~400 static golf courses (Finland, Denmark, Norway, Sweden, Spain, Estonia; the list screen filters them to a distance radius, 200 km by default), fetches forecasts from three weather sources, aggregates them, and scores playability per hour/window. Supports favorites, i18n (fi/en, Finnish default), and deploys as a static web export to Vercel. Almost no backend: all API calls happen client-side, except a one-route Vercel Edge Function ([api/yr.ts](api/yr.ts)) that proxies YR.no for the web build. No test suite.
 
 ## Tech stack
 
@@ -20,6 +20,7 @@ Nordic golf course weather app. Lists ~400 static golf courses (Finland, Denmark
 
 ## Directory map
 
+- `api/yr.ts` — Vercel Edge Function proxying YR.no for web only (CORS + `User-Agent`, edge-cached); native calls MET directly from `src/lib/weather/yr.ts`
 - `src/app/` — Expo Router screens (see Routes below)
 - `src/components/` — reusable UI (`CourseCard`, `HourlyStrip`, `PlayabilityBadge`, `SourceComparisonTable`, `ThemedText`/`ThemedView`, etc.)
 - `src/hooks/` — custom hooks and context providers (`use-favorites`, `use-course-sort`, `use-location`, `use-courses-weather`, `use-course-weather`, `use-current-hour`, `use-theme`, `use-color-scheme` + `.web` variant)
@@ -98,7 +99,7 @@ Sun times come from `suncalc` locally, no network call.
 
 ## Gotchas
 
-- YR.no requires a `User-Agent` header or requests are rejected with 403. Browsers strip the custom header and substitute their own, which MET accepts
+- YR.no requires a `User-Agent` header or requests are rejected with 403, and doesn't grant CORS to arbitrary origins. Browsers strip custom `User-Agent` headers, so web can't call MET directly; native can and does. Web instead calls the same-origin proxy `api/yr.ts` ([Platform.OS](https://reactnative.dev/docs/platform) branch in `src/lib/weather/yr.ts`), which sets the header server-side and lets Vercel edge-cache successful responses for 15 min (`Vercel-CDN-Cache-Control`) — don't forward MET's own `Cache-Control` verbatim, or the edge cache won't apply
 - FMI responses are XML, parsed with `fast-xml-parser`. Harmonie only covers the Nordic/Baltic area, so the Spanish courses get no FMI data
 - Open-Meteo rejects bursts above roughly 9 concurrent requests per IP with `429 {"reason":"Too many concurrent requests"}`, separately from its 10k/day quota. Hence the batched multi-coordinate request and the concurrency caps in [src/lib/weather/request.ts](src/lib/weather/request.ts) — don't reintroduce per-course Open-Meteo fetching
 - Open-Meteo returns an array for several coordinates but a bare object for one, and echoes coordinates snapped to the model grid, so batch results must be matched to courses by index, never by coordinate

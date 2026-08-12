@@ -94,10 +94,36 @@ Client: [src/lib/weather/yr.ts](../src/lib/weather/yr.ts)
 - **Endpoint:** `GET https://api.met.no/weatherapi/locationforecast/2.0/compact`
 - **Auth / headers:** requires a descriptive `User-Agent` header per the
   [MET Norway Terms of Service](https://api.met.no/doc/TermsOfService); the
-  app sends `golf-weather-app/1.0 github.com/heipekka/golf-weather`. Browsers
-  may silently strip custom `User-Agent` headers, which can break this
-  request on web.
+  app sends `golf-weather-app/1.0 github.com/heipekka/golf-weather`.
 - **Query params:** `lat`, `lon` (4 decimal places, via `toFixed(4)`)
+
+#### Web goes through a proxy, native calls MET directly
+
+Browsers can't reliably call `api.met.no`: MET doesn't grant CORS to arbitrary
+origins, and it requires that `User-Agent` header, which browsers silently
+strip and replace. `fetchYr` branches on `Platform.OS`:
+
+- **Native (iOS/Android):** calls `api.met.no` directly with the `User-Agent`
+  header, as above.
+- **Web:** calls the same-origin Vercel Edge Function
+  [api/yr.ts](../api/yr.ts) at `/api/yr?lat=…&lon=…`, which sets the
+  `User-Agent` header server-side, forwards MET's status and body, and adds
+  its own cache headers (MET's own `Cache-Control` is not forwarded):
+  - 2xx: `Cache-Control: public, max-age=0, must-revalidate` for the browser,
+    `Vercel-CDN-Cache-Control: s-maxage=900, stale-while-revalidate=3600,
+    stale-if-error=86400` for Vercel's edge cache — 900s matches `TTL_MS` in
+    [cache.ts](../src/lib/weather/cache.ts), so the edge and the client's own
+    per-source cache expire together. Since course coordinates are static and
+    the request URL is the cache key, one course's forecast is shared across
+    all web visitors within that window.
+  - non-2xx: `Cache-Control: no-store`, so a cached 403/429 can't get stuck
+    serving every visitor and starve the retries in
+    [request.ts](../src/lib/weather/request.ts).
+- Local `expo start --web` doesn't serve `/api/yr` (no functions runtime);
+  testing the proxy needs `vercel dev` or a deployed preview.
+- The rewrite in [vercel.json](../vercel.json) excludes `/api` from the SPA
+  catch-all (`/((?!api/).*)`) so the function isn't shadowed by the static
+  export.
 
 ### Response shape
 
